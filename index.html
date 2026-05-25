@@ -2639,7 +2639,21 @@ const AGENCIES = [
       {id:'pt-tcp',  label:'Nursing | Transition Care Programs | Year 1 | Bachelor of Nursing', caps:Array(28).fill(null)},
       {id:'pt-cc',   label:'Nursing | Critical Care | Year 3 | Bachelor of Nursing',      caps:Array(28).fill(null)},
     ],
-    reqs:[],
+    reqs:[
+      {id:'r86100',reqNum:'Req: 86100',status:'rejected',
+       ep:'ACU',campus:'Melbourne',epCode:'QACURR513A',
+       discipline:'Nursing',type:'General Medical',year:'Yr 3',qty:2,dur:'14 days',
+       shiftLabel:'AM only',shiftBadge:'sb-am',chipStyle:'ep',chipLabel:'AM',
+       shiftId:'s-am',ptId:'pt-gm',
+       dates:'13 May – 26 May 2026',
+       comment:'Rejected — requested dates overlap with existing confirmed placements.',cells:{}},
+      {id:'r86101',reqNum:'Req: 86101',status:'rejected',
+       ep:'Deakin',campus:'Geelong',epCode:'DKN',
+       discipline:'Nursing',type:'Perioperative',year:'Yr 3',qty:3,dur:'28 days',
+       shiftLabel:'Any shift',shiftBadge:'sb-all',chipStyle:'ep',chipLabel:'Any',
+       shiftId:'all',ptId:'pt-peri',
+       dates:'13 May – 9 Jun 2026',comment:'',cells:{}},
+    ],
     hiddenChildren:[]
   },
   { id:'sa-b', name:'(SA) Agency B', expanded:true,
@@ -2725,6 +2739,14 @@ const AGENCIES = [
          {day:'Mon', shiftId:'g03-am', chipLabel:'AM',  cells:{1:1,8:1,15:1,22:1}},
          {day:'Tue', shiftId:'g03-pm', chipLabel:'PM',  cells:{2:1,9:1,16:1,23:1}},
        ]},
+      // Rejected — Monash Acute, insufficient night shift capacity
+      {id:'r90615',reqNum:'Req: 90615',status:'rejected',
+       ep:'Monash',campus:'Clayton',epCode:'MON',
+       discipline:'Nursing',type:'Acute',year:'Yr 3',qty:4,dur:'28 days',
+       shiftLabel:'Night shift',shiftBadge:'sb-ngt',chipStyle:'ep',chipLabel:'Night',
+       shiftId:'g03-ngt',ptId:'g03-pt3',
+       dates:'13 May – 9 Jun 2026',
+       comment:'Rejected — night shift capacity fully allocated for this period.',cells:{}},
     ],
     children:[
       { id:'surg', name:'Surgical', expanded:false,
@@ -2991,6 +3013,30 @@ const TULSA_AGENCIES = [
        discipline:'Nursing',type:'Obstetrics',year:'Junior',
        qty:2,dur:'1 day',shiftLabel:'Day shift',shiftBadge:'sb-day',chipStyle:'ep',chipLabel:'Day',
        shiftId:'sfh-ant-day',ptId:'sfh-ant-pt1',dates:'20 Aug 2026',comment:'',cells:{3:1}},
+
+      // 13. Rogers State — Adult Med-Surg, rejected (capacity unavailable)
+      {id:'r53401',reqNum:'Req: 53401',status:'rejected',
+       ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+       discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',
+       qty:4,dur:'28 days',shiftLabel:'Day shift',shiftBadge:'sb-day',chipStyle:'ep',chipLabel:'Day',
+       shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+       dates:'17 Aug – 11 Sep 2026',comment:'Request rejected — insufficient capacity for requested dates.',cells:{}},
+
+      // 14. Oral Roberts — Critical Care, rejected (no matching placement type)
+      {id:'r53402',reqNum:'Req: 53402',status:'rejected',
+       ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',
+       discipline:'Nursing',type:'Critical Care',year:'Senior',
+       qty:3,dur:'14 days',shiftLabel:'Night shift',shiftBadge:'sb-ngt',chipStyle:'ep',chipLabel:'Night',
+       shiftId:'sfh-5sicu-ngt',ptId:'sfh-5sicu-pt1',
+       dates:'24 Aug – 7 Sep 2026',comment:'',cells:{}},
+
+      // 15. University of Tulsa — Paramedic, rejected (no capacity)
+      {id:'r53403',reqNum:'Req: 53403',status:'rejected',
+       ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',
+       discipline:'Nursing',type:'Paramedic',year:'4th Semester',
+       qty:2,dur:'7 days',shiftLabel:'Day shift',shiftBadge:'sb-day',chipStyle:'ep',chipLabel:'Day',
+       shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+       dates:'31 Aug – 4 Sep 2026',comment:'Rejected — placement type not supported at this facility.',cells:{}},
     ], hiddenChildren:[],
     children:[
 
@@ -4278,6 +4324,16 @@ function posPlcTooltip(e){
 }
 
 /* ─── TOOLTIP ACTIONS ──────────────────────────── */
+function reinstateRequest(rid){
+  const r = REQ_META[rid];
+  if(!r) return;
+  r.status = 'pending';
+  document.getElementById('reqTooltip').classList.remove('visible');
+  render();
+  refreshCounters();
+  showAllocToast('Request reinstated', `${r.reqNum} moved back to Pending`);
+}
+
 function renderTooltipActions(r){
   const el = document.getElementById('ttActions');
   const isPartial = !r.reqType && r.allocated && r.allocated > 0 && r.allocated < r.qty;
@@ -4304,7 +4360,7 @@ function renderTooltipActions(r){
     html = '';
   } else if(r.status === 'rejected'){
     el.className = 'tt-actions';
-    html += `<span class="tt-note">Reinstate from Request List</span>`;
+    html += `<button class="tt-btn tt-btn-p" onclick="reinstateRequest('${r.id}')">Reinstate</button>`;
   } else {
     el.className = 'tt-actions';
     html = '';
