@@ -1651,25 +1651,78 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
 .vp-sub{font-size:11px;color:#6b7280;margin-top:1px;}
 .vp-close{background:none;border:none;cursor:pointer;color:#9ca3af;font-size:20px;line-height:1;padding:0;}
 .vp-close:hover{color:#374151;}
-.vp-body{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
-.vp-card{border-radius:8px;border:1px solid #e2e8f0;border-left:3px solid #2563eb;background:#f8faff;padding:10px 12px;}
-.vp-card.offered{border-left-color:#f59e0b;background:#fffdf0;}
-.vp-card.published{border-left-color:#16a34a;background:#f0fdf4;}
-.vp-card.rotation{border-left-color:#7c3aed;background:#faf5ff;}
-.vp-card-hdr{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.vp-card-id{font-size:10px;font-weight:700;color:#3b82f6;font-family:monospace;}
+.vp-body{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:4px;}
+.vp-card{
+  border-radius:6px;border:1px solid #e8e8e8;
+  border-left:3px solid #90caf9;
+  background:#f9f9f9;
+  padding:9px 12px;
+}
+.vp-card.accepted{border-left-color:#1976d2;}
+.vp-card.published{border-left-color:#43a047;}
+.vp-card.offered{border-left-color:#fb8c00;}
+.vp-card-hdr{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:2px;}
+.vp-card-id{font-size:12px;font-weight:500;color:#1976d2;}
 .vp-card-title{font-size:11px;font-weight:600;color:#1e293b;flex:1;}
-.vp-card-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;}
-.vp-card-badge.draft{background:#dbeafe;color:#1d4ed8;}
-.vp-card-badge.offered{background:#fef3c7;color:#92400e;}
-.vp-card-badge.published{background:#dcfce7;color:#15803d;}
-.vp-card-badge.rotation{background:#f5f3ff;color:#7c3aed;}
+.vp-card-badge{
+  font-size:9px;font-weight:500;
+  padding:1px 7px;border-radius:8px;
+  white-space:nowrap;flex-shrink:0;
+  background:#efefef;color:#777;
+}
 .vp-card-rows{display:flex;flex-direction:column;gap:2px;}
 .vp-card-row{display:flex;gap:6px;font-size:10px;}
 .vp-card-lbl{color:#9ca3af;width:52px;flex-shrink:0;}
 .vp-card-val{color:#374151;}
 .vp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#d1d5db;gap:8px;text-align:center;}
 .vp-empty p{font-size:11px;color:#9ca3af;}
+.vp-card-ep{font-size:11px;font-weight:600;color:#1e293b;line-height:1.4}
+.vp-card-meta{font-size:10px;color:#64748b;display:flex;align-items:center;gap:3px;flex-wrap:wrap;line-height:1.5;}
+.vp-card-meta .sep{color:#d1d5db}
+.vp-card-rotation{display:flex;align-items:center;gap:4px;font-size:10px;color:#7c3aed;font-weight:500;margin-top:2px;}
+.vp-card-rotation svg{width:10px;height:10px;fill:#7c3aed;flex-shrink:0}
+.vp-card-req{
+  display:flex;align-items:center;gap:5px;
+  font-size:10px;color:#9ca3af;margin-top:4px;
+  padding-top:4px;border-top:1px solid #efefef;
+}
+.vp-card-req-num{font-weight:500;color:#94a3b8;}
+.vp-card-req-status{
+  font-size:9px;font-weight:500;padding:1px 5px;
+  border-radius:6px;white-space:nowrap;
+  background:#efefef;color:#888;
+}
+.plc-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  margin-left:6px;padding:2px 7px;border-radius:10px;
+  background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;
+  font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:background .15s;vertical-align:middle;
+}
+.plc-badge:hover{background:#c8e6c9}
+.plc-badge svg{width:9px;height:9px;fill:#2e7d32;flex-shrink:0}
+
+/* ── VP sheet status group headers ── */
+.vp-group-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 0 4px;margin-top:4px;
+}
+.vp-group-hdr:first-child{margin-top:0}
+.vp-group-label{
+  font-size:10px;font-weight:700;color:#6b7280;
+  text-transform:uppercase;letter-spacing:0.6px;
+}
+.vp-group-right{display:flex;align-items:center;gap:8px}
+.vp-group-count{
+  font-size:10px;font-weight:600;color:#9ca3af;
+  background:#f3f4f6;padding:1px 6px;border-radius:8px;
+}
+.vp-group-more{
+  font-size:10px;color:#1976d2;font-weight:500;
+  background:none;border:none;padding:0;font-family:inherit;cursor:pointer;
+}
+.vp-group-more:hover{text-decoration:underline}
+
 
 </style>
 </head>
@@ -2333,7 +2386,9 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
 
 </div><!-- /screen-alloc -->
 
-<!-- View Placements side sheet -->
+</div><!-- /screens -->
+
+<!-- View Placements side sheet — outside screens to avoid overflow:hidden clipping -->
 <div class="vp-overlay" id="vpOverlay" onclick="closeVpSheet()"></div>
 <div class="vp-sheet" id="vpSheet">
   <div class="vp-hdr">
@@ -2345,8 +2400,6 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
   </div>
   <div class="vp-body" id="vpBody"></div>
 </div>
-
-</div><!-- /screens -->
 
 <!-- modal removed — replaced by inline allocator -->
 
@@ -3281,7 +3334,7 @@ const PLACEMENTS = [
    discipline:'Nursing',type:'General Medical',year:'Yr 2',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
   // This one placed at a DIFFERENT agency — mismatch demo
-  {id:'p75179',plcNum:'Plc: 75179',reqId:'r85589',status:'confirmed',
+  {id:'p75179',plcNum:'Plc: 75179',reqId:'r85589',status:'accepted',
    agencyName:'(SA) Agency B',
    requestedEp:'Deakin',requestedCampus:'Melbourne Burwood',
    student:'Omar Hassan',studentCode:'S00301234',
@@ -3394,11 +3447,54 @@ const PLACEMENTS = [
   {id:'pt53274b',plcNum:'Plc: 53274B',reqId:'r53274',status:'published', agencyName:'Laureate Psychiatric',ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',dates:'31 Aug 2026',cells:{14:1}},
   {id:'pt53277a',plcNum:'Plc: 53277A',reqId:'r53277',status:'accepted',  agencyName:'Laureate Psychiatric',ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',dates:'07 Sep 2026',cells:{21:1}},
   {id:'pt53280a',plcNum:'Plc: 53280A',reqId:'r53280',status:'offered',   agencyName:'Laureate Psychiatric',ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Day',dates:'14 Sep 2026',cells:{28:1}},
+
+  // ── ROTATION PLACEMENTS — Saint Francis Hospital ────────────────────────
+  // 1. Accepted rotation — spans 3 wards
+  //    Linked to r88880 (Rogers State, pending rotation request)
+  {id:'prot88880a',plcNum:'Plc: 88880R1',reqId:'r88880',
+   agencyName:'Saint Francis Hospital',
+   isRotation:true,status:'accepted',
+   rotationAgencies:['4-West Med-Surg','Emergency','Critical Care'],
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Rotation',year:'Junior',
+   shift:null,
+   dates:'24 Aug – 7 Dec 2026',cells:{}},
+
+  // 2. Published rotation — spans 2 wards
+  //    Linked to r88901 (Langston, pending rotation request)
+  {id:'prot88901a',plcNum:'Plc: 88901R1',reqId:'r88901',
+   agencyName:'Saint Francis Hospital',
+   isRotation:true,status:'published',
+   rotationAgencies:['4-West Med-Surg','Emergency'],
+   ep:'Langston University',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Rotation',year:'Junior',
+   shift:null,
+   dates:'24 Aug – 7 Dec 2026',cells:{}},
+
+  // 3. Offered rotation — no shift yet (assigned at offering)
+  //    Linked to r88902 (Oral Roberts, pending rotation request)
+  {id:'prot88902a',plcNum:'Plc: 88902R1',reqId:'r88902',
+   agencyName:'Saint Francis Hospital',
+   isRotation:true,status:'offered',
+   rotationAgencies:['4-West Med-Surg','Critical Care','Emergency','Procedural'],
+   ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Rotation',year:'Senior',
+   shift:null,
+   dates:'24 Aug – 7 Dec 2026',cells:{}},
 ];
 const PLACEMENTS_BY_REQ = {};
 PLACEMENTS.forEach(p=>{
   if(!PLACEMENTS_BY_REQ[p.reqId]) PLACEMENTS_BY_REQ[p.reqId]=[];
   PLACEMENTS_BY_REQ[p.reqId].push(p);
+});
+
+// Index placements by agencyName for the placement side sheet
+const PLACEMENTS_BY_AGENCY = {};
+PLACEMENTS.forEach(p=>{
+  const key = p.agencyName;
+  if(!key) return;
+  if(!PLACEMENTS_BY_AGENCY[key]) PLACEMENTS_BY_AGENCY[key]=[];
+  PLACEMENTS_BY_AGENCY[key].push(p);
 });
 
 /* Flatten req meta */
@@ -3417,63 +3513,64 @@ TULSA_REQS.forEach(r=>{REQ_META[r.id]=r;});
 
 // EP Balance data computed from REQUESTS (slot counts) + PLACEMENTS (record counts)
 // Keyed by EP name only — campus differences don't create separate rows
+//
+// Metric definitions (all counted by placement slots / qty, not request count):
+//   Pending   = qty on pending requests minus placements already created against them
+//   Rejected  = qty on rejected requests + "reject remaining" partial rejections
+//   Planned   = placements in Planned status
+//   Offered   = placements in Offered, Accepted, or Published status (rolled up)
+//   Cancelled = placements in Cancelled status (includes offer-declined by EP)
 function computeEpData(){
   const map = {};
   const addEp = (ep) => {
     if(!map[ep]) map[ep] = {
       ep,
-      // Request slot counts (qty-based)
-      req_pending:0, req_allocated:0, req_rejected:0,
-      // Placement record counts
-      plc_offered:0, plc_accepted:0, plc_published:0, plc_cancelled:0
+      // Placement slot counts (for bar)
+      pending:0, rejected:0, planned:0, offered:0, cancelled:0
     };
     return map[ep];
   };
 
-  // ── Requests — count by slot qty ──────────────────────────────────────────
+  // ── Requests — used only for Pending (unactioned slots) and Rejected (wholly rejected, no placements) ──
   const isTulsaEp = document.getElementById('fRegion').value === 'tulsa';
   const activeRegionReqsEp = isTulsaEp ? TULSA_REQS : VICTORIA_REQS;
   const allReqs = [...activeRegionReqsEp, ...getAllReqs()];
   allReqs.forEach(r => {
-    if(!r.ep || r.reqType==='student') return;
+    if(!r.ep) return;
     const e = addEp(r.ep);
     const qty = r.qty || 0;
     const alloc = r.allocated || 0;
     if(r.status === 'pending'){
-      const open = Math.max(qty - alloc, 0);
-      e.req_allocated += alloc;
-      e.req_pending   += open;
-    } else if(r.status === 'allocated'){
-      e.req_allocated += qty;
-    } else if(r.status === 'rejected'){
-      e.req_rejected += qty;
-    } else if(r.status === 'offered'){
-      // Request-level offered (no placement records yet) — count toward bar
-      e.plc_offered += qty;
-    } else if(r.status === 'accepted'){
-      e.plc_accepted += qty;
-    } else if(r.status === 'published'){
-      e.plc_published += qty;
+      // Pending = requested slots minus any placements already created
+      e.pending += Math.max(qty - alloc, 0);
+    } else if(r.status === 'rejected' && alloc === 0){
+      // Whole request rejected with no placements created — use request.qty
+      e.rejected += qty;
     }
   });
 
-  // ── Placements — count by record, filtered to active region ────────────────
-  // Build a set of reqIds that belong to the current region
+  // ── Placements — primary source for all buckets ────────────────────────────
   const activeReqIds = new Set(allReqs.map(r => r.id));
   PLACEMENTS.forEach(p => {
     if(!p.ep) return;
-    // Only include placements whose request belongs to the active region
     if(!activeReqIds.has(p.reqId)) return;
     const e = addEp(p.ep);
-    if(p.status === 'offered')    e.plc_offered++;
-    else if(p.status === 'accepted')  e.plc_accepted++;
-    else if(p.status === 'published') e.plc_published++;
-    else if(p.status === 'cancelled') e.plc_cancelled++;
-    else if(p.status === 'withdrawn') e.plc_cancelled++; // treat withdrawn as cancelled
+    if(['cancelled','withdrawn'].includes(p.status)){
+      // Cancelled covers agency cancellations and EP offer-declined (both → cancelled)
+      e.cancelled++;
+    } else if(p.status === 'planned'){
+      e.planned++;
+    } else if(p.status === 'rejected'){
+      // Placement-level rejected = "reject remaining" partial rejections
+      e.rejected++;
+    } else {
+      // Offered = all placements minus cancelled & planned (incl. offered, accepted, published, confirmed, etc.)
+      e.offered++;
+    }
   });
 
   // Sort by most pending first
-  return Object.values(map).sort((a,b) => b.req_pending - a.req_pending);
+  return Object.values(map).sort((a,b) => b.pending - a.pending);
 }
 
 function getAllReqs(){
@@ -3491,14 +3588,12 @@ function drawEpPanel(){
   const body = document.getElementById('epBody');
   if(!data.length){ body.innerHTML='<div class="ep-empty">No EP data for current filters</div>'; return; }
 
-  // Shared scale: find the max placement total across all EPs
-  // Round up to a "nice" number (next multiple of 5) so ticks land on round values
+  // Shared scale: max across all 5 metrics summed per EP
   const maxRaw = Math.max(...data.map(ep =>
-    ep.plc_offered + ep.plc_accepted + ep.plc_published + ep.plc_cancelled
+    ep.pending + ep.rejected + ep.planned + ep.offered + ep.cancelled
   ), 1);
-  const scaleMax = Math.ceil(maxRaw / 5) * 5; // e.g. 8 → 10, 13 → 15
+  const scaleMax = Math.ceil(maxRaw / 5) * 5;
 
-  // Build 5 evenly-spaced tick marks: 0, 25%, 50%, 75%, 100%
   const tickPcts = [0, 25, 50, 75, 100];
   const scaleTicks = tickPcts.map(pct => {
     const val = Math.round((pct / 100) * scaleMax);
@@ -3508,42 +3603,43 @@ function drawEpPanel(){
   let html = `<div class="ep-grid-hdr">
     <div class="ep-col-ep">EP</div>
     <div class="ep-col-bar">Placements</div>
-    <div class="ep-col-total" style="white-space:nowrap">Plc</div>
+    <div class="ep-col-total" style="white-space:nowrap">Total</div>
   </div>`;
 
   data.forEach(ep => {
-    // Request text summary
-    const reqParts = [];
-    if(ep.req_pending)   reqParts.push(`${ep.req_pending} pending`);
-    if(ep.req_allocated) reqParts.push(`${ep.req_allocated} allocated`);
-    if(ep.req_rejected)  reqParts.push(`${ep.req_rejected} rejected`);
-    const reqMeta = reqParts.length ? reqParts.join(' · ') : 'no requests';
+    const total = ep.pending + ep.rejected + ep.planned + ep.offered + ep.cancelled;
 
-    // Placement bar — all EPs share the same scale (scaleMax)
-    const plcTotal = ep.plc_offered + ep.plc_accepted + ep.plc_published + ep.plc_cancelled;
-    const offW  = Math.round((ep.plc_offered   / scaleMax) * 100);
-    const accW  = Math.round((ep.plc_accepted  / scaleMax) * 100);
-    const pubW  = Math.round((ep.plc_published / scaleMax) * 100);
-    const witW  = Math.round((ep.plc_cancelled / scaleMax) * 100);
+    // Bar segment widths (% of scaleMax)
+    const pW  = Math.round((ep.pending   / scaleMax) * 100);
+    const oW  = Math.round((ep.offered   / scaleMax) * 100);
+    const plW = Math.round((ep.planned   / scaleMax) * 100);
+    const rW  = Math.round((ep.rejected  / scaleMax) * 100);
+    const cW  = Math.round((ep.cancelled / scaleMax) * 100);
+
+    // Left offsets for stacked segments: Pending | Offered | Planned | Rejected | Cancelled
+    const oL  = pW;
+    const plL = pW + oW;
+    const rL  = pW + oW + plW;
+    const cL  = pW + oW + plW + rW;
 
     html += `<div class="ep-grid-row">
       <div class="ep-col-ep">
         <div class="ep-row-name">${ep.ep}</div>
-        <div class="ep-row-meta">${reqMeta}</div>
       </div>
       <div class="ep-col-bar">
         <div class="ep-bar-wrap">
           <div class="ep-bar-track"></div>
           <div class="ep-bar-guideline-75"></div>
-          <div class="ep-bar-seg" style="width:${offW}%;background:rgba(255,165,0,0.3);left:0" title="${ep.plc_offered} offered"></div>
-          <div class="ep-bar-seg" style="width:${accW}%;background:rgba(0,128,0,0.3);left:${offW}%" title="${ep.plc_accepted} accepted"></div>
-          <div class="ep-bar-seg" style="width:${pubW}%;background:rgba(0,0,255,0.3);left:${offW+accW}%" title="${ep.plc_published} published"></div>
-          <div class="ep-bar-seg" style="width:${witW}%;background:rgba(128,128,128,0.3);left:${offW+accW+pubW}%" title="${ep.plc_cancelled} cancelled"></div>
+          <div class="ep-bar-seg" style="width:${pW}%;background:rgba(198,40,40,0.25);left:0" title="${ep.pending} pending"></div>
+          <div class="ep-bar-seg" style="width:${oW}%;background:rgba(255,152,0,0.35);left:${oL}%" title="${ep.offered} offered (all placements excl. cancelled &amp; planned)"></div>
+          <div class="ep-bar-seg" style="width:${plW}%;background:rgba(33,150,243,0.3);left:${plL}%" title="${ep.planned} planned"></div>
+          <div class="ep-bar-seg" style="width:${rW}%;background:rgba(80,80,80,0.25);left:${rL}%" title="${ep.rejected} rejected"></div>
+          <div class="ep-bar-seg" style="width:${cW}%;background:rgba(158,158,158,0.25);left:${cL}%" title="${ep.cancelled} cancelled"></div>
         </div>
       </div>
       <div class="ep-col-total">
-        <span class="ep-total-num">${plcTotal}</span>
-        <span class="ep-total-lbl">plc</span>
+        <span class="ep-total-num">${total}</span>
+        <span class="ep-total-lbl">Plcs</span>
       </div>
     </div>`;
   });
@@ -3813,6 +3909,28 @@ function renderFacRow(ag,cols,depth){
   let h=`<tr class="tr-fac"><td class="td-fac-name"><div class="td-fac-inner" style="padding-left:${pad}px">`;
   h+=arrow;
   h+=`<span class="fac-name-txt">${ag.name}</span>`;
+  // Placement badge — shown when Show Placements toggle is ON
+  if(showPlacements){
+    const agPlcs = (PLACEMENTS_BY_AGENCY[ag.name]||[])
+      .filter(p=>!['cancelled','withdrawn'].includes(p.status));
+    if(agPlcs.length){
+      const accepted  = agPlcs.filter(p=>p.status==='accepted').length;
+      const published = agPlcs.filter(p=>p.status==='published').length;
+      const offered   = agPlcs.filter(p=>p.status==='offered').length;
+      const tipParts=[];
+      if(accepted)  tipParts.push(`${accepted} Accepted`);
+      if(published) tipParts.push(`${published} Published`);
+      if(offered)   tipParts.push(`${offered} Offered`);
+      h+=`<button class="plc-badge"
+            title="${tipParts.join(' · ')}"
+            data-agname="${ag.name.replace(/"/g,'&quot;')}"
+            data-agtotal="${agPlcs.length}"
+            onclick="event.stopPropagation();openVpSheetForAgency(this.dataset.agname,parseInt(this.dataset.agtotal))">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+          ${agPlcs.length} plc
+        </button>`;
+    }
+  }
   // info icon removed
   h+=`</div></td>`;
   for(let i=0;i<cols;i++){
@@ -4111,12 +4229,8 @@ function renderEpCountRow(group, ag, cols, depth, isCollapsed){
 }
 
 function renderReqAndPlacements(r, cols, depth){
-
-  let h = renderReqRow(r, cols, depth);
-  if(showPlacements && PLACEMENTS_BY_REQ[r.id]){
-    PLACEMENTS_BY_REQ[r.id].forEach(p=>{ h += renderPlcRow(p, cols, depth); });
-  }
-  return h;
+  // Placement rows removed from grid — placements surface via agency badge + side sheet
+  return renderReqRow(r, cols, depth);
 }
 
 function renderReqRow(r,cols,depth){
@@ -6328,6 +6442,109 @@ function closeVpSheet(){
   if(rotationMode) document.getElementById('agRows')?.addEventListener('click', onRotationCellClick, true);
 }
 
+/* ── Placement side sheet — agency-scoped, status-grouped ── */
+const VP_MAX_PER_GROUP = 5;
+
+function openVpSheetForAgency(agencyName, total){
+  const placements = (PLACEMENTS_BY_AGENCY[agencyName]||[])
+    .filter(p=>!['cancelled','withdrawn'].includes(p.status));
+
+  document.getElementById('vpTitle').textContent = agencyName;
+  document.getElementById('vpSub').textContent =
+    `${total} placement${total!==1?'s':''} consuming capacity`;
+
+  const ORDER  = ['accepted','published','offered'];
+  const LABELS = {accepted:'Accepted',published:'Published',offered:'Offered'};
+  const BADGE  = {accepted:'accepted',published:'published',offered:'offered'};
+
+  const groups = {};
+  ORDER.forEach(s=>{ groups[s]=[]; });
+  placements.forEach(p=>{
+    if(groups[p.status]) groups[p.status].push(p);
+  });
+  // Sort each group — rotation placements first so they're visible within the cap
+  ORDER.forEach(s=>{
+    groups[s].sort((a,b)=> (b.isRotation?1:0) - (a.isRotation?1:0));
+  });
+
+  let html = '';
+  ORDER.forEach(status=>{
+    const list = groups[status];
+    if(!list.length) return;
+    const shown    = list.slice(0, VP_MAX_PER_GROUP);
+    const overflow = list.length - shown.length;
+
+    html += `<div class="vp-group-hdr">
+      <span class="vp-group-label">${LABELS[status]}</span>
+      <div class="vp-group-right">
+        ${overflow > 0
+          ? `<button class="vp-group-more"
+               onclick="alert('Full list for ${LABELS[status]} placements — placement list page TBD')">
+               +${overflow} more
+             </button>`
+          : ''}
+        <span class="vp-group-count">${list.length}</span>
+      </div>
+    </div>`;
+
+    shown.forEach(p=>{
+      const isRot = !!p.isRotation;
+      const metaParts = [];
+      if(p.type)  metaParts.push(`<span>${p.type}</span>`);
+      if(p.year)  metaParts.push(`<span class="sep">·</span><span>${p.year}</span>`);
+      if(p.shift && !isRot) metaParts.push(`<span class="sep">·</span><span>${p.shift}</span>`);
+      if(p.dates) metaParts.push(`<span class="sep">·</span><span>${p.dates}</span>`);
+
+      // Request trace — reqNum + status, always shown in muted grey
+      const req = REQ_META[p.reqId];
+      const reqNum = req?.reqNum || (p.reqId ? `Req: ${p.reqId.replace(/^r/,'')}` : null);
+      const reqStatus = req?.status || null;
+      const reqStatusCls = reqStatus ? `vp-req-${reqStatus}` : '';
+      const reqLine = reqNum
+        ? `<div class="vp-card-req">
+             <span class="vp-card-req-num">${reqNum}</span>
+             ${reqStatus ? `<span class="vp-card-req-status">${reqStatus.charAt(0).toUpperCase()+reqStatus.slice(1)}</span>` : ''}
+           </div>`
+        : '';
+
+      // Agency mismatch indicator
+      const mismatch = p.requestedAgencyName && p.agencyName !== p.requestedAgencyName
+        ? `<div style="font-size:9px;color:#e65100;margin-top:2px">
+             ⚠ Placed here — requested at ${p.requestedAgencyName}
+           </div>`
+        : '';
+
+      html += `<div class="vp-card ${status}">
+        <div class="vp-card-hdr">
+          <span class="vp-card-id">${p.plcNum}</span>
+          <span class="vp-card-badge ${BADGE[status]}">${LABELS[status]}</span>
+        </div>
+        <div class="vp-card-ep">${p.ep} · ${p.campus}</div>
+        <div class="vp-card-meta">${metaParts.join('')}</div>
+        ${isRot ? `<div class="vp-card-rotation">
+          <svg viewBox="0 0 24 24"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>
+          Rotation · ${p.rotationAgencies ? p.rotationAgencies.join(' → ') : 'Multi-ward'}
+        </div>` : ''}
+        ${reqLine}
+        ${mismatch}
+      </div>`;
+    });
+  });
+
+  if(!html){
+    html = `<div class="vp-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+      </svg>
+      <p>No active placements consuming capacity at this agency.</p>
+    </div>`;
+  }
+
+  document.getElementById('vpBody').innerHTML = html;
+  document.getElementById('vpOverlay').classList.add('open');
+  document.getElementById('vpSheet').classList.add('open');
+}
+
 function toggleAgencyGroup(hdr){
   const group = hdr.closest('.pt-agency-group');
   if(group) group.classList.toggle('collapsed');
@@ -7265,10 +7482,11 @@ loadGrid();
     <button class="ep-close" onclick="toggleEp()" title="Close">×</button>
   </div>
   <div class="ep-legend" id="epLegend">
-    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(255,165,0,0.3)"></span>Offered</span>
-    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(0,128,0,0.3)"></span>Accepted</span>
-    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(0,0,255,0.3)"></span>Published</span>
-    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(128,128,128,0.3)"></span>Cancelled</span>
+    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(198,40,40,0.25)"></span>Pending</span>
+    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(255,152,0,0.35)"></span>Offered</span>
+    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(33,150,243,0.3)"></span>Planned</span>
+    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(80,80,80,0.25)"></span>Rejected</span>
+    <span class="ep-leg-item"><span class="ep-leg-dot" style="background:rgba(158,158,158,0.25)"></span>Cancelled</span>
   </div>
   <div class="ep-body" id="epBody">
     <div class="ep-empty">Load the grid to see EP fairness</div>
