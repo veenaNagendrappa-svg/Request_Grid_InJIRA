@@ -140,29 +140,40 @@ body{
 .btn-mf-clear{height:36px;padding:0 16px;border:1px solid #bbb;border-radius:4px;background:white;font-family:inherit;font-size:13px;cursor:pointer}
 .btn-mf-apply{height:36px;padding:0 20px;background:#1976d2;color:white;border:1px solid #1976d2;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer}
 
-/* ── SUMMARY BAR ── */
-.summary-bar{
-  display:flex;align-items:stretch;background:white;
-  border-bottom:1px solid #e0e0e0;flex-shrink:0;
+/* ── SELECTOR PILLS (inside dropdown trigger) — neutral, no colour overload ── */
+.sel-pill{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:1px 7px;border-radius:9px;font-size:11px;font-weight:500;
+  margin-right:3px;white-space:nowrap;vertical-align:middle;
+  border:1px solid #bbb;background:#f0f0f0;color:#333;
 }
-.summary-card{
-  flex:1;padding:10px 16px;cursor:pointer;
-  border-right:1px solid #e8e8e8;transition:background .12s;
-  display:flex;flex-direction:column;gap:2px;position:relative;
+.sel-pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:#888}
+.sel-pill-more{
+  display:inline-flex;align-items:center;
+  padding:1px 6px;border-radius:9px;font-size:11px;font-weight:600;
+  background:#f0f0f0;color:#555;border:1px solid #bbb;vertical-align:middle;
 }
-.summary-card:last-child{border-right:none}
-.summary-card:hover{background:#f5f7ff}
-.summary-card.active{background:#f0f4ff}
-.summary-card.active::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;
-  height:2px;background:#1976d2;
+/* Status dropdown — tall enough, select all pinned at top */
+#msStatusDd{max-height:300px}
+#msStatusDd .ms-select-all{position:sticky;top:0;background:white;z-index:1;border-bottom:1px solid #eee}
+.status-indicator-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 16px;background:white;
+  border-bottom:1px solid #e8e8e8;flex-shrink:0;
+  min-height:34px;
 }
-.summary-card-val{font-size:20px;font-weight:500;color:#1a1d23;line-height:1}
-.summary-card-lbl{font-size:11px;color:#888;white-space:nowrap}
-.summary-card.s-pending .summary-card-val{color:#c62828}
-.summary-card.s-offered .summary-card-val{color:#e65100}
-.summary-card.s-rejected .summary-card-val{color:#555}
-.summary-card-action{margin-left:auto;align-self:center}
+.si-text{font-size:12px;color:#555;font-weight:400;white-space:nowrap}
+/* Status dropdown options with colour dots */
+.ms-option .ms-status-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  display:inline-block;margin-right:2px;vertical-align:middle;
+}
+.ms-opt-dot-pending{background:#c62828}
+.ms-opt-dot-offered{background:#e65100}
+.ms-opt-dot-rejected{background:#616161}
+.ms-opt-dot-allocated{background:#2e7d32}
+.ms-opt-dot-completed{background:#00695c}
+.ms-opt-dot-withdrawn{background:#7b1fa2}
 .btn-alloc-reqs{
   height:30px;padding:0 14px;border:1.5px solid #1976d2;
   border-radius:4px;background:white;color:#1976d2;
@@ -351,6 +362,65 @@ th,td{border:1px solid #e8e8e8;padding:0}
 .td-sub-num.wknd{background:#f5f5f5;color:#aaa;text-decoration:none;cursor:default}
 /* Demand indicator on shift sub-row cells */
 .td-sub-num-wrap{display:flex;flex-direction:column;align-items:center;gap:1px}
+/* ── PLACEMENT ROW ── */
+/* ── Placement section: left accent border connects label + all lane rows ── */
+.tr-plc-row td:first-child{border-left:3px solid #7aaaf0}
+.tr-plc-row td{background:#eff5ff}
+.tr-plc-row:hover td{background:#e6eeff}
+/* Lane separator — border-bottom on each row except last */
+.tr-plc-row:not(:last-of-type) td{border-bottom:1px solid #d4e4ff}
+.td-plc-row-name{
+  position:sticky;left:0;background:inherit;z-index:5;
+  border-right:2px solid #ddd;
+  padding:4px 6px 4px 0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;
+}
+.plc-row-inner{display:flex;align-items:center;gap:5px;padding:2px 6px;width:100%}
+.plc-row-lbl{font-size:11px;font-weight:500;color:#444;flex:1}
+.plc-row-view{
+  display:flex;align-items:center;gap:4px;
+  opacity:0;pointer-events:none;
+  cursor:pointer;
+  font-size:11px;font-family:inherit;
+  font-weight:500;letter-spacing:0.04em;
+  padding:3px 10px;border-radius:4px;
+  white-space:nowrap;
+  color:#fff;
+  background:var(--mat-button-protected-label-text-color,var(--mat-sys-primary,#1976d2));
+  border:none;
+  box-shadow:0 1px 3px rgba(0,0,0,0.25),0 1px 2px rgba(0,0,0,0.15);
+  transition:opacity 0.15s ease,box-shadow 0.15s ease;
+}
+.tr-plc-row:hover .plc-row-view{opacity:1;pointer-events:all}
+.plc-row-view:hover{box-shadow:0 2px 6px rgba(0,0,0,0.28),0 2px 4px rgba(0,0,0,0.18)}
+.td-plc-row-cell{
+  vertical-align:top;padding:2px 3px;
+  border-right:1px solid #e8e8e8;
+  font-size:10px;line-height:1.4;
+  background:inherit;
+}
+.td-plc-row-cell.wknd{background:#ececec}
+.plc-ep-chip{
+  display:block;
+  white-space:nowrap;
+  color:#333;
+  padding:1px 0;
+}
+.plc-ep-span{
+  display:block;
+  background:#dce8ff;
+  border:1px solid #b3ccf5;
+  border-radius:3px;
+  padding:1px 5px;
+  font-size:10px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  color:#1a3a6b;
+}
+.plc-ep-clickable{cursor:pointer}
+.plc-ep-clickable:hover{background:#c2d6f8;border-color:#7aaaf0}
+.td-plc-row-cell.plc-ep-has-data{padding:2px 2px}
 .sub-cap-val{font-size:12px;color:#1976d2;line-height:1.3;text-decoration:underline}
 .sub-cap-val.neg{color:#c62828}
 .sub-demand{
@@ -370,6 +440,21 @@ th,td{border:1px solid #e8e8e8;padding:0}
 }
 /* Req label — ID + subtext matching Allocation Options style */
 .req-lbl-wrap{display:flex;flex-direction:column;gap:2px}
+/* Condensed mode */
+.condensed .req-lbl-wrap{flex-direction:row;align-items:center;gap:5px}
+.condensed .req-lbl-sub{display:none}
+.condensed .td-req-name{padding-top:2px;padding-bottom:2px}
+.condensed .tr-req td{line-height:1.2}
+.req-lbl-condensed-date{display:none;font-size:10px;color:#888;white-space:nowrap}
+.condensed .req-lbl-condensed-date{display:inline}
+.req-lbl-sub-tooltip{
+  display:none;position:absolute;left:8px;top:100%;margin-top:2px;
+  background:#333;color:#fff;font-size:10px;padding:3px 7px;border-radius:3px;
+  white-space:nowrap;z-index:100;pointer-events:none;
+  box-shadow:0 2px 6px rgba(0,0,0,0.25);
+}
+.condensed .td-req-name{position:relative}
+.condensed .td-req-name:hover .req-lbl-sub-tooltip{display:block}
 .req-roster-badge{display:none}
 .req-lbl-top{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .req-lbl-link{
@@ -1807,10 +1892,14 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
         <svg class="ms-chevron" viewBox="0 0 10 7"><path d="M0 0l5 7 5-7z"/></svg>
       </div>
       <div class="ms-dropdown" id="msStatusDd">
-        <label class="ms-option selected"><input type="checkbox" value="pending" checked onchange="msStatusChanged()"> Pending</label>
-        <label class="ms-option"><input type="checkbox" value="offered" onchange="msStatusChanged()"> Offered</label>
-        <label class="ms-option"><input type="checkbox" value="rejected" onchange="msStatusChanged()"> Rejected</label>
-        <label class="ms-option"><input type="checkbox" value="published" onchange="msStatusChanged()"> Published</label>
+        <div class="ms-select-all" onclick="msStatusSelectAll()">Select all</div>
+        <label class="ms-option selected"><input type="checkbox" value="pending" checked onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-pending"></span> Pending</label>
+        <label class="ms-option"><input type="checkbox" value="offered" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-offered"></span> Offered</label>
+        <label class="ms-option"><input type="checkbox" value="allocated" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-allocated"></span> Allocated</label>
+        <label class="ms-option"><input type="checkbox" value="rejected" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-rejected"></span> Rejected</label>
+        <label class="ms-option"><input type="checkbox" value="completed" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-completed"></span> Completed</label>
+        <label class="ms-option"><input type="checkbox" value="withdrawn-ep" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-withdrawn"></span> Withdrawn Education Provider</label>
+        <label class="ms-option"><input type="checkbox" value="withdrawn-student" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-withdrawn"></span> Withdrawn Student</label>
       </div>
     </div>
   </div>
@@ -1841,24 +1930,9 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
   </div>
 </div>
 
-<!-- SUMMARY BAR -->
-<div class="summary-bar" id="summaryBar">
-  <div class="summary-card" onclick="setSummaryFilter('all')">
-    <span class="summary-card-val" id="sum-all">0</span>
-    <span class="summary-card-lbl">All Requests</span>
-  </div>
-  <div class="summary-card s-pending active" onclick="setSummaryFilter('pending')">
-    <span class="summary-card-val" id="sum-pending">0</span>
-    <span class="summary-card-lbl">Pending</span>
-  </div>
-  <div class="summary-card s-offered" onclick="setSummaryFilter('offered')">
-    <span class="summary-card-val" id="sum-offered">0</span>
-    <span class="summary-card-lbl">Offered</span>
-  </div>
-  <div class="summary-card s-rejected" onclick="setSummaryFilter('rejected')">
-    <span class="summary-card-val" id="sum-rejected">0</span>
-    <span class="summary-card-lbl">Rejected</span>
-  </div>
+<!-- STATUS INDICATOR (replaces summary bar) -->
+<div class="status-indicator-bar" id="statusIndicatorBar">
+  <span class="si-text" id="statusIndicatorText">Showing 0 Pending</span>
 </div>
 
 <!-- TOOLBAR -->
@@ -1924,7 +1998,19 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
   <!-- 5. Spacer pushes EP Balance to far right -->
   <div class="toolbar-spacer"></div>
 
-  <!-- 6. EP Balance — secondary, far right -->
+  <!-- 6. Compact toggle + EP Balance — far right -->
+  <div style="display:flex;align-items:center;gap:4px;margin-right:6px">
+    <span class="toolbar-section-lbl">Compact</span>
+    <div class="groupby-grp" title="Toggle compact view">
+      <button class="gb-btn active" id="densityNormal" onclick="setDensity('normal',this)" style="padding:3px 8px;font-size:11px" title="Comfortable">
+        <svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+      </button>
+      <button class="gb-btn" id="densityCondensed" onclick="setDensity('condensed',this)" style="padding:3px 8px;font-size:11px" title="Compact">
+        <svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:currentColor"><path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"/></svg>
+      </button>
+    </div>
+  </div>
+
   <button class="ep-toggle-btn" id="epToggleBtn" onclick="toggleEp('modal')">
     <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
     EP Balance
@@ -2610,6 +2696,7 @@ let groupBy  = 'none';
 let gridLoaded = false;
 const statusFilters = new Set(['pending']); // default: pending only (incl. partial); offered/rejected/published off
 let showPlacements = false; // placements hidden by default
+let condensedView = false;
 let showEP = false; // EP grouping hidden by default — independent toggle
 const DAYS = 28;
 const WEEKS = 28;
@@ -2802,7 +2889,7 @@ const AGENCIES = [
        comment:'Rejected — night shift capacity fully allocated for this period.',cells:{}},
     ],
     children:[
-      { id:'surg', name:'Surgical', expanded:false,
+      { id:'surg', name:'Surgical', expanded:true,
         caps:[null,null,null,null,null,2,null,null,null,null,null,null,2,null,null,null,null,null,null,2,null,null,null,null,null,null,null,null],
         shifts:[
           {id:'surg-day',label:'Day',full:'Day (08:00 - 16:00) | Nursing',caps:Array(28).fill(null)},
@@ -2828,27 +2915,53 @@ const AGENCIES = [
     hiddenChildren:[]
   },
   { id:'at3111', name:'3.11.1 AT', expanded:true,
-    caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?5:null),
+    caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?8:null),
     shifts:[
-      {id:'at-aud',label:'Audiology | Not Specified',full:'Audiology | Not Specified | Yr 1',caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?5:null)},
+      {id:'at-am',  label:'AM',  full:'AM (08:00-14:00) | Nursing', caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?4:null)},
+      {id:'at-pm',  label:'PM',  full:'PM (14:00-20:00) | Nursing', caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?4:null)},
+      {id:'at-ngt', label:'Night',full:'Night (20:00-06:00) | Nursing',caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?2:null)},
     ],
     pts:[
-      {id:'at-pt1',label:'Audiology | Placement Type 1 | Year 1 | Bachelor of Audiology',caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?1:null)},
+      {id:'at-pt1',label:'Nursing | General Medical | Year 2',caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?4:null)},
+      {id:'at-pt2',label:'Nursing | Surgical | Year 3',      caps:Array(28).fill(null).map((_,i)=>[0,1,3,4].includes(i%7)?4:null)},
     ],
     reqs:[
       {id:'r90613',reqNum:'Req: 90613',status:'offered',ep:'ACU',campus:'Melbourne',epCode:'ACU',
-       discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:1,allocated:1,dur:'14 days',shiftLabel:'PM only',shiftBadge:'sb-pm',chipLabel:'PM',
-       shiftId:'at-aud',ptId:'at-pt1',dates:'13 May – 26 May 2026',comment:'',
-       // Roster: Mon+Tue PM — cells are day indices for Mon and Tue within the date range
+       discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:3,allocated:2,dur:'14 days',shiftLabel:'PM only',shiftBadge:'sb-pm',chipLabel:'PM',
+       shiftId:'at-pm',ptId:'at-pt1',dates:'13 May – 26 May 2026',comment:'',
        roster:{days:['Mon','Tue'],shift:'PM (13:00-19:00)'},
        cells:{0:1,1:1,7:1,8:1,14:1,15:1}},
+      {id:'r90614',reqNum:'Req: 90614',status:'pending',ep:'DKN',campus:'Geelong',epCode:'DKN',
+       discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:2,allocated:0,dur:'7 days',shiftLabel:'AM only',shiftBadge:'sb-am',chipLabel:'AM',
+       shiftId:'at-am',ptId:'at-pt1',dates:'13 May – 22 May 2026',comment:'',
+       cells:{0:1,1:1,2:1,3:1,4:1,7:1,8:1,9:1}},
+      {id:'r90615',reqNum:'Req: 90615',status:'offered',ep:'MON',campus:'Clayton',epCode:'MON',
+       discipline:'Nursing',type:'Surgical',year:'Yr 3',qty:2,allocated:2,dur:'7 days',shiftLabel:'AM only',shiftBadge:'sb-am',chipLabel:'AM',
+       shiftId:'at-am',ptId:'at-pt2',dates:'13 May – 16 May 2026',comment:'',
+       cells:{0:1,1:1,2:1,3:1}},
+      {id:'r90616',reqNum:'Req: 90616',status:'pending',ep:'RMIT',campus:'City',epCode:'RMIT',
+       discipline:'Nursing',type:'Surgical',year:'Yr 3',qty:3,allocated:0,dur:'14 days',shiftLabel:'PM only',shiftBadge:'sb-pm',chipLabel:'PM',
+       shiftId:'at-pm',ptId:'at-pt2',dates:'19 May – 2 Jun 2026',comment:'',
+       cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1}},
+      {id:'r90617',reqNum:'Req: 90617',status:'offered',ep:'LTU',campus:'Melbourne',epCode:'LTU',
+       discipline:'Nursing',type:'Surgical',year:'Yr 3',qty:2,allocated:2,dur:'14 days',shiftLabel:'PM only',shiftBadge:'sb-pm',chipLabel:'PM',
+       shiftId:'at-pm',ptId:'at-pt2',dates:'13 May – 22 May 2026',comment:'',
+       cells:{0:1,1:1,3:1,4:1,7:1,8:1,9:1}},
+      {id:'r90618',reqNum:'Req: 90618',status:'pending',ep:'VU',campus:'Footscray',epCode:'VU',
+       discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:2,allocated:0,dur:'14 days',shiftLabel:'AM only',shiftBadge:'sb-am',chipLabel:'AM',
+       shiftId:'at-am',ptId:'at-pt1',dates:'20 May – 2 Jun 2026',comment:'',
+       cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1}},
+      {id:'r90619',reqNum:'Req: 90619',status:'pending',ep:'CSU',campus:'Wagga',epCode:'CSU',
+       discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:2,allocated:0,dur:'28 days',shiftLabel:'PM only',shiftBadge:'sb-pm',chipLabel:'PM',
+       shiftId:'at-pm',ptId:'at-pt1',dates:'13 May – 9 Jun 2026',comment:'',
+       cells:{0:1,1:1,7:1,8:1,14:1,15:1,21:1,22:1}},
       // Student request at agency level
       {id:'r91072',reqNum:'Req: 91072',reqType:'student',status:'pending',
        studentName:'James Okafor',studentCode:'S00304561',
        ep:'Deakin',campus:'Geelong',epCode:'DKN',
        discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:1,dur:'7 days',
        shiftLabel:'AM only',shiftBadge:'sb-am',chipStyle:'student',chipLabel:'Student',
-       shiftId:'at-aud',ptId:'at-pt1',dates:'20 May – 26 May 2026',comment:'Student has disability support needs — please advise parking',
+       shiftId:'at-am',ptId:'at-pt1',dates:'20 May – 26 May 2026',comment:'Student has disability support needs — please advise parking',
        roster:{days:['Wed','Thu','Fri'],shift:'AM (08:00-14:00)'},
        cells:{7:1,8:1,9:1}},
     ],
@@ -3312,59 +3425,137 @@ const TULSA_AGENCIES = [
    Statuses: offered | published | accepted | confirmed | cancelled | withdrawn
    Cells: same day-index format as requests                               */
 const PLACEMENTS = [
-  // Deakin · Melbourne Burwood — linked to r85589 — placed at 03-2300
+  // Deakin · Melbourne Burwood — linked to r85589 (General Medical, All shifts, pt:g03-pt2)
   {id:'p75176',plcNum:'Plc: 75176',reqId:'r85589',status:'offered',
-   agencyName:'03-2300',
+   agencyName:'03-2300',shiftId:'all',ptId:'g03-pt2',
    student:'Zunga Siakalima',studentCode:'S00187432',
    ep:'Deakin',campus:'Melbourne Burwood',epCode:'CURR512A',
    discipline:'Nursing',type:'General Medical',year:'Yr 2',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',
    cells:{0:1,1:1,7:1,8:1,14:1,15:1,21:1,22:1}},
   {id:'p75177',plcNum:'Plc: 75177',reqId:'r85589',status:'accepted',
-   agencyName:'03-2300',
+   agencyName:'03-2300',shiftId:'all',ptId:'g03-pt2',
    student:'Amara Osei',studentCode:'S00201345',
    ep:'Deakin',campus:'Melbourne Burwood',epCode:'CURR512A',
    discipline:'Nursing',type:'General Medical',year:'Yr 2',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',
    cells:{0:1,1:1,7:1,8:1,14:1,15:1,21:1,22:1}},
   {id:'p75178',plcNum:'Plc: 75178',reqId:'r85589',status:'accepted',
-   agencyName:'03-2300',
+   agencyName:'03-2300',shiftId:'all',ptId:'g03-pt2',
    student:'Sarah Kim',studentCode:'S00288912',
    ep:'Deakin',campus:'Melbourne Burwood',epCode:'CURR512A',
    discipline:'Nursing',type:'General Medical',year:'Yr 2',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
   // This one placed at a DIFFERENT agency — mismatch demo
   {id:'p75179',plcNum:'Plc: 75179',reqId:'r85589',status:'accepted',
-   agencyName:'(SA) Agency B',
+   agencyName:'(SA) Agency B',shiftId:'all',ptId:'g03-pt2',
    requestedEp:'Deakin',requestedCampus:'Melbourne Burwood',
    student:'Omar Hassan',studentCode:'S00301234',
    ep:'Deakin',campus:'Melbourne Burwood',epCode:'CURR512A',
    discipline:'Nursing',type:'General Medical',year:'Yr 3',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',cells:{1:1,8:1,15:1,22:1}},
 
-  // Deakin · Geelong — linked to r85593 — placed at 03-2300
+  // Deakin · Geelong — linked to r85593 (Surgical, All shifts, pt:g03-pt1)
   {id:'p75180',plcNum:'Plc: 75180',reqId:'r85593',status:'published',
-   agencyName:'03-2300',
+   agencyName:'03-2300',shiftId:'all',ptId:'g03-pt1',
    student:'James Larter',studentCode:'S00299871',
    ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
    discipline:'Nursing',type:'Surgical',year:'Yr 3',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',
    cells:{0:1,1:1,2:1,7:1,8:1,9:1,14:1,15:1,16:1,21:1,22:1,23:1}},
   {id:'p75181',plcNum:'Plc: 75181',reqId:'r85593',status:'accepted',
-   agencyName:'03-2300',
+   agencyName:'03-2300',shiftId:'all',ptId:'g03-pt1',
    student:'Priya Mehta',studentCode:'S00312456',
    ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
    discipline:'Nursing',type:'Surgical',year:'Yr 3',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',
    cells:{0:1,1:1,2:1,7:1,8:1,9:1,14:1,15:1,16:1,21:1,22:1,23:1}},
   {id:'p75182',plcNum:'Plc: 75182',reqId:'r85593',status:'accepted',
-   agencyName:'03-2300',
+   agencyName:'03-2300',shiftId:'all',ptId:'g03-pt1',
    student:'Lily Chen',studentCode:'S00315678',
    ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
    discipline:'Nursing',type:'Surgical',year:'Yr 3',
    shift:'Full Day',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
 
-  // ACU · Melbourne — linked to r90613, r88101
+  // ACU · Melbourne — linked to r88101 (General Medical, AM shift, pt:g03-pt1)
+  {id:'p75191',plcNum:'Plc: 75191',reqId:'r88101',status:'offered',
+   agencyName:'03-2300',shiftId:'g03-am',ptId:'g03-pt1',
+   student:'Fatima Al-Rashid',studentCode:'S00367890',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 3',
+   shift:'AM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
+  {id:'p75192',plcNum:'Plc: 75192',reqId:'r88101',status:'accepted',
+   agencyName:'03-2300',shiftId:'g03-am',ptId:'g03-pt1',
+   student:'Tom Walsh',studentCode:'S00378901',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 3',
+   shift:'AM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
+
+  // Monash · Clayton — linked to r88102 (General Medical, PM shift, pt:g03-pt2)
+  {id:'p75193',plcNum:'Plc: 75193',reqId:'r88102',status:'published',
+   agencyName:'03-2300',shiftId:'g03-pm',ptId:'g03-pt2',
+   student:'Aisha Patel',studentCode:'S00389012',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',
+   shift:'PM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
+  {id:'p75194',plcNum:'Plc: 75194',reqId:'r88102',status:'accepted',
+   agencyName:'03-2300',shiftId:'g03-pm',ptId:'g03-pt2',
+   student:'David Park',studentCode:'S00390123',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',
+   shift:'PM',dates:'13 May – 9 Jun 2026',cells:{7:1,14:1,21:1}},
+
+  // Monash · Clayton — linked to r91205 (Acute, AM shift, pt:g03-pt1)
+  {id:'p75196',plcNum:'Plc: 75196',reqId:'r91205',status:'offered',
+   agencyName:'03-2300',shiftId:'g03-am',ptId:'g03-pt1',
+   student:'Chloe Nguyen',studentCode:'S00391001',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'Acute',year:'Yr 3',
+   shift:'AM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
+  {id:'p75197',plcNum:'Plc: 75197',reqId:'r91205',status:'accepted',
+   agencyName:'03-2300',shiftId:'g03-am',ptId:'g03-pt1',
+   student:'Hassan Ali',studentCode:'S00391002',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'Acute',year:'Yr 3',
+   shift:'AM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
+  {id:'p75198',plcNum:'Plc: 75198',reqId:'r91205',status:'offered',
+   agencyName:'03-2300',shiftId:'g03-am',ptId:'g03-pt1',
+   student:'Yuki Tanaka',studentCode:'S00391003',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'Acute',year:'Yr 3',
+   shift:'AM',dates:'13 May – 9 Jun 2026',cells:{7:1,14:1,21:1}},
+
+  // ACU · Ballarat — linked to r86430b (General Medical, AM shift, pt:g03-pt1)
+  {id:'p75199',plcNum:'Plc: 75199',reqId:'r86430b',status:'offered',
+   agencyName:'03-2300',shiftId:'g03-am',ptId:'g03-pt1',
+   student:'Mia Kowalski',studentCode:'S00392001',
+   ep:'ACU',campus:'Ballarat',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 3',
+   shift:'AM',dates:'18 May 2026',cells:{5:1}},
+
+  // Night shift placements — linked to r86430b (Night, pt:g03-pt3)
+  {id:'p75200',plcNum:'Plc: 75200',reqId:'r85593',status:'offered',
+   agencyName:'03-2300',shiftId:'g03-ngt',ptId:'g03-pt3',
+   student:'Elena Sousa',studentCode:'S00393001',
+   ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
+   discipline:'Nursing',type:'Acute',year:'Yr 3',
+   shift:'Night',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
+  {id:'p75201',plcNum:'Plc: 75201',reqId:'r85589',status:'accepted',
+   agencyName:'03-2300',shiftId:'g03-ngt',ptId:'g03-pt4',
+   student:'Ryan O\'Brien',studentCode:'S00393002',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'Acute',year:'Yr 2',
+   shift:'Night',dates:'13 May – 9 Jun 2026',cells:{1:1,8:1,15:1,22:1}},
+
+  // Deakin · Geelong — withdrawn placement
+  {id:'p75183',plcNum:'Plc: 75183',reqId:'r85593',status:'withdrawn',
+   agencyName:'03-2300',shiftId:'all',ptId:'g03-pt1',
+   student:'Marcus Reid',studentCode:'S00320001',
+   ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
+
+  // ACU · Melbourne — linked to r90613 — placed at 3.11.1 AT
   {id:'p75190',plcNum:'Plc: 75190',reqId:'r90613',status:'offered',
    agencyName:'3.11.1 AT',
    student:'Ben Nguyen',studentCode:'S00345678',
@@ -3372,39 +3563,6 @@ const PLACEMENTS = [
    discipline:'Nursing',type:'General Medical',year:'Yr 2',
    shift:'PM',dates:'13 May – 26 May 2026',
    cells:{0:1,1:1,7:1,8:1,14:1,15:1}},
-  {id:'p75191',plcNum:'Plc: 75191',reqId:'r88101',status:'offered',
-   agencyName:'03-2300',
-   student:'Fatima Al-Rashid',studentCode:'S00367890',
-   ep:'ACU',campus:'Melbourne',epCode:'ACU',
-   discipline:'Nursing',type:'General Medical',year:'Yr 3',
-   shift:'AM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
-  {id:'p75192',plcNum:'Plc: 75192',reqId:'r88101',status:'accepted',
-   agencyName:'03-2300',
-   student:'Tom Walsh',studentCode:'S00378901',
-   ep:'ACU',campus:'Melbourne',epCode:'ACU',
-   discipline:'Nursing',type:'General Medical',year:'Yr 3',
-   shift:'AM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
-
-  // Monash · Clayton — linked to r88102
-  {id:'p75193',plcNum:'Plc: 75193',reqId:'r88102',status:'published',
-   agencyName:'03-2300',
-   student:'Aisha Patel',studentCode:'S00389012',
-   ep:'Monash',campus:'Clayton',epCode:'MON',
-   discipline:'Nursing',type:'General Medical',year:'Yr 2',
-   shift:'PM',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
-  {id:'p75194',plcNum:'Plc: 75194',reqId:'r88102',status:'accepted',
-   agencyName:'03-2300',
-   student:'David Park',studentCode:'S00390123',
-   ep:'Monash',campus:'Clayton',epCode:'MON',
-   discipline:'Nursing',type:'General Medical',year:'Yr 2',
-   shift:'PM',dates:'13 May – 9 Jun 2026',cells:{7:1,14:1,21:1}},
-  // Deakin · Geelong — withdrawn placement
-  {id:'p75183',plcNum:'Plc: 75183',reqId:'r85593',status:'withdrawn',
-   agencyName:'03-2300',
-   student:'Marcus Reid',studentCode:'S00320001',
-   ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
-   discipline:'Nursing',type:'Surgical',year:'Yr 3',
-   shift:'Full Day',dates:'13 May – 9 Jun 2026',cells:{0:1,7:1,14:1,21:1}},
 
   // Mismatch demo — placed at (SA) Agency B, request was under 03-2300
   {id:'p75195',plcNum:'Plc: 75195',reqId:'r88102',status:'offered',
@@ -3417,30 +3575,30 @@ const PLACEMENTS = [
 
   // ── Tulsa region — fake placement data for EP Balance demo ───────────────
   // Langston University — mix of offered + accepted + published
-  {id:'pt53176a',plcNum:'Plc: 53176A',reqId:'r53176',status:'offered',   agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'24 Aug 2026',cells:{7:1}},
-  {id:'pt53176b',plcNum:'Plc: 53176B',reqId:'r53176',status:'offered',   agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'24 Aug 2026',cells:{7:1}},
-  {id:'pt53176c',plcNum:'Plc: 53176C',reqId:'r53176',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'24 Aug 2026',cells:{7:1}},
-  {id:'pt53177a',plcNum:'Plc: 53177A',reqId:'r53177',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'31 Aug 2026',cells:{14:1}},
-  {id:'pt53177b',plcNum:'Plc: 53177B',reqId:'r53177',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'31 Aug 2026',cells:{14:1}},
-  {id:'pt53177c',plcNum:'Plc: 53177C',reqId:'r53177',status:'published', agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'31 Aug 2026',cells:{14:1}},
-  {id:'pt53184a',plcNum:'Plc: 53184A',reqId:'r53184',status:'published', agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'14 Sep 2026',cells:{28:1}},
-  {id:'pt53184b',plcNum:'Plc: 53184B',reqId:'r53184',status:'withdrawn', agencyName:'Saint Francis Hospital',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'14 Sep 2026',cells:{28:1}},
+  {id:'pt53176a',plcNum:'Plc: 53176A',reqId:'r53176',status:'offered',   agencyName:'4 West - Medical Surgical',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'24 Aug 2026',cells:{7:1}},
+  {id:'pt53176b',plcNum:'Plc: 53176B',reqId:'r53176',status:'offered',   agencyName:'4 West - Medical Surgical',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'24 Aug 2026',cells:{7:1}},
+  {id:'pt53176c',plcNum:'Plc: 53176C',reqId:'r53176',status:'accepted',  agencyName:'4 West - Medical Surgical',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'24 Aug 2026',cells:{7:1}},
+  {id:'pt53177a',plcNum:'Plc: 53177A',reqId:'r53177',status:'accepted',  agencyName:'4 West - Medical Surgical',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'31 Aug 2026',cells:{14:1}},
+  {id:'pt53177b',plcNum:'Plc: 53177B',reqId:'r53177',status:'accepted',  agencyName:'4 West - Medical Surgical',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'31 Aug 2026',cells:{14:1}},
+  {id:'pt53177c',plcNum:'Plc: 53177C',reqId:'r53177',status:'published', agencyName:'4 West - Medical Surgical',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'31 Aug 2026',cells:{14:1}},
+  {id:'pt53184a',plcNum:'Plc: 53184A',reqId:'r53184',status:'published', agencyName:'Emergency Department',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'14 Sep 2026',cells:{28:1}},
+  {id:'pt53184b',plcNum:'Plc: 53184B',reqId:'r53184',status:'withdrawn', agencyName:'Emergency Department',ep:'Langston University',campus:'Tulsa',epCode:'LU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',dates:'14 Sep 2026',cells:{28:1}},
 
   // Rogers State University — mostly accepted + published
-  {id:'pt53169a',plcNum:'Plc: 53169A',reqId:'r53169',status:'offered',   agencyName:'Saint Francis Hospital',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
-  {id:'pt53169b',plcNum:'Plc: 53169B',reqId:'r53169',status:'offered',   agencyName:'Saint Francis Hospital',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
-  {id:'pt53169c',plcNum:'Plc: 53169C',reqId:'r53169',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
-  {id:'pt53169d',plcNum:'Plc: 53169D',reqId:'r53169',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'31 Aug 2026',cells:{14:1}},
-  {id:'pt53169e',plcNum:'Plc: 53169E',reqId:'r53169',status:'published', agencyName:'Saint Francis Hospital',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'07 Sep 2026',cells:{21:1}},
+  {id:'pt53169a',plcNum:'Plc: 53169A',reqId:'r53169',status:'offered',   agencyName:'4 West - Medical Surgical',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
+  {id:'pt53169b',plcNum:'Plc: 53169B',reqId:'r53169',status:'offered',   agencyName:'4 West - Medical Surgical',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
+  {id:'pt53169c',plcNum:'Plc: 53169C',reqId:'r53169',status:'accepted',  agencyName:'4 West - Medical Surgical',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
+  {id:'pt53169d',plcNum:'Plc: 53169D',reqId:'r53169',status:'accepted',  agencyName:'4 West - Medical Surgical',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'31 Aug 2026',cells:{14:1}},
+  {id:'pt53169e',plcNum:'Plc: 53169E',reqId:'r53169',status:'published', agencyName:'4 West - Medical Surgical',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Full Day',dates:'07 Sep 2026',cells:{21:1}},
   {id:'pt88880a',plcNum:'Plc: 88880A',reqId:'r88880',status:'published', agencyName:'Saint Francis Hospital',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Rotation',year:'Junior',shift:'All shifts',dates:'24 Aug 2026',cells:{7:1}},
   {id:'pt88880b',plcNum:'Plc: 88880B',reqId:'r88880',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',discipline:'Nursing',type:'Rotation',year:'Junior',shift:'All shifts',dates:'24 Aug 2026',cells:{7:1}},
 
   // Oral Roberts University — partially allocated (3 of 8)
-  {id:'pt53901a',plcNum:'Plc: 53901A',reqId:'r53901',status:'offered',   agencyName:'Saint Francis Hospital',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
-  {id:'pt53901b',plcNum:'Plc: 53901B',reqId:'r53901',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'31 Aug 2026',cells:{14:1}},
-  {id:'pt53901c',plcNum:'Plc: 53901C',reqId:'r53901',status:'accepted',  agencyName:'Saint Francis Hospital',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'07 Sep 2026',cells:{21:1}},
-  {id:'pt53901d',plcNum:'Plc: 53901D',reqId:'r53901',status:'published', agencyName:'Saint Francis Hospital',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'14 Sep 2026',cells:{28:1}},
-  {id:'pt53901e',plcNum:'Plc: 53901E',reqId:'r53901',status:'withdrawn', agencyName:'Saint Francis Hospital',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'21 Sep 2026',cells:{35:1}},
+  {id:'pt53901a',plcNum:'Plc: 53901A',reqId:'r53901',status:'offered',   agencyName:'4 West - Medical Surgical',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'24 Aug 2026',cells:{7:1}},
+  {id:'pt53901b',plcNum:'Plc: 53901B',reqId:'r53901',status:'accepted',  agencyName:'4 West - Medical Surgical',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'31 Aug 2026',cells:{14:1}},
+  {id:'pt53901c',plcNum:'Plc: 53901C',reqId:'r53901',status:'accepted',  agencyName:'4 West - Medical Surgical',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'07 Sep 2026',cells:{21:1}},
+  {id:'pt53901d',plcNum:'Plc: 53901D',reqId:'r53901',status:'published', agencyName:'4 West - Medical Surgical',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'14 Sep 2026',cells:{28:1}},
+  {id:'pt53901e',plcNum:'Plc: 53901E',reqId:'r53901',status:'withdrawn', agencyName:'4 West - Medical Surgical',ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Full Day',dates:'21 Sep 2026',cells:{35:1}},
 
   // University of Tulsa — published and accepted
   {id:'pt53274a',plcNum:'Plc: 53274A',reqId:'r53274',status:'published', agencyName:'Laureate Psychiatric',ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',dates:'24 Aug 2026',cells:{7:1}},
@@ -3481,6 +3639,706 @@ const PLACEMENTS = [
    discipline:'Nursing',type:'Rotation',year:'Senior',
    shift:null,
    dates:'24 Aug – 7 Dec 2026',cells:{}},
+
+  // ── Victoria · 03-2300 child agency — Surgical ward ─────────────────────
+  // Several placements at the Surgical child to test placement row on child agency
+
+  {id:'p80100',plcNum:'Plc: 80100',reqId:'r85593',status:'offered',
+   agencyName:'Surgical',
+   student:'Tom Walsh',studentCode:'S00400001',
+   ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',
+   cells:{0:1,1:1,2:1,7:1,8:1,9:1,14:1,15:1,16:1,21:1,22:1,23:1}},
+  {id:'p80101',plcNum:'Plc: 80101',reqId:'r85593',status:'accepted',
+   agencyName:'Surgical',
+   student:'Nina Park',studentCode:'S00400002',
+   ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',
+   cells:{0:1,1:1,2:1,7:1,8:1,9:1,14:1,15:1,16:1,21:1,22:1,23:1}},
+  {id:'p80102',plcNum:'Plc: 80102',reqId:'r85593',status:'accepted',
+   agencyName:'Surgical',
+   student:'Leo Bauer',studentCode:'S00400003',
+   ep:'Deakin',campus:'Melbourne Burwood',epCode:'CURR512A',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',
+   cells:{0:1,7:1,14:1,21:1}},
+  {id:'p80103',plcNum:'Plc: 80103',reqId:'r85589',status:'offered',
+   agencyName:'Surgical',
+   student:'Aisha Diallo',studentCode:'S00400004',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',
+   cells:{0:1,1:1,7:1,8:1,14:1,15:1,21:1,22:1}},
+  {id:'p80104',plcNum:'Plc: 80104',reqId:'r85589',status:'accepted',
+   agencyName:'Surgical',
+   student:'Ravi Patel',studentCode:'S00400005',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',
+   cells:{0:1,1:1,2:1,7:1,8:1,9:1,14:1,15:1,16:1}},
+  {id:'p80105',plcNum:'Plc: 80105',reqId:'r88101',status:'published',
+   agencyName:'Surgical',
+   student:'Chloe Armstrong',studentCode:'S00400006',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 3',
+   shift:'AM',dates:'13 May – 9 Jun 2026',
+   cells:{0:1,7:1,14:1,21:1}},
+
+  // ── Victoria · 03-2300 child agency — A2023-00016 (deep child) ──────────
+  {id:'p80200',plcNum:'Plc: 80200',reqId:'r85593',status:'accepted',
+   agencyName:'A2023-00016',
+   student:'Sophie Grant',studentCode:'S00500001',
+   ep:'Deakin',campus:'Geelong Waterfront',epCode:'CURR512A',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',
+   cells:{7:1,8:1,9:1,14:1,15:1,16:1}},
+  {id:'p80201',plcNum:'Plc: 80201',reqId:'r85593',status:'offered',
+   agencyName:'A2023-00016',
+   student:'Marcus Hill',studentCode:'S00500002',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',
+   shift:'Full Day',dates:'13 May – 9 Jun 2026',
+   cells:{7:1,8:1,14:1,15:1,21:1,22:1}},
+  {id:'p80202',plcNum:'Plc: 80202',reqId:'r91205',status:'accepted',
+   agencyName:'A2023-00016',
+   student:'Elena Russo',studentCode:'S00500003',
+   ep:'Monash',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'Acute',year:'Yr 3',
+   shift:'AM',dates:'13 May – 9 Jun 2026',
+   cells:{0:1,7:1,14:1,21:1}},
+
+  // ── Victoria · 3.11.1 AT ────────────────────────────────────────────────
+  {id:'p80300',plcNum:'Plc: 80300',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',
+   student:'Oliver Chen',studentCode:'S00600001',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',
+   shift:'PM',dates:'13 May – 26 May 2026',
+   cells:{0:1,1:1,7:1,8:1}},
+  {id:'p80301',plcNum:'Plc: 80301',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',
+   student:'Priya Sharma',studentCode:'S00600002',
+   ep:'Deakin',campus:'Geelong',epCode:'DKN',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',
+   shift:'PM',dates:'13 May – 26 May 2026',
+   cells:{1:1,8:1,14:1,15:1}},
+  {id:'p80302',plcNum:'Plc: 80302',reqId:'r90613',status:'published',
+   agencyName:'3.11.1 AT',
+   student:'James Wu',studentCode:'S00600003',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',
+   shift:'PM',dates:'13 May – 26 May 2026',
+   cells:{0:1,7:1,14:1}},
+
+  // ── Tulsa · Laureate · Adult Behavioral Health ───────────────────────────
+  {id:'p90100',plcNum:'Plc: 90100',reqId:'r88880',status:'offered',
+   agencyName:'Adult Behavioral Health',
+   student:'Kayla Rivers',studentCode:'T00100001',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',
+   shift:'Day',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'p90101',plcNum:'Plc: 90101',reqId:'r88880',status:'accepted',
+   agencyName:'Adult Behavioral Health',
+   student:'Marcus Taylor',studentCode:'T00100002',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',
+   shift:'Evening',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,9:1,14:1,15:1,16:1,21:1,22:1,23:1}},
+  {id:'p90102',plcNum:'Plc: 90102',reqId:'r88901',status:'offered',
+   agencyName:'Adult Behavioral Health',
+   student:'Destiny Moore',studentCode:'T00100003',
+   ep:'Langston University',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',
+   shift:'Day',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'p90103',plcNum:'Plc: 90103',reqId:'r88901',status:'accepted',
+   agencyName:'Adult Behavioral Health',
+   student:'Jordan Blake',studentCode:'T00100004',
+   ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',
+   shift:'Day',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,14:1,15:1,21:1,22:1}},
+  {id:'p90104',plcNum:'Plc: 90104',reqId:'r88902',status:'published',
+   agencyName:'Adult Behavioral Health',
+   student:'Alexis Reed',studentCode:'T00100005',
+   ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',
+   shift:'Evening',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,9:1,11:1,14:1,16:1,18:1,21:1,23:1}},
+
+  // ── Tulsa · Laureate · Eating Disorders ─────────────────────────────────
+  {id:'p90200',plcNum:'Plc: 90200',reqId:'r88903',status:'offered',
+   agencyName:'Eating Disorders',
+   student:'Brianna Scott',studentCode:'T00200001',
+   ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',
+   shift:'Day',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,9:1,14:1,15:1,16:1}},
+  {id:'p90201',plcNum:'Plc: 90201',reqId:'r88901',status:'accepted',
+   agencyName:'Eating Disorders',
+   student:'Noah Martinez',studentCode:'T00200002',
+   ep:'Langston University',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',
+   shift:'Evening',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,14:1,15:1,21:1,22:1}},
+
+  // ── Tulsa · Laureate · Senior Behavioral Health ──────────────────────────
+  {id:'p90300',plcNum:'Plc: 90300',reqId:'r88902',status:'accepted',
+   agencyName:'Senior Behavioral Health',
+   student:'Cameron Ellis',studentCode:'T00300001',
+   ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',
+   shift:'Day',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'p90301',plcNum:'Plc: 90301',reqId:'r88880',status:'offered',
+   agencyName:'Senior Behavioral Health',
+   student:'Taylor Kim',studentCode:'T00300002',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',
+   shift:'Evening',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,9:1,11:1,14:1,16:1,18:1,21:1,23:1,25:1}},
+  {id:'p90302',plcNum:'Plc: 90302',reqId:'r88903',status:'published',
+   agencyName:'Senior Behavioral Health',
+   student:'Devon Washington',studentCode:'T00300003',
+   ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',
+   shift:'Day',dates:'24 Aug – 7 Dec 2026',
+   cells:{8:1,10:1,15:1,17:1,22:1,24:1}},
+
+  // ── Tulsa · Laureate · Wells Progressive Care ────────────────────────────
+  {id:'p90400',plcNum:'Plc: 90400',reqId:'r88901',status:'offered',
+   agencyName:'Wells Progressive Care',
+   student:'Riley Johnson',studentCode:'T00400001',
+   ep:'Langston University',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',
+   shift:'Day',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,9:1,14:1,15:1,16:1,21:1,22:1,23:1}},
+  {id:'p90401',plcNum:'Plc: 90401',reqId:'r88902',status:'accepted',
+   agencyName:'Wells Progressive Care',
+   student:'Avery Thompson',studentCode:'T00400002',
+   ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',
+   shift:'Evening',dates:'24 Aug – 7 Dec 2026',
+   cells:{7:1,8:1,14:1,15:1,21:1,22:1}},
+
+  // ── Tulsa · Saint Francis · 4 West Medical Surgical ─────────────────────
+  {id:'p91000',plcNum:'Plc: 91000',reqId:'r88904',status:'offered',
+   agencyName:'4 West - Medical Surgical',
+   student:'Hunter Davis',studentCode:'T01000001',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',
+   shift:'Day',dates:'18 Aug – 10 Sep 2026',
+   cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'p91001',plcNum:'Plc: 91001',reqId:'r88904',status:'accepted',
+   agencyName:'4 West - Medical Surgical',
+   student:'Savannah Clark',studentCode:'T01000002',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',
+   shift:'Day',dates:'18 Aug – 10 Sep 2026',
+   cells:{7:1,8:1,9:1,14:1,15:1,16:1}},
+  {id:'p91002',plcNum:'Plc: 91002',reqId:'r53901',status:'offered',
+   agencyName:'4 West - Medical Surgical',
+   student:'Isaiah White',studentCode:'T01000003',
+   ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',
+   shift:'Day',dates:'24 Aug – 9 Sep 2026',
+   cells:{7:1,9:1,14:1,16:1,21:1,23:1}},
+  {id:'p91003',plcNum:'Plc: 91003',reqId:'r53901',status:'accepted',
+   agencyName:'4 West - Medical Surgical',
+   student:'Aaliyah Harris',studentCode:'T01000004',
+   ep:'Langston University',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',
+   shift:'Day',dates:'24 Aug – 9 Sep 2026',
+   cells:{7:1,9:1,14:1,16:1}},
+  {id:'p91004',plcNum:'Plc: 91004',reqId:'r53176',status:'published',
+   agencyName:'4 West - Medical Surgical',
+   student:'Ethan Robinson',studentCode:'T01000005',
+   ep:'Langston University',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',
+   shift:'Day',dates:'24 Aug 2026',
+   cells:{7:1}},
+
+  // ── Tulsa · Saint Francis · Emergency Department ─────────────────────────
+  {id:'p91100',plcNum:'Plc: 91100',reqId:'r53184',status:'offered',
+   agencyName:'Emergency Department',
+   student:'Caden Lewis',studentCode:'T01100001',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Emergency',year:'Junior',
+   shift:'PM',dates:'18 Aug – 10 Sep 2026',
+   cells:{1:1,3:1,8:1,10:1,15:1,17:1}},
+  {id:'p91101',plcNum:'Plc: 91101',reqId:'r53184',status:'accepted',
+   agencyName:'Emergency Department',
+   student:'Zoe Walker',studentCode:'T01100002',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Emergency',year:'Junior',
+   shift:'PM',dates:'18 Aug – 10 Sep 2026',
+   cells:{1:1,3:1,8:1,10:1}},
+  {id:'p91102',plcNum:'Plc: 91102',reqId:'r53290',status:'offered',
+   agencyName:'Emergency Department',
+   student:'Lucas Hall',studentCode:'T01100003',
+   ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Emergency',year:'Senior',
+   shift:'Day',dates:'17 Aug – 8 Sep 2026',
+   cells:{0:1,1:1,7:1,8:1,14:1,15:1}},
+
+  // ── Tulsa · Saint Francis · 5 Specialty CICU ────────────────────────────
+  {id:'p91200',plcNum:'Plc: 91200',reqId:'r53274',status:'offered',
+   agencyName:'5 Specialty - Cardiac Intensive Care Unit',
+   student:'Maya Young',studentCode:'T01200001',
+   ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Critical Care',year:'4th Semester',
+   shift:'Night',dates:'2 Sep 2026',
+   cells:{16:1}},
+  {id:'p91201',plcNum:'Plc: 91201',reqId:'r53274',status:'accepted',
+   agencyName:'5 Specialty - Cardiac Intensive Care Unit',
+   student:'Liam Green',studentCode:'T01200002',
+   ep:'Rogers State University',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Critical Care',year:'4th Semester',
+   shift:'Night',dates:'2 Sep 2026',
+   cells:{16:1}},
+
+  // ── Tulsa · Saint Francis · 2 West Antepartum ───────────────────────────
+  {id:'p91300',plcNum:'Plc: 91300',reqId:'r53290',status:'accepted',
+   agencyName:'2 West - Antepartum',
+   student:'Emma Torres',studentCode:'T01300001',
+   ep:'University of Tulsa',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Obstetrics',year:'Senior',
+   shift:'Day',dates:'17 Aug – 8 Sep 2026',
+   cells:{0:1,1:1,7:1,8:1,14:1,15:1,21:1,22:1}},
+  {id:'p91301',plcNum:'Plc: 91301',reqId:'r53291',status:'offered',
+   agencyName:'2 West - Antepartum',
+   student:'Grace Adams',studentCode:'T01300002',
+   ep:'Oral Roberts University',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Obstetrics',year:'Junior',
+   shift:'Day',dates:'20 Aug 2026',
+   cells:{3:1}},
+  {id:'p91302',plcNum:'Plc: 91302',reqId:'r53192',status:'published',
+   agencyName:'2 West - Antepartum',
+   student:'Noah Carter',studentCode:'T01300003',
+   ep:'Langston University',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Obstetrics',year:'Not Specified',
+   shift:'Day',dates:'21 Aug – 11 Sep 2026',
+   cells:{4:1,11:1,18:1,25:1}},
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 3.11.1 AT — Rich placement data covering all lane/groupBy scenarios
+  // Days: 0=Mon13, 1=Tue14, 2=Wed15, 3=Thu16, 4=Fri17, 5=Sat, 6=Sun,
+  //       7=Mon20, 8=Tue21, 9=Wed22, 10=Thu23, 11=Fri24 ...
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // ── Scenario A: Lane splitting — ACU Mon-Wed, DKN Wed-Fri (share Wed → 2 lanes)
+  {id:'at001',plcNum:'Plc: AT001',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Sophie Allen',studentCode:'S00700001',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'13 May – 15 May 2026',cells:{0:1,1:1,2:1}},
+
+  {id:'at002',plcNum:'Plc: AT002',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Ben Carter',studentCode:'S00700002',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'13 May – 15 May 2026',cells:{0:1,1:1,2:1}},
+
+  {id:'at003',plcNum:'Plc: AT003',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Mia Torres',studentCode:'S00700003',
+   ep:'DKN',campus:'Geelong',epCode:'DKN',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'15 May – 19 May 2026',cells:{2:1,3:1,4:1}},
+
+  {id:'at004',plcNum:'Plc: AT004',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Kai Nguyen',studentCode:'S00700004',
+   ep:'DKN',campus:'Geelong',epCode:'DKN',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'15 May – 19 May 2026',cells:{2:1,3:1,4:1}},
+
+  // ── Scenario B: 3 EPs all overlapping on Mon 13 May → 3 lanes
+  {id:'at005',plcNum:'Plc: AT005',reqId:'r90613',status:'published',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Lena Park',studentCode:'S00700005',
+   ep:'MON',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'13 May – 16 May 2026',cells:{0:1,1:1,2:1,3:1}},
+
+  {id:'at006',plcNum:'Plc: AT006',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Ryan Walsh',studentCode:'S00700006',
+   ep:'MON',campus:'Clayton',epCode:'MON',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'13 May – 16 May 2026',cells:{0:1,1:1,2:1,3:1}},
+
+  {id:'at007',plcNum:'Plc: AT007',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Nina Reid',studentCode:'S00700007',
+   ep:'CURR512A',campus:'Burwood',epCode:'CURR512A',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'13 May – 14 May 2026',cells:{0:1,1:1}},
+
+  // ── Scenario C: PM shift — different EPs for group-by-shift demo
+  {id:'at010',plcNum:'Plc: AT010',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'James Wu',studentCode:'S00710001',
+   ep:'ACU',campus:'Ballarat',epCode:'ACU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'13 May – 20 May 2026',cells:{0:1,1:1,3:1,4:1,7:1,8:1}},
+
+  {id:'at011',plcNum:'Plc: AT011',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Grace Kim',studentCode:'S00710002',
+   ep:'ACU',campus:'Ballarat',epCode:'ACU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'13 May – 20 May 2026',cells:{0:1,1:1,3:1,4:1,7:1,8:1}},
+
+  {id:'at012',plcNum:'Plc: AT012',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Omar Said',studentCode:'S00710003',
+   ep:'LTU',campus:'Melbourne',epCode:'LTU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'13 May – 22 May 2026',cells:{0:1,1:1,3:1,4:1,7:1,8:1,9:1}},
+
+  {id:'at013',plcNum:'Plc: AT013',reqId:'r90613',status:'published',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Priya Joshi',studentCode:'S00710004',
+   ep:'LTU',campus:'Melbourne',epCode:'LTU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'13 May – 22 May 2026',cells:{0:1,1:1,3:1,4:1,7:1,8:1,9:1}},
+
+  {id:'at014',plcNum:'Plc: AT014',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Ethan Brooks',studentCode:'S00710005',
+   ep:'RMIT',campus:'City',epCode:'RMIT',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'19 May – 26 May 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1}},
+
+  {id:'at015',plcNum:'Plc: AT015',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Chloe Evans',studentCode:'S00710006',
+   ep:'RMIT',campus:'City',epCode:'RMIT',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'19 May – 26 May 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1}},
+
+  {id:'at016',plcNum:'Plc: AT016',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Lucas Tan',studentCode:'S00710007',
+   ep:'RMIT',campus:'City',epCode:'RMIT',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'19 May – 26 May 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1}},
+
+  // ── Scenario D: Night shift — sparse, 2 EPs with gap between them
+  {id:'at020',plcNum:'Plc: AT020',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-ngt',ptId:'at-pt1',
+   student:'Yuki Sato',studentCode:'S00720001',
+   ep:'DKN',campus:'Geelong',epCode:'DKN',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'Night',
+   dates:'13 May – 14 May 2026',cells:{0:1,1:1}},
+
+  {id:'at021',plcNum:'Plc: AT021',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-ngt',ptId:'at-pt1',
+   student:'Amir Hassan',studentCode:'S00720002',
+   ep:'VU',campus:'Footscray',epCode:'VU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'Night',
+   dates:'20 May – 22 May 2026',cells:{7:1,8:1,9:1}},
+
+  {id:'at022',plcNum:'Plc: AT022',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-ngt',ptId:'at-pt2',
+   student:'Zara Hill',studentCode:'S00720003',
+   ep:'ACU',campus:'Melbourne',epCode:'ACU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'Night',
+   dates:'21 May – 24 May 2026',cells:{8:1,9:1,10:1}},
+
+  // ── Scenario E: Dense cell — 4+ EPs all on same day (overflow demo) Week 2
+  {id:'at030',plcNum:'Plc: AT030',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Felix Ng',studentCode:'S00730001',
+   ep:'UNI-MEL',campus:'Parkville',epCode:'UNI-MEL',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'20 May – 21 May 2026',cells:{7:1,8:1}},
+
+  {id:'at031',plcNum:'Plc: AT031',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Isla Morgan',studentCode:'S00730002',
+   ep:'SWIN',campus:'Hawthorn',epCode:'SWIN',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'20 May – 22 May 2026',cells:{7:1,8:1,9:1}},
+
+  {id:'at032',plcNum:'Plc: AT032',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Declan Ross',studentCode:'S00730003',
+   ep:'SWIN',campus:'Hawthorn',epCode:'SWIN',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'20 May – 22 May 2026',cells:{7:1,8:1,9:1}},
+
+  {id:'at033',plcNum:'Plc: AT033',reqId:'r90613',status:'published',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt2',
+   student:'Amber Liu',studentCode:'S00730004',
+   ep:'VU',campus:'Footscray',epCode:'VU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'AM',
+   dates:'21 May – 26 May 2026',cells:{8:1,9:1,10:1,11:1,14:1}},
+
+  {id:'at034',plcNum:'Plc: AT034',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt2',
+   student:'Marcus Bell',studentCode:'S00730005',
+   ep:'VU',campus:'Footscray',epCode:'VU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'AM',
+   dates:'21 May – 26 May 2026',cells:{8:1,9:1,10:1,11:1,14:1}},
+
+  // ── Scenario F: Non-consecutive gaps mid-span (ACU skips Thu/Fri)
+  {id:'at040',plcNum:'Plc: AT040',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt1',
+   student:'Tara Singh',studentCode:'S00740001',
+   ep:'CSU',campus:'Wagga',epCode:'CSU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'PM',
+   dates:'13 May – 26 May 2026',cells:{0:1,1:1,7:1,8:1,14:1,15:1}},  // Mon+Tue each week
+
+  {id:'at041',plcNum:'Plc: AT041',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt1',
+   student:'Jordan Fox',studentCode:'S00740002',
+   ep:'CSU',campus:'Wagga',epCode:'CSU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'PM',
+   dates:'13 May – 26 May 2026',cells:{0:1,1:1,7:1,8:1,14:1,15:1}},
+
+  {id:'at042',plcNum:'Plc: AT042',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt1',
+   student:'Maya Cross',studentCode:'S00740003',
+   ep:'UNI-MEL',campus:'Parkville',epCode:'UNI-MEL',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'PM',
+   dates:'13 May – 24 May 2026',cells:{0:1,1:1,2:1,3:1,4:1,7:1,8:1,9:1,10:1}}, // Mon-Fri wk1 + Mon-Thu wk2
+
+  // ── Weekend-spanning: Thu16 May → Mon20 May (cols 3,4,5,6,7) ─────────────
+  {id:'at050',plcNum:'Plc: AT050',reqId:'r90613',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Ava Nielsen',studentCode:'S00750001',
+   ep:'CSU',campus:'Wagga',epCode:'CSU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'16 May – 20 May 2026',cells:{3:1,4:1,5:1,6:1,7:1}}, // Thu→Fri→Sat→Sun→Mon
+
+  {id:'at051',plcNum:'Plc: AT051',reqId:'r90613',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-am',ptId:'at-pt1',
+   student:'Jack Brennan',studentCode:'S00750002',
+   ep:'CSU',campus:'Wagga',epCode:'CSU',
+   discipline:'Nursing',type:'General Medical',year:'Yr 2',shift:'AM',
+   dates:'16 May – 20 May 2026',cells:{3:1,4:1,5:1,6:1,7:1}}, // Thu→Fri→Sat→Sun→Mon
+
+  {id:'at052',plcNum:'Plc: AT052',reqId:'r90619',status:'offered',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Nadia Okafor',studentCode:'S00750003',
+   ep:'VU',campus:'Footscray',epCode:'VU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'21 May – 25 May 2026',cells:{8:1,9:1,10:1,11:1,12:1,13:1,14:1}}, // Tue→Wed→Thu→Fri→Sat→Sun→Mon
+
+  {id:'at053',plcNum:'Plc: AT053',reqId:'r90619',status:'accepted',
+   agencyName:'3.11.1 AT',shiftId:'at-pm',ptId:'at-pt2',
+   student:'Connor Walsh',studentCode:'S00750004',
+   ep:'VU',campus:'Footscray',epCode:'VU',
+   discipline:'Nursing',type:'Surgical',year:'Yr 3',shift:'PM',
+   dates:'21 May – 25 May 2026',cells:{8:1,9:1,10:1,11:1,12:1,13:1,14:1}}, // Tue→Wed→Thu→Fri→Sat→Sun→Mon
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TULSA — Rich data for lane/groupBy scenarios
+  // Cols: 7=Mon24Aug, 8=Tue25, 9=Wed26, 10=Thu27, 11=Fri28
+  //       14=Mon31, 15=Tue01Sep, 16=Wed02, 17=Thu03, 18=Fri04
+  //       21=Mon07Sep, 22=Tue08, 23=Wed09, 24=Thu10, 25=Fri11
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // ── Adult Behavioral Health: RSU Mon-Wed, LU Wed-Fri (share Wed → 2 lanes), ORU spans all ──
+  {id:'tu001',plcNum:'Plc: TU001',reqId:'r88880',status:'offered',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-day',ptId:'lau-abh-pt1',
+   student:'Kayla Rivers',studentCode:'T10001',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Day',
+   dates:'24 Aug – 26 Aug 2026',cells:{7:1,8:1,9:1}},
+  {id:'tu002',plcNum:'Plc: TU002',reqId:'r88880',status:'accepted',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-day',ptId:'lau-abh-pt1',
+   student:'Marcus Taylor',studentCode:'T10002',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Day',
+   dates:'24 Aug – 26 Aug 2026',cells:{7:1,8:1,9:1}},
+  {id:'tu003',plcNum:'Plc: TU003',reqId:'r88901',status:'offered',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-day',ptId:'lau-abh-pt1',
+   student:'Destiny Moore',studentCode:'T10003',ep:'LU',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Day',
+   dates:'26 Aug – 29 Aug 2026',cells:{9:1,10:1,11:1}},
+  {id:'tu004',plcNum:'Plc: TU004',reqId:'r88901',status:'accepted',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-day',ptId:'lau-abh-pt1',
+   student:'Jordan Blake',studentCode:'T10004',ep:'LU',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Day',
+   dates:'26 Aug – 29 Aug 2026',cells:{9:1,10:1,11:1}},
+  {id:'tu005',plcNum:'Plc: TU005',reqId:'r88902',status:'published',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-day',ptId:'lau-abh-pt1',
+   student:'Alexis Reed',studentCode:'T10005',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu006',plcNum:'Plc: TU006',reqId:'r88902',status:'offered',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-day',ptId:'lau-abh-pt1',
+   student:'Cameron Ellis',studentCode:'T10006',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  // Evening shift — UTU and RSU overlap wk2
+  {id:'tu007',plcNum:'Plc: TU007',reqId:'r88903',status:'offered',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-eve',ptId:'lau-abh-pt1',
+   student:'Taylor Kim',studentCode:'T10007',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Evening',
+   dates:'31 Aug – 04 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu008',plcNum:'Plc: TU008',reqId:'r88903',status:'accepted',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-eve',ptId:'lau-abh-pt1',
+   student:'Devon Washington',studentCode:'T10008',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Evening',
+   dates:'31 Aug – 04 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu009',plcNum:'Plc: TU009',reqId:'r88880',status:'offered',
+   agencyName:'Adult Behavioral Health',shiftId:'lau-abh-eve',ptId:'lau-abh-pt1',
+   student:'Riley Johnson',studentCode:'T10009',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Evening',
+   dates:'31 Aug – 07 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1,21:1}},
+
+  // ── Senior Behavioral Health: ORU wk1, RSU spans wk1-2, UTU wk2-3, LU wk3 ──
+  {id:'tu020',plcNum:'Plc: TU020',reqId:'r88902',status:'offered',
+   agencyName:'Senior Behavioral Health',shiftId:'lau-sbh-day',ptId:'lau-sbh-pt1',
+   student:'Hunter Grant',studentCode:'T20001',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',
+   dates:'24 Aug – 28 Aug 2026',cells:{7:1,8:1,9:1,10:1,11:1}},
+  {id:'tu021',plcNum:'Plc: TU021',reqId:'r88902',status:'accepted',
+   agencyName:'Senior Behavioral Health',shiftId:'lau-sbh-day',ptId:'lau-sbh-pt1',
+   student:'Savannah Brooks',studentCode:'T20002',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',
+   dates:'24 Aug – 28 Aug 2026',cells:{7:1,8:1,9:1,10:1,11:1}},
+  {id:'tu022',plcNum:'Plc: TU022',reqId:'r88880',status:'offered',
+   agencyName:'Senior Behavioral Health',shiftId:'lau-sbh-day',ptId:'lau-sbh-pt1',
+   student:'Isaiah White',studentCode:'T20003',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu023',plcNum:'Plc: TU023',reqId:'r88903',status:'published',
+   agencyName:'Senior Behavioral Health',shiftId:'lau-sbh-day',ptId:'lau-sbh-pt1',
+   student:'Aaliyah Harris',studentCode:'T20004',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Day',
+   dates:'31 Aug – 11 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu024',plcNum:'Plc: TU024',reqId:'r88901',status:'offered',
+   agencyName:'Senior Behavioral Health',shiftId:'lau-sbh-day',ptId:'lau-sbh-pt1',
+   student:'Ethan Robinson',studentCode:'T20005',ep:'LU',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Junior',shift:'Day',
+   dates:'07 Sep – 11 Sep 2026',cells:{21:1,22:1,23:1,24:1,25:1}},
+  // Evening — ORU and UTU overlap wk3
+  {id:'tu025',plcNum:'Plc: TU025',reqId:'r88902',status:'offered',
+   agencyName:'Senior Behavioral Health',shiftId:'lau-sbh-eve',ptId:'lau-sbh-pt1',
+   student:'Caden Lewis',studentCode:'T20006',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Evening',
+   dates:'07 Sep – 11 Sep 2026',cells:{21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu026',plcNum:'Plc: TU026',reqId:'r88903',status:'accepted',
+   agencyName:'Senior Behavioral Health',shiftId:'lau-sbh-eve',ptId:'lau-sbh-pt1',
+   student:'Zoe Walker',studentCode:'T20007',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Behavioral Health',year:'Senior',shift:'Evening',
+   dates:'07 Sep – 11 Sep 2026',cells:{21:1,22:1,23:1,24:1,25:1}},
+
+  // ── 4 West Med-Surg: 3 shifts, RSU/ORU/LU across all ──
+  {id:'tu040',plcNum:'Plc: TU040',reqId:'r88904',status:'offered',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+   student:'Noah Martinez',studentCode:'T40001',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu041',plcNum:'Plc: TU041',reqId:'r88904',status:'accepted',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+   student:'Brianna Scott',studentCode:'T40002',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu042',plcNum:'Plc: TU042',reqId:'r88904',status:'offered',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+   student:'Lucas Hall',studentCode:'T40003',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu043',plcNum:'Plc: TU043',reqId:'r53901',status:'offered',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+   student:'Maya Young',studentCode:'T40004',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Day',
+   dates:'24 Aug – 11 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu044',plcNum:'Plc: TU044',reqId:'r53901',status:'accepted',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+   student:'Liam Green',studentCode:'T40005',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Day',
+   dates:'24 Aug – 11 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu045',plcNum:'Plc: TU045',reqId:'r53176',status:'offered',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-day',ptId:'sfh-4wms-pt1',
+   student:'Emma Torres',studentCode:'T40006',ep:'LU',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Day',
+   dates:'07 Sep – 11 Sep 2026',cells:{21:1,22:1,23:1,24:1,25:1}},
+  // Evening
+  {id:'tu046',plcNum:'Plc: TU046',reqId:'r88904',status:'offered',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-eve',ptId:'sfh-4wms-pt1',
+   student:'Grace Adams',studentCode:'T40007',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Evening',
+   dates:'31 Aug – 11 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu047',plcNum:'Plc: TU047',reqId:'r53901',status:'accepted',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-eve',ptId:'sfh-4wms-pt1',
+   student:'Noah Carter',studentCode:'T40008',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Evening',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu048',plcNum:'Plc: TU048',reqId:'r53176',status:'published',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-eve',ptId:'sfh-4wms-pt1',
+   student:'Avery Thompson',studentCode:'T40009',ep:'LU',campus:'Tulsa',epCode:'LU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Not Specified',shift:'Evening',
+   dates:'31 Aug – 11 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  // Night
+  {id:'tu049',plcNum:'Plc: TU049',reqId:'r88904',status:'offered',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-ngt',ptId:'sfh-4wms-pt1',
+   student:'Hunter Davis',studentCode:'T40010',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Junior',shift:'Night',
+   dates:'24 Aug – 28 Aug 2026',cells:{7:1,8:1,9:1,10:1,11:1}},
+  {id:'tu050',plcNum:'Plc: TU050',reqId:'r53901',status:'offered',
+   agencyName:'4 West - Medical Surgical',shiftId:'sfh-4wms-ngt',ptId:'sfh-4wms-pt1',
+   student:'Savannah Clark',studentCode:'T40011',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Adult Med-Surg/Intermediate',year:'Senior',shift:'Night',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+
+  // ── Emergency Dept: RSU/UTU overlap wk1, UTU extends wk2-3, ORU wk2+ ──
+  {id:'tu060',plcNum:'Plc: TU060',reqId:'r53184',status:'offered',
+   agencyName:'Emergency Department',shiftId:'sfh-ed-day',ptId:'sfh-ed-pt1',
+   student:'Caden Rivers',studentCode:'T60001',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Emergency',year:'Junior',shift:'Day',
+   dates:'24 Aug – 28 Aug 2026',cells:{7:1,8:1,9:1,10:1,11:1}},
+  {id:'tu061',plcNum:'Plc: TU061',reqId:'r53184',status:'accepted',
+   agencyName:'Emergency Department',shiftId:'sfh-ed-day',ptId:'sfh-ed-pt1',
+   student:'Zoe Walker',studentCode:'T60002',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Emergency',year:'Junior',shift:'Day',
+   dates:'24 Aug – 28 Aug 2026',cells:{7:1,8:1,9:1,10:1,11:1}},
+  {id:'tu062',plcNum:'Plc: TU062',reqId:'r53290',status:'offered',
+   agencyName:'Emergency Department',shiftId:'sfh-ed-day',ptId:'sfh-ed-pt1',
+   student:'Lucas Hall',studentCode:'T60003',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Emergency',year:'Senior',shift:'Day',
+   dates:'24 Aug – 11 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu063',plcNum:'Plc: TU063',reqId:'r53290',status:'accepted',
+   agencyName:'Emergency Department',shiftId:'sfh-ed-day',ptId:'sfh-ed-pt1',
+   student:'Maya Young',studentCode:'T60004',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Emergency',year:'Senior',shift:'Day',
+   dates:'24 Aug – 11 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu064',plcNum:'Plc: TU064',reqId:'r53291',status:'offered',
+   agencyName:'Emergency Department',shiftId:'sfh-ed-day',ptId:'sfh-ed-pt1',
+   student:'Liam Green',studentCode:'T60005',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Emergency',year:'Junior',shift:'Day',
+   dates:'31 Aug – 11 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+
+  // ── 5 Specialty CICU: UTU+RSU day, ORU+UTU night, sparse lanes ──
+  {id:'tu070',plcNum:'Plc: TU070',reqId:'r53274',status:'offered',
+   agencyName:'5 Specialty - Cardiac Intensive Care Unit',shiftId:'sfh-5sicu-day',ptId:'sfh-5sicu-pt1',
+   student:'Emma Torres',studentCode:'T70001',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Critical Care',year:'4th Semester',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu071',plcNum:'Plc: TU071',reqId:'r53274',status:'accepted',
+   agencyName:'5 Specialty - Cardiac Intensive Care Unit',shiftId:'sfh-5sicu-day',ptId:'sfh-5sicu-pt1',
+   student:'Grace Adams',studentCode:'T70002',ep:'RSU',campus:'Tulsa',epCode:'RSU',
+   discipline:'Nursing',type:'Critical Care',year:'4th Semester',shift:'Day',
+   dates:'24 Aug – 04 Sep 2026',cells:{7:1,8:1,9:1,10:1,11:1,14:1,15:1,16:1,17:1,18:1}},
+  {id:'tu072',plcNum:'Plc: TU072',reqId:'r53274',status:'offered',
+   agencyName:'5 Specialty - Cardiac Intensive Care Unit',shiftId:'sfh-5sicu-ngt',ptId:'sfh-5sicu-pt1',
+   student:'Noah Carter',studentCode:'T70003',ep:'ORU',campus:'Tulsa',epCode:'ORU',
+   discipline:'Nursing',type:'Critical Care',year:'4th Semester',shift:'Night',
+   dates:'31 Aug – 11 Sep 2026',cells:{14:1,15:1,16:1,17:1,18:1,21:1,22:1,23:1,24:1,25:1}},
+  {id:'tu073',plcNum:'Plc: TU073',reqId:'r53274',status:'published',
+   agencyName:'5 Specialty - Cardiac Intensive Care Unit',shiftId:'sfh-5sicu-ngt',ptId:'sfh-5sicu-pt1',
+   student:'Avery Thompson',studentCode:'T70004',ep:'UTU',campus:'Tulsa',epCode:'UTU',
+   discipline:'Nursing',type:'Critical Care',year:'4th Semester',shift:'Night',
+   dates:'07 Sep – 11 Sep 2026',cells:{21:1,22:1,23:1,24:1,25:1}},
 ];
 const PLACEMENTS_BY_REQ = {};
 PLACEMENTS.forEach(p=>{
@@ -3796,6 +4654,150 @@ function agencyHasAnyReqs(ag){
   return (ag.children||[]).some(c=>agencyHasAnyReqs(c));
 }
 
+/* ── PLACEMENT ROW ─────────────────────────────────────────────────────────
+   Renders one "Placements" row directly under an agency (or shift sub-row).
+   `plcs`  — array of PLACEMENTS objects scoped to this agency/shift
+   `depth` — indentation level (matches the parent row)
+   `agencyName` — passed through to openVpSheetForAgency
+   `epFilter` — if set (EP groupBy context), cells show that EP's placements only;
+                View still opens ALL placements for the agency                */
+function renderPlacementRow(plcs, depth, agencyName, epFilter){
+  if(!plcs || !plcs.length) return '';
+
+  const active = plcs.filter(p=>!['cancelled','withdrawn'].includes(p.status));
+  if(!active.length) return '';
+
+  const allAgPlcs = (PLACEMENTS_BY_AGENCY[agencyName]||[])
+    .filter(p=>!['cancelled','withdrawn'].includes(p.status));
+  const viewTotal = allAgPlcs.length || active.length;
+
+  const cols = viewMode==='week' ? WEEKS : DAYS;
+  const pad  = 8 + (depth+1)*20;
+  const safeAgName = agencyName.replace(/"/g,'&quot;');
+  const isWkndCol = i => viewMode !== 'week' && isWknd(getDate(i));
+
+  // ── Build per-EP day-count arrays ─────────────────────────────────────────
+  const epMap = {};
+  active.forEach(p => {
+    const code = p.epCode || p.ep || '—';
+    if(!epMap[code]) epMap[code] = Array(cols).fill(0);
+    for(let i = 0; i < cols; i++){
+      if(p.cells && p.cells[i]) epMap[code][i] += 1;
+    }
+  });
+
+  // ── epFilter mode: inside EP group row — single row, count-only ───────────
+  if(epFilter){
+    const counts = epMap[epFilter] || Array(cols).fill(0);
+    let h = `<tr class="tr-plc-row">`;
+    h += `<td class="td-plc-row-name"><div class="plc-row-inner" style="padding-left:${pad}px">`;
+    h += `<span class="plc-row-lbl">Placements</span>`;
+    h += `<button class="plc-row-view" onclick="openVpSheetForAgency('${safeAgName}',${viewTotal})">View</button>`;
+    h += `</div></td>`;
+    let i = 0;
+    while(i < cols){
+      const wknd = isWkndCol(i);
+      if(!counts[i]){ h += `<td class="td-plc-row-cell${wknd?' wknd':''}"></td>`; i++; continue; }
+      let span = 1, total = counts[i];
+      while(i+span < cols && counts[i+span]){
+        total += counts[i+span]; span++;
+      }
+      const safeEp = epFilter.replace(/'/g,"\\'");
+      const wkndCls = wknd ? ' wknd' : '';
+      h += `<td class="td-plc-row-cell plc-ep-has-data${wkndCls}"${span>1?` colspan="${span}"`:''}>`
+         + `<span class="plc-ep-chip plc-ep-span plc-ep-clickable" onclick="openVpSheetForAgency('${safeAgName}',${total},'${safeEp}')">×${total}</span></td>`;
+      i += span;
+    }
+    return h + '</tr>';
+  }
+
+  // ── Sort EPs alphabetically ───────────────────────────────────────────────
+  const epCodes = Object.keys(epMap).sort();
+
+  // ── Build segments per EP: {ep, start, end, span, total} ─────────────────
+  // Segments span consecutive days WITH placements — weekends bridged if
+  // placements exist on both sides (Thu→Mon nursing pattern)
+  const segments = [];
+  epCodes.forEach(ep => {
+    const counts = epMap[ep];
+    let i = 0;
+    while(i < cols){
+      if(!counts[i]){ i++; continue; }
+      let span = 1, total = counts[i];
+      // Extend: skip weekend cols (they may be zero) if next non-weekend has placements
+      while(i+span < cols){
+        if(counts[i+span]){
+          // next day has placements — always extend
+          total += counts[i+span]; span++;
+        } else if(isWkndCol(i+span)){
+          // weekend gap — look ahead to see if placements resume after weekend
+          let skip = 1;
+          while(i+span+skip < cols && isWkndCol(i+span+skip)) skip++;
+          if(i+span+skip < cols && counts[i+span+skip]){
+            // placements resume after weekend — bridge over it
+            span += skip; // include the weekend cols in the span (zero count, just visual)
+          } else {
+            break; // nothing after weekend — stop
+          }
+        } else {
+          break; // weekday with no placements — stop
+        }
+      }
+      segments.push({ ep, start: i, end: i+span-1, span, total });
+      i += span;
+    }
+  });
+
+  // ── Assign segments to lanes (greedy, any shared day = new lane) ──────────
+  const lanes = [];
+  segments.forEach(seg => {
+    let placed = false;
+    for(const lane of lanes){
+      const clash = lane.some(s => seg.start <= s.end && seg.end >= s.start);
+      if(!clash){ lane.push(seg); placed = true; break; }
+    }
+    if(!placed) lanes.push([seg]);
+  });
+
+  if(!lanes.length) return '';
+
+  // ── Render lanes ─────────────────────────────────────────────────────────
+  let h = '';
+  lanes.forEach((lane, laneIdx) => {
+    h += `<tr class="tr-plc-row">`;
+
+    if(laneIdx === 0){
+      const laneLabel = lanes.length > 1 ? '' : '';
+      h += `<td class="td-plc-row-name" rowspan="${lanes.length}">`;
+      h += `<div class="plc-row-inner" style="padding-left:${pad}px">`;
+      h += `<span class="plc-row-lbl">Placements</span>`;
+      h += `<button class="plc-row-view" onclick="openVpSheetForAgency('${safeAgName}',${viewTotal})">View</button>`;
+      h += `</div></td>`;
+    }
+
+    lane.sort((a,b) => a.start - b.start);
+
+    let i = 0, segIdx = 0;
+    while(i < cols){
+      if(segIdx < lane.length && lane[segIdx].start === i){
+        const seg = lane[segIdx++];
+        const safeEp = seg.ep.replace(/'/g,"\\'");
+        const lbl = `${seg.total}\u00d7 ${seg.ep}`;
+        h += `<td class="td-plc-row-cell plc-ep-has-data"${seg.span>1?` colspan="${seg.span}"`:''}>`
+           + `<span class="plc-ep-chip plc-ep-span plc-ep-clickable" onclick="openVpSheetForAgency('${safeAgName}',${seg.total},'${safeEp}')">${lbl}</span>`
+           + `</td>`;
+        i += seg.span;
+      } else {
+        h += isWkndCol(i) ? `<td class="td-plc-row-cell wknd"></td>` : `<td class="td-plc-row-cell"></td>`;
+        i++;
+      }
+    }
+    h += `</tr>`;
+  });
+
+  return h;
+}
+
 function renderAgencies(ags,cols,depth){
   let rows='';
   ags.forEach(ag=>{
@@ -3804,6 +4806,14 @@ function renderAgencies(ags,cols,depth){
       const reqs=(ag.reqs||[]).filter(r=>statusFilters.has(r.status));
       const shifts=ag.shifts||[];
       const pts=ag.pts||[];
+
+      // ── Placement row (groupBy=none only — shift/pt modes inject per sub-row) ──
+      // Only on leaf agencies (no children) — parent agencies show placements on their children
+      const isLeaf = !ag.children || ag.children.length === 0;
+      if(showPlacements && groupBy==='none' && isLeaf){
+        const agPlcs = PLACEMENTS_BY_AGENCY[ag.name]||[];
+        rows += renderPlacementRow(agPlcs, depth, ag.name);
+      }
 
       if(groupBy==='none'){
         // ── GROUP BY NONE (DEFAULT) ───────────────────────────────────────────
@@ -3899,7 +4909,7 @@ function getAgCap(ag, i){
 }
 
 function renderFacRow(ag,cols,depth){
-  const pad=8+depth*16;
+  const pad=8+depth*20;
   const hasKids=(ag.shifts&&ag.shifts.length)||(ag.reqs&&ag.reqs.length)||(ag.children&&ag.children.length)||(ag.hiddenChildren&&ag.hiddenChildren.length)||(ag.pts&&ag.pts.length);
   // Show as collapsed by default when no matching requests, but still expandable
   const arrowCls = ag.expanded ? 'open' : 'closed';
@@ -3909,28 +4919,6 @@ function renderFacRow(ag,cols,depth){
   let h=`<tr class="tr-fac"><td class="td-fac-name"><div class="td-fac-inner" style="padding-left:${pad}px">`;
   h+=arrow;
   h+=`<span class="fac-name-txt">${ag.name}</span>`;
-  // Placement badge — shown when Show Placements toggle is ON
-  if(showPlacements){
-    const agPlcs = (PLACEMENTS_BY_AGENCY[ag.name]||[])
-      .filter(p=>!['cancelled','withdrawn'].includes(p.status));
-    if(agPlcs.length){
-      const accepted  = agPlcs.filter(p=>p.status==='accepted').length;
-      const published = agPlcs.filter(p=>p.status==='published').length;
-      const offered   = agPlcs.filter(p=>p.status==='offered').length;
-      const tipParts=[];
-      if(accepted)  tipParts.push(`${accepted} Accepted`);
-      if(published) tipParts.push(`${published} Published`);
-      if(offered)   tipParts.push(`${offered} Offered`);
-      h+=`<button class="plc-badge"
-            title="${tipParts.join(' · ')}"
-            data-agname="${ag.name.replace(/"/g,'&quot;')}"
-            data-agtotal="${agPlcs.length}"
-            onclick="event.stopPropagation();openVpSheetForAgency(this.dataset.agname,parseInt(this.dataset.agtotal))">
-          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-          ${agPlcs.length} plc
-        </button>`;
-    }
-  }
   // info icon removed
   h+=`</div></td>`;
   for(let i=0;i<cols;i++){
@@ -3972,7 +4960,7 @@ function renderFacRow(ag,cols,depth){
 }
 
 function renderSubRow(sub,ag,cols,depth,mode){
-  const pad=8+(depth+1)*16;
+  const pad=8+(depth+1)*20;
   const rawLabel=sub.full||sub.label;
   const label = ['Any shift','All shifts','Any'].includes(rawLabel) ? '' : rawLabel;
 
@@ -3993,6 +4981,17 @@ function renderSubRow(sub,ag,cols,depth,mode){
   // Find requests matching this shift/PT
   if(mode==='shift' || mode==='agency'){
     const stdReqs=(ag.reqs||[]).filter(r=>statusFilters.has(r.status)&&r.shiftId===sub.id);
+    // Placement row for this shift — filter placements whose request matches this shift
+    if(showPlacements){
+      const shiftReqIds = new Set((ag.reqs||[]).filter(r=>r.shiftId===sub.id).map(r=>r.id));
+      // Filter by shiftId directly on placement (most precise), fall back to req-based match
+      const shiftPlcs = (PLACEMENTS_BY_AGENCY[ag.name]||[]).filter(p=>{
+        if(p.shiftId) return p.shiftId === sub.id;
+        // fallback: placement's reqId matches a req on this shift
+        return shiftReqIds.has(p.reqId);
+      });
+      h += renderPlacementRow(shiftPlcs, depth+1, ag.name);
+    }
     if(showEP && stdReqs.length){
       // EP rows only when EP toggle on
       h+=renderEpGroupRows(stdReqs,ag,cols,depth+1,sub.id);
@@ -4002,6 +5001,16 @@ function renderSubRow(sub,ag,cols,depth,mode){
     }
   } else if(mode==='pt'){
     const ptReqs=(ag.reqs||[]).filter(r=>statusFilters.has(r.status)&&r.ptId===sub.id);
+    // Placement row for this PT — filter placements whose request matches this PT
+    if(showPlacements){
+      const ptReqIds = new Set((ag.reqs||[]).filter(r=>r.ptId===sub.id).map(r=>r.id));
+      // Filter by ptId directly on placement (most precise), fall back to req-based match
+      const ptPlcs = (PLACEMENTS_BY_AGENCY[ag.name]||[]).filter(p=>{
+        if(p.ptId) return p.ptId === sub.id;
+        return ptReqIds.has(p.reqId);
+      });
+      h += renderPlacementRow(ptPlcs, depth+1, ag.name);
+    }
     if(showEP){
       h+=renderEpGroupRows(ptReqs,ag,cols,depth+1,null);
     } else {
@@ -4016,7 +5025,7 @@ function renderReqRowLeg(r,leg,cols,depth){
   // Renders one "leg" of a mixed-shift request under a specific shift sub-row
   // Label shows full req info; chips only appear on this leg's days
   const cc={pending:'rc-p',offered:'rc-o',published:'rc-pu',rejected:'rc-r'}[r.status]||'rc-p';
-  const pad=8+(depth+1)*16;
+  const pad=8+(depth+1)*20;
   // Option 1 (chipStyle:'ep'): Req ID only on line 1
   // Option 2 (chipStyle:'shift'): Req ID + EP name on line 1
   const line1 = r.chipStyle==='shift'
@@ -4148,6 +5157,11 @@ function renderEpGroupRows(reqs, ag, cols, depth, parentShiftId){
     const isCollapsed = epCollapsed[k] !== false; // default collapsed
     rows += renderEpCountRow(group, ag, cols, depth, isCollapsed);
     if(!isCollapsed){
+      // Placement row for this EP — filter by ep and agency
+      if(showPlacements && ag){
+        const epPlcs = (PLACEMENTS_BY_AGENCY[ag.name]||[]).filter(p=>p.ep === group.ep);
+        rows += renderPlacementRow(epPlcs, depth, ag.name, group.ep);
+      }
       group.reqs.forEach(r=>{ rows += renderReqAndPlacements(r, cols, depth+1); });
     }
   });
@@ -4156,7 +5170,7 @@ function renderEpGroupRows(reqs, ag, cols, depth, parentShiftId){
 }
 
 function renderEpCountRow(group, ag, cols, depth, isCollapsed){
-  const pad = 8 + (depth+1)*16;
+  const pad = 8 + (depth+1)*20;
   const label = group.ep;
   const epKey = group.ep;
   const totalReqs = group.reqs.length;
@@ -4288,16 +5302,20 @@ function renderReqRow(r,cols,depth){
   const line2 = isStudent
     ? `${r.discipline||'Nursing'} · ${r.type} · ${r.year}${r.studentCode ? ` · ${r.studentCode}` : ''}`
     : `${r.discipline||'Nursing'} · ${r.type} · ${r.year}${datePart}`;
+  const condensedDateSpan = r.dates
+    ? `<span class="req-lbl-condensed-date">${shortenDates(r.dates)}</span>`
+    : '';
 
-  const pad=depth>0?8+(depth+1)*16:18;
+  const pad = depth < 0 ? 46 : depth === 0 ? 28 : 8+(depth+1)*20;
   let h=`<tr class="tr-req"><td class="td-req-name" style="padding-left:${pad}px">
     <div class="req-lbl-wrap">
       <div class="req-lbl-top">
         ${line1Parts}
+        ${condensedDateSpan}
         ${statusPill}
         ${studentBadge}
       </div>
-      <div class="req-lbl-sub">${line2}</div>
+      <div class="req-lbl-sub">${line2}</div><span class="req-lbl-sub-tooltip">${line2}</span>
     </div>
   </td>`;
   for(let i=0;i<cols;i++){
@@ -4342,7 +5360,7 @@ function renderReqRow(r,cols,depth){
 
 function renderGhost(ag,cols,depth){
   const n=ag.hiddenChildren.length;
-  const pad=8+(depth+1)*16;
+  const pad=8+(depth+1)*20;
   const lbl=ag.ghostExpanded?`∨ ${n} hidden by filter`:`› ${n} hidden by filter`;
   let h=`<tr class="tr-ghost"><td class="td-ghost" style="padding-left:${pad}px" data-ghost="${ag.id}">${lbl}</td>`;
   for(let i=0;i<cols;i++) h+=`<td></td>`;
@@ -4350,7 +5368,7 @@ function renderGhost(ag,cols,depth){
 }
 
 function renderHidden(hc,cols,depth){
-  const pad=8+(depth+2)*16;
+  const pad=8+(depth+2)*20;
   let h=`<tr class="tr-hidden"><td style="padding:0"><div class="td-hidden" style="padding-left:${pad}px">
     ${hc.name}
     <button class="info-ico" title="${hc.reasons.join(', ')}"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#ccc"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
@@ -4360,7 +5378,7 @@ function renderHidden(hc,cols,depth){
 }
 
 function renderEmptySubRow(msg,cols,depth){
-  const pad=8+(depth+1)*16;
+  const pad=8+(depth+1)*20;
   let h=`<tr class="tr-sub"><td class="td-sub-name" style="padding-left:${pad}px;color:#bbb;font-style:italic">${msg}</td>`;
   for(let i=0;i<cols;i++) h+=`<td class="td-sub-num"></td>`;
   return h+'</tr>';
@@ -4561,37 +5579,17 @@ function posTooltip(e){
 /* ─── EP CHART ──────────────────────────────────── */
 let epOpen=false;
 function updateSummaryBar(){
-  const _isTulsaSB = document.getElementById('fRegion').value === 'tulsa';
-  const allReqs = [
-    ...(_isTulsaSB ? TULSA_REQS : VICTORIA_REQS),
-    ...getAllReqs()
-  ];
-  const counts = {all:0, pending:0, offered:0, published:0, rejected:0};
-  allReqs.forEach(r=>{
-    counts.all++;
-    if(r.status==='pending')   counts.pending++;
-    else if(r.status==='offered') counts.offered++;
-    else if(r.status==='published') counts.published++;
-    else if(['rejected','withdrawn-ep','withdrawn-student'].includes(r.status)) counts.rejected++;
-  });
-  document.getElementById('sum-all').textContent       = counts.all;
-  document.getElementById('sum-pending').textContent   = counts.pending;
-  document.getElementById('sum-offered').textContent   = counts.offered;
-  document.getElementById('sum-rejected').textContent  = counts.rejected;
+  // Replaced by updateStatusIndicator — kept as no-op to avoid breaking render() call
+  updateStatusIndicator();
 }
 
 function setSummaryFilter(status){
-  // Update active card
-  document.querySelectorAll('.summary-card').forEach(c=>c.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  // Summary cards removed — no-op
+}
 
-  // Update status filter dropdown to match
+function msStatusSelectAll(){
   const wrap = document.getElementById('msStatus');
-  if(!wrap) return;
-  wrap.querySelectorAll('input[type=checkbox]').forEach(b=>{
-    if(status==='all') b.checked = true;
-    else b.checked = b.value === status;
-  });
+  wrap.querySelectorAll('input[type=checkbox]').forEach(b=>{ b.checked = true; });
   msStatusChanged();
 }
 
@@ -4609,17 +5607,76 @@ function msStatusChanged(){
   statusFilters.clear();
   checked.forEach(b=>statusFilters.add(b.value));
 
-  // If nothing selected, show all (treat as no filter)
+  // Status pill config
+  const pillCfg = {
+    pending:          {label:'Pending',                    cls:'si-pill-pending'},
+    offered:          {label:'Offered',                    cls:'si-pill-offered'},
+    allocated:        {label:'Allocated',                  cls:'si-pill-allocated'},
+    rejected:         {label:'Rejected',                   cls:'si-pill-rejected'},
+    completed:        {label:'Completed',                  cls:'si-pill-completed'},
+    'withdrawn-ep':   {label:'Withdrawn Education Provider', cls:'si-pill-withdrawn'},
+    'withdrawn-student': {label:'Withdrawn Student',       cls:'si-pill-withdrawn'},
+  };
+
+  const ALL_STATUSES = ['pending','offered','allocated','rejected','completed','withdrawn-ep','withdrawn-student'];
+
   if(checked.length === 0){
+    // Blank = show all
     valEl.className = 'ms-value placeholder';
     valEl.textContent = 'All statuses';
-    ['pending','offered','rejected','published'].forEach(s=>statusFilters.add(s));
+    ALL_STATUSES.forEach(s=>statusFilters.add(s));
   } else {
     valEl.className = 'ms-value';
-    valEl.textContent = checked.map(b=>b.value.charAt(0).toUpperCase()+b.value.slice(1)).join(', ');
+    // Show first 2 as pills, remainder as +N
+    const visible = checked.slice(0, 2);
+    const overflow = checked.length - 2;
+    let html = visible.map(b=>{
+      const cfg = pillCfg[b.value]||{label:b.value,cls:''};
+      return `<span class="sel-pill sel-pill-${b.value}"><span class="sel-pill-dot"></span>${cfg.label}</span>`;
+    }).join('');
+    if(overflow > 0) html += `<span class="sel-pill-more">+${overflow}</span>`;
+    valEl.innerHTML = html;
   }
 
   render();
+  updateStatusIndicator();
+}
+
+function updateStatusIndicator(){
+  const wrap = document.getElementById('msStatus');
+  if(!wrap) return;
+  const checked = [...wrap.querySelectorAll('input[type=checkbox]:checked')];
+  const textEl = document.getElementById('statusIndicatorText');
+  if(!textEl) return;
+
+  const _isTulsa = document.getElementById('fRegion').value === 'tulsa';
+  const allReqs = [
+    ...(_isTulsa ? TULSA_REQS : VICTORIA_REQS),
+    ...getAllReqs()
+  ];
+  const totalAll = allReqs.length;
+  const visibleCount = allReqs.filter(r=>statusFilters.has(r.status)).length;
+
+  // Pill config
+  const pillCfg = {
+    pending:             {label:'Pending',                     cls:'si-pill-pending'},
+    offered:             {label:'Offered',                     cls:'si-pill-offered'},
+    allocated:           {label:'Allocated',                   cls:'si-pill-allocated'},
+    rejected:            {label:'Rejected',                    cls:'si-pill-rejected'},
+    completed:           {label:'Completed',                   cls:'si-pill-completed'},
+    'withdrawn-ep':      {label:'Withdrawn Education Provider',cls:'si-pill-withdrawn'},
+    'withdrawn-student': {label:'Withdrawn Student',           cls:'si-pill-withdrawn'},
+  };
+
+  if(checked.length === 0){
+    textEl.textContent = `Showing all ${totalAll} Request${totalAll!==1?'s':''}`;
+  } else if(checked.length === 1){
+    const status = checked[0].value;
+    const label = pillCfg[status]?.label || status;
+    textEl.textContent = `Showing ${visibleCount} ${label}`;
+  } else {
+    textEl.textContent = `Showing ${visibleCount} of ${totalAll} Request${totalAll!==1?'s':''}`;
+  }
 }
 
 function msStatusRemove(val, e){
@@ -6445,11 +7502,19 @@ function closeVpSheet(){
 /* ── Placement side sheet — agency-scoped, status-grouped ── */
 const VP_MAX_PER_GROUP = 5;
 
-function openVpSheetForAgency(agencyName, total){
-  const placements = (PLACEMENTS_BY_AGENCY[agencyName]||[])
+function openVpSheetForAgency(agencyName, total, epCode){
+  let placements = (PLACEMENTS_BY_AGENCY[agencyName]||[])
     .filter(p=>!['cancelled','withdrawn'].includes(p.status));
 
-  document.getElementById('vpTitle').textContent = agencyName;
+  // If called from a specific EP chip, filter to that EP only
+  if(epCode){
+    placements = placements.filter(p=>(p.epCode||p.ep)===epCode);
+    total = placements.length;
+  }
+
+  document.getElementById('vpTitle').textContent = epCode
+    ? `${agencyName} · ${epCode}`
+    : agencyName;
   document.getElementById('vpSub').textContent =
     `${total} placement${total!==1?'s':''} consuming capacity`;
 
@@ -7463,6 +8528,15 @@ function confirmRotation(){
   refreshCounters();
   resetFulfillmentMode();
 }
+
+function setDensity(mode, btn){
+  condensedView = mode === 'condensed';
+  document.getElementById('densityNormal')?.classList.toggle('active', !condensedView);
+  document.getElementById('densityCondensed')?.classList.toggle('active', condensedView);
+  const screen = document.getElementById('screen-grid');
+  if(screen) screen.classList.toggle('condensed', condensedView);
+}
+
 
 /* ─── INIT ──────────────────────────────────────── */
 onRegionChange();
