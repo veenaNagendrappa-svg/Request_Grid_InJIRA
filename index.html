@@ -140,29 +140,47 @@ body{
 .btn-mf-clear{height:36px;padding:0 16px;border:1px solid #bbb;border-radius:4px;background:white;font-family:inherit;font-size:13px;cursor:pointer}
 .btn-mf-apply{height:36px;padding:0 20px;background:#1976d2;color:white;border:1px solid #1976d2;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer}
 
-/* ── SUMMARY BAR ── */
-.summary-bar{
-  display:flex;align-items:stretch;background:white;
-  border-bottom:1px solid #e0e0e0;flex-shrink:0;
+/* ── SELECTOR PILLS — bordered semantic, matching existing status colours ── */
+.sel-pill{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:1px 7px;border-radius:9px;font-size:11px;font-weight:500;
+  margin-right:3px;white-space:nowrap;vertical-align:middle;
+  background:#f0f0f0;color:#333;border:1px solid #ccc;
 }
-.summary-card{
-  flex:1;padding:10px 16px;cursor:pointer;
-  border-right:1px solid #e8e8e8;transition:background .12s;
-  display:flex;flex-direction:column;gap:2px;position:relative;
+/* Per-status bordered semantic styles */
+.sel-pill-pending{background:#fde8e8;color:#7f0000;border-color:#ef9a9a}
+.sel-pill-offered{background:#fff8e1;color:#5f3800;border-color:#ffe082}
+.sel-pill-allocated{background:#e3f2fd;color:#0d2f6e;border-color:#90caf9}
+.sel-pill-rejected{background:#f5f5f5;color:#555;border-color:#bdbdbd}
+.sel-pill-completed{background:#e8f5e9;color:#1b5e20;border-color:#a5d6a7}
+.sel-pill-withdrawn-ep,
+.sel-pill-withdrawn-student{background:#f5f5f5;color:#555;border-color:#bdbdbd}
+.sel-pill-more{
+  display:inline-flex;align-items:center;
+  padding:1px 6px;border-radius:9px;font-size:11px;font-weight:600;
+  background:#f0f0f0;color:#555;border:1px solid #ccc;vertical-align:middle;
 }
-.summary-card:last-child{border-right:none}
-.summary-card:hover{background:#f5f7ff}
-.summary-card.active{background:#f0f4ff}
-.summary-card.active::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;
-  height:2px;background:#1976d2;
+/* Status dropdown — tall enough, select all pinned at top */
+#msStatusDd{max-height:300px}
+#msStatusDd .ms-select-all{position:sticky;top:0;background:white;z-index:1;border-bottom:1px solid #eee}
+.status-indicator-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 16px;background:white;
+  border-bottom:1px solid #e8e8e8;flex-shrink:0;
+  min-height:34px;
 }
-.summary-card-val{font-size:20px;font-weight:500;color:#1a1d23;line-height:1}
-.summary-card-lbl{font-size:11px;color:#888;white-space:nowrap}
-.summary-card.s-pending .summary-card-val{color:#c62828}
-.summary-card.s-offered .summary-card-val{color:#e65100}
-.summary-card.s-rejected .summary-card-val{color:#555}
-.summary-card-action{margin-left:auto;align-self:center}
+.si-text{font-size:12px;color:#555;font-weight:400;white-space:nowrap}
+/* Status dropdown options with colour dots */
+.ms-option .ms-status-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  display:inline-block;margin-right:2px;vertical-align:middle;
+}
+.ms-opt-dot-pending{background:#c62828}
+.ms-opt-dot-offered{background:#e65100}
+.ms-opt-dot-rejected{background:#757575}
+.ms-opt-dot-allocated{background:#1565c0}
+.ms-opt-dot-completed{background:#2e7d32}
+.ms-opt-dot-withdrawn{background:#757575}
 .btn-alloc-reqs{
   height:30px;padding:0 14px;border:1.5px solid #1976d2;
   border-radius:4px;background:white;color:#1976d2;
@@ -1881,10 +1899,14 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
         <svg class="ms-chevron" viewBox="0 0 10 7"><path d="M0 0l5 7 5-7z"/></svg>
       </div>
       <div class="ms-dropdown" id="msStatusDd">
-        <label class="ms-option selected"><input type="checkbox" value="pending" checked onchange="msStatusChanged()"> Pending</label>
-        <label class="ms-option"><input type="checkbox" value="offered" onchange="msStatusChanged()"> Offered</label>
-        <label class="ms-option"><input type="checkbox" value="rejected" onchange="msStatusChanged()"> Rejected</label>
-        <label class="ms-option"><input type="checkbox" value="published" onchange="msStatusChanged()"> Published</label>
+        <div class="ms-select-all" onclick="msStatusSelectAll(event)">Select all</div>
+        <label class="ms-option selected"><input type="checkbox" value="pending" checked onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-pending"></span> Pending</label>
+        <label class="ms-option"><input type="checkbox" value="offered" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-offered"></span> Offered</label>
+        <label class="ms-option"><input type="checkbox" value="allocated" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-allocated"></span> Allocated</label>
+        <label class="ms-option"><input type="checkbox" value="rejected" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-rejected"></span> Rejected</label>
+        <label class="ms-option"><input type="checkbox" value="completed" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-completed"></span> Completed</label>
+        <label class="ms-option"><input type="checkbox" value="withdrawn-ep" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-withdrawn"></span> Withdrawn Education Provider</label>
+        <label class="ms-option"><input type="checkbox" value="withdrawn-student" onchange="msStatusChanged()"><span class="ms-status-dot ms-opt-dot-withdrawn"></span> Withdrawn Student</label>
       </div>
     </div>
   </div>
@@ -1915,24 +1937,9 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
   </div>
 </div>
 
-<!-- SUMMARY BAR -->
-<div class="summary-bar" id="summaryBar">
-  <div class="summary-card" onclick="setSummaryFilter('all')">
-    <span class="summary-card-val" id="sum-all">0</span>
-    <span class="summary-card-lbl">All Requests</span>
-  </div>
-  <div class="summary-card s-pending active" onclick="setSummaryFilter('pending')">
-    <span class="summary-card-val" id="sum-pending">0</span>
-    <span class="summary-card-lbl">Pending</span>
-  </div>
-  <div class="summary-card s-offered" onclick="setSummaryFilter('offered')">
-    <span class="summary-card-val" id="sum-offered">0</span>
-    <span class="summary-card-lbl">Offered</span>
-  </div>
-  <div class="summary-card s-rejected" onclick="setSummaryFilter('rejected')">
-    <span class="summary-card-val" id="sum-rejected">0</span>
-    <span class="summary-card-lbl">Rejected</span>
-  </div>
+<!-- STATUS INDICATOR (replaces summary bar) -->
+<div class="status-indicator-bar" id="statusIndicatorBar">
+  <span class="si-text" id="statusIndicatorText">Showing 0 Pending</span>
 </div>
 
 <!-- TOOLBAR -->
@@ -4384,7 +4391,9 @@ function computeEpData(){
     if(!map[ep]) map[ep] = {
       ep,
       // Placement slot counts (for bar)
-      pending:0, rejected:0, planned:0, offered:0, cancelled:0
+      pending:0, rejected:0, planned:0, offered:0, cancelled:0,
+      // Request counts (for sub-text)
+      req_pending:0, req_offered:0, req_rejected:0
     };
     return map[ep];
   };
@@ -4401,9 +4410,13 @@ function computeEpData(){
     if(r.status === 'pending'){
       // Pending = requested slots minus any placements already created
       e.pending += Math.max(qty - alloc, 0);
+      e.req_pending++;
     } else if(r.status === 'rejected' && alloc === 0){
       // Whole request rejected with no placements created — use request.qty
       e.rejected += qty;
+      e.req_rejected++;
+    } else if(['offered','accepted','published','confirmed'].includes(r.status)){
+      e.req_offered++;
     }
   });
 
@@ -4465,32 +4478,39 @@ function drawEpPanel(){
   </div>`;
 
   data.forEach(ep => {
+    // Sub-text shows request counts — hide zero values
+    const reqParts = [];
+    if(ep.req_pending)  reqParts.push(`${ep.req_pending} pending`);
+    if(ep.req_offered)  reqParts.push(`${ep.req_offered} offered`);
+    if(ep.req_rejected) reqParts.push(`${ep.req_rejected} rejected`);
+    const metaText = reqParts.length ? 'Requests: ' + reqParts.join(' · ') : '';
+
     const total = ep.pending + ep.rejected + ep.planned + ep.offered + ep.cancelled;
 
-    // Bar segment widths (% of scaleMax)
+    // Bar segment widths (% of scaleMax) — order: Pending | Planned | Offered | Rejected | Cancelled
     const pW  = Math.round((ep.pending   / scaleMax) * 100);
-    const oW  = Math.round((ep.offered   / scaleMax) * 100);
     const plW = Math.round((ep.planned   / scaleMax) * 100);
+    const oW  = Math.round((ep.offered   / scaleMax) * 100);
     const rW  = Math.round((ep.rejected  / scaleMax) * 100);
     const cW  = Math.round((ep.cancelled / scaleMax) * 100);
 
-    // Left offsets for stacked segments: Pending | Offered | Planned | Rejected | Cancelled
-    const oL  = pW;
-    const plL = pW + oW;
-    const rL  = pW + oW + plW;
-    const cL  = pW + oW + plW + rW;
+    // Left offsets
+    const plL = pW;
+    const oL  = pW + plW;
+    const rL  = pW + plW + oW;
+    const cL  = pW + plW + oW + rW;
 
     html += `<div class="ep-grid-row">
       <div class="ep-col-ep">
         <div class="ep-row-name">${ep.ep}</div>
+        ${metaText ? `<div class="ep-row-meta">${metaText}</div>` : ''}
       </div>
       <div class="ep-col-bar">
         <div class="ep-bar-wrap">
-          <div class="ep-bar-track"></div>
           <div class="ep-bar-guideline-75"></div>
           <div class="ep-bar-seg" style="width:${pW}%;background:rgba(198,40,40,0.25);left:0" title="${ep.pending} pending"></div>
-          <div class="ep-bar-seg" style="width:${oW}%;background:rgba(255,152,0,0.35);left:${oL}%" title="${ep.offered} offered (all placements excl. cancelled &amp; planned)"></div>
           <div class="ep-bar-seg" style="width:${plW}%;background:rgba(33,150,243,0.3);left:${plL}%" title="${ep.planned} planned"></div>
+          <div class="ep-bar-seg" style="width:${oW}%;background:rgba(255,152,0,0.35);left:${oL}%" title="${ep.offered} offered (all placements excl. cancelled &amp; planned)"></div>
           <div class="ep-bar-seg" style="width:${rW}%;background:rgba(80,80,80,0.25);left:${rL}%" title="${ep.rejected} rejected"></div>
           <div class="ep-bar-seg" style="width:${cW}%;background:rgba(158,158,158,0.25);left:${cL}%" title="${ep.cancelled} cancelled"></div>
         </div>
@@ -5579,37 +5599,21 @@ function posTooltip(e){
 /* ─── EP CHART ──────────────────────────────────── */
 let epOpen=false;
 function updateSummaryBar(){
-  const _isTulsaSB = document.getElementById('fRegion').value === 'tulsa';
-  const allReqs = [
-    ...(_isTulsaSB ? TULSA_REQS : VICTORIA_REQS),
-    ...getAllReqs()
-  ];
-  const counts = {all:0, pending:0, offered:0, published:0, rejected:0};
-  allReqs.forEach(r=>{
-    counts.all++;
-    if(r.status==='pending')   counts.pending++;
-    else if(r.status==='offered') counts.offered++;
-    else if(r.status==='published') counts.published++;
-    else if(['rejected','withdrawn-ep','withdrawn-student'].includes(r.status)) counts.rejected++;
-  });
-  document.getElementById('sum-all').textContent       = counts.all;
-  document.getElementById('sum-pending').textContent   = counts.pending;
-  document.getElementById('sum-offered').textContent   = counts.offered;
-  document.getElementById('sum-rejected').textContent  = counts.rejected;
+  // Replaced by updateStatusIndicator — kept as no-op to avoid breaking render() call
+  updateStatusIndicator();
 }
 
 function setSummaryFilter(status){
-  // Update active card
-  document.querySelectorAll('.summary-card').forEach(c=>c.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  // Summary cards removed — no-op
+}
 
-  // Update status filter dropdown to match
+function msStatusSelectAll(e){
+  e.stopPropagation();
   const wrap = document.getElementById('msStatus');
-  if(!wrap) return;
-  wrap.querySelectorAll('input[type=checkbox]').forEach(b=>{
-    if(status==='all') b.checked = true;
-    else b.checked = b.value === status;
-  });
+  const boxes = wrap.querySelectorAll('input[type=checkbox]');
+  const allChecked = [...boxes].every(b=>b.checked);
+  boxes.forEach(b=>b.checked=!allChecked);
+  e.target.textContent = allChecked ? 'Select all' : 'Deselect all';
   msStatusChanged();
 }
 
@@ -5627,17 +5631,78 @@ function msStatusChanged(){
   statusFilters.clear();
   checked.forEach(b=>statusFilters.add(b.value));
 
-  // If nothing selected, show all (treat as no filter)
+  const labelMap = {
+    pending:'Pending', offered:'Offered', allocated:'Allocated',
+    rejected:'Rejected', completed:'Completed',
+    'withdrawn-ep':'Withdrawn EP', 'withdrawn-student':'Withdrawn Student'
+  };
+
+  const ALL_STATUSES = ['pending','offered','allocated','rejected','completed','withdrawn-ep','withdrawn-student'];
+
   if(checked.length === 0){
     valEl.className = 'ms-value placeholder';
     valEl.textContent = 'All statuses';
-    ['pending','offered','rejected','published'].forEach(s=>statusFilters.add(s));
-  } else {
+    ALL_STATUSES.forEach(s=>statusFilters.add(s));
+  } else if(checked.length === 1){
     valEl.className = 'ms-value';
-    valEl.textContent = checked.map(b=>b.value.charAt(0).toUpperCase()+b.value.slice(1)).join(', ');
+    const val = checked[0].value;
+    valEl.innerHTML = `<span class="sel-pill sel-pill-${val}">${labelMap[val]||val}</span>`;
+  } else if(checked.length === 2){
+    valEl.className = 'ms-value';
+    valEl.innerHTML = checked.map(b=>`<span class="sel-pill sel-pill-${b.value}">${labelMap[b.value]||b.value}</span>`).join('');
+  } else {
+    // 3+ — show first two + overflow count
+    valEl.className = 'ms-value';
+    const firstTwo = checked.slice(0,2).map(b=>`<span class="sel-pill sel-pill-${b.value}">${labelMap[b.value]||b.value}</span>`).join('');
+    const overflow = checked.length - 2;
+    valEl.innerHTML = `${firstTwo}<span class="sel-pill-more">+${overflow}</span>`;
   }
 
   render();
+  updateStatusIndicator();
+}
+
+function updateStatusIndicator(){
+  const wrap = document.getElementById('msStatus');
+  if(!wrap) return;
+  const checked = [...wrap.querySelectorAll('input[type=checkbox]:checked')];
+  const textEl = document.getElementById('statusIndicatorText');
+  if(!textEl) return;
+
+  const _isTulsa = document.getElementById('fRegion').value === 'tulsa';
+  // Total across ALL statuses regardless of filter — the full dataset for context
+  const allReqsUnfiltered = [
+    ...(_isTulsa ? TULSA_REQS : VICTORIA_REQS),
+    ...getAllReqs()
+  ];
+  const totalAll = allReqsUnfiltered.length;
+
+  // Visible = matches statusFilters AND any other active filters
+  // We approximate by counting what's in statusFilters from the full dataset
+  const statusMatchCount = allReqsUnfiltered.filter(r=>statusFilters.has(r.status)).length;
+
+  // Currently visible in grid (after ALL filters) — count rendered rows
+  // We use statusFilters as proxy; other filters reduce this further
+  const visibleCount = allReqsUnfiltered.filter(r=>statusFilters.has(r.status)).length;
+
+  const labelMap = {
+    pending:'Pending', offered:'Offered', allocated:'Allocated',
+    rejected:'Rejected', completed:'Completed',
+    'withdrawn-ep':'Withdrawn EP', 'withdrawn-student':'Withdrawn Student'
+  };
+
+  if(checked.length === 0){
+    // All / blank
+    textEl.textContent = `Showing ${totalAll} Request${totalAll!==1?'s':''}`;
+  } else if(checked.length === 1){
+    const status = checked[0].value;
+    const label = labelMap[status] || status;
+    // Single status: "X Pending of Y Requests"
+    textEl.textContent = `Showing ${statusMatchCount} ${label} of ${totalAll} Requests`;
+  } else {
+    // Multiple statuses: just total visible + count of statuses selected
+    textEl.textContent = `Showing ${visibleCount} Request${visibleCount!==1?'s':''} · ${checked.length} statuses selected`;
+  }
 }
 
 function msStatusRemove(val, e){
