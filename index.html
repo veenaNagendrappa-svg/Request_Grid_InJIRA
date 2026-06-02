@@ -867,7 +867,7 @@ html,body{height:100%;overflow:hidden}
 }
 .btn-back-grid:hover{background:#f5f5f5}
 .btn-back-grid svg{width:12px;height:12px;fill:currentColor}
-.alloc-back-label{font-size:12px;color:#888}
+.alloc-back-label{font-size:12px;font-weight:600;color:#111827;background:#e8edf7;padding:3px 10px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:600px;}
 .alloc-pending-grp{margin-left:auto;display:flex;align-items:center;gap:8px}
 .alloc-pending-counter{
   display:flex;align-items:center;gap:6px;padding:0 10px;height:28px;
@@ -883,9 +883,20 @@ html,body{height:100%;overflow:hidden}
 
 /* Request context bar — v23 style */
 .alloc-req-bar{background:white;border-bottom:1px solid #e5e7eb;padding:0 16px;flex-shrink:0;}
-/* Row 1 */
-.alloc-req-row1{display:flex;align-items:center;justify-content:space-between;padding:7px 0 4px;gap:12px;flex-wrap:wrap;}
+/* Row 1: EP | Req# | Dates — left; Edit/Reassign/Reject — right */
+.alloc-req-row1{display:flex;align-items:center;justify-content:space-between;padding:7px 0 3px;gap:12px;}
 .alloc-req-row1-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0;}
+/* Row 2: meta fields left, count badges right */
+.alloc-req-row2{display:flex;align-items:center;justify-content:space-between;padding:2px 0 3px;gap:8px;flex-wrap:wrap;}
+.alloc-meta-fields{display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:0;}
+.alloc-req-badges{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+/* Row 3: students — only shown for student/group requests */
+.alloc-req-row3{display:none;align-items:center;gap:4px;padding:2px 0 6px;flex-wrap:wrap;}
+.alloc-req-row3.show{display:flex;}
+.alloc-req-row3-lbl{font-size:10px;color:#9ca3af;font-weight:500;letter-spacing:.01em;white-space:nowrap;margin-right:4px;}
+.alloc-student-link{font-size:11px;color:#1976d2;font-weight:500;cursor:pointer;white-space:nowrap;}
+.alloc-student-link:hover{text-decoration:underline;}
+.alloc-student-code{font-size:10px;color:#9ca3af;margin-right:8px;}
 /* Rotation active banner */
 .rotation-active-banner{
   display:flex;align-items:center;gap:8px;
@@ -908,18 +919,18 @@ body.rotation-mode #btnBuildRotation{display:none;}
 .alloc-req-sep{font-size:11px;color:#d1d5db;}
 .alloc-req-id{font-size:12px;font-weight:500;color:#111827;}
 .alloc-dates-lbl{font-size:12px;color:#6b7280;font-weight:400;}
-/* Row 2 — meta + badges */
+/* Meta row kv pairs */
 .alloc-meta-row{display:flex;align-items:center;gap:6px;padding:4px 0 6px;flex-wrap:wrap;}
 .alloc-req-kv{display:inline-flex;align-items:baseline;gap:4px;}
-.alloc-req-lbl{font-size:10px;color:#9ca3af;font-weight:500;letter-spacing:.01em;white-space:nowrap;}
+.alloc-req-lbl{font-size:10px;color:#9ca3af;font-weight:500;letter-spacing:.01em;white-space:nowrap;text-transform:uppercase;}
 .alloc-req-val{font-size:11.5px;color:#111827;font-weight:600;white-space:nowrap;}
-.alloc-req-badges{margin-left:auto;display:flex;align-items:center;gap:5px;flex-shrink:0;}
 /* Badges — v23 palette */
 .alloc-badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
 .alloc-badge-total{background:#e5e7eb;color:#374151;}
 .alloc-badge-rem{background:#fef3c7;color:#92400e;border:1px solid #f59e0b;}
 .alloc-badge-alloc{background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;}
 .alloc-badge-rejected{background:#f3f4f6;color:#374151;border:1px solid #d1d5db;}
+.alloc-badge-reassigned{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;}
 /* Comment bar */
 /* alloc-comment-bar moved inline to filter bar — no yellow style needed */
 
@@ -946,6 +957,74 @@ body.rotation-mode #btnBuildRotation{display:none;}
 .aff-select:focus{border-color:#bbb;}
 .aff-select.prefilled{border-color:#bbb;background:white;color:#333;font-weight:500}
 .aff-chev{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2;margin-left:auto;color:#bbb}
+
+/* ── Multiselect pill trigger ── */
+.aff-ms-trigger{
+  height:30px;border:1px solid #bbb;border-radius:4px;padding:0 8px;
+  display:flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;
+  color:#333;background:white;cursor:pointer;min-width:140px;max-width:200px;
+  white-space:nowrap;overflow:hidden;position:relative;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M0 0l5 7 5-7z' fill='%23bbb'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 6px center;
+  padding-right:20px;
+}
+.aff-ms-trigger.req-default{ border-color:#bbb;background:white;color:#333; }
+.aff-ms-trigger.filter-changed{ border-color:#555;color:#111; font-weight:600; }
+.aff-req-hint{font-size:9px;color:#6b7280;margin-top:2px;white-space:nowrap;font-style:italic;}
+.aff-req-hint.visible{display:block;}
+.aff-req-hint{display:none;}
+
+/* ── Multiselect dropdown ── */
+.aff-ms-drop{
+  position:fixed;background:white;border:1px solid #e0e0e0;border-radius:8px;
+  box-shadow:0 4px 18px rgba(0,0,0,.13);z-index:9999;min-width:180px;
+  padding:4px 0;max-height:280px;overflow-y:auto;
+}
+.aff-ms-item{
+  padding:7px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;
+  gap:8px;color:#333;
+}
+.aff-ms-item:hover{background:#f5f7ff;}
+.aff-ms-item.selected{font-weight:600;color:#1976d2;background:#f0f4ff;}
+.aff-ms-item-check{
+  width:14px;height:14px;border:1.5px solid #bbb;border-radius:3px;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+}
+.aff-ms-item.selected .aff-ms-item-check{
+  background:#1976d2;border-color:#1976d2;color:white;
+}
+.aff-ms-req-chip{
+  font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;
+  background:#dbeafe;color:#1d4ed8;text-transform:uppercase;letter-spacing:.04em;
+  margin-left:auto;flex-shrink:0;
+}
+
+/* ── Filter / Reset buttons ── */
+.aff-btn-filter{
+  height:30px;padding:0 14px;background:#1976d2;color:white;border:none;
+  border-radius:4px;font-family:inherit;font-size:12px;font-weight:600;
+  cursor:pointer;white-space:nowrap;transition:background .15s;
+}
+.aff-btn-filter:hover{background:#1565c0;}
+.aff-btn-reset{
+  height:30px;padding:0 10px;background:none;color:#666;border:none;
+  font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap;
+  text-decoration:underline;opacity:.5;pointer-events:none;
+}
+.aff-btn-reset.active{opacity:1;pointer-events:all;color:#1976d2;}
+
+/* ── View By Week/Day toggle ── */
+.aff-view-toggle{display:flex;height:30px;}
+.aff-view-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:30px;padding:0 11px;border:1px solid #bbb;background:white;
+  font-family:inherit;font-size:12px;font-weight:500;color:#555;cursor:pointer;
+  white-space:nowrap;transition:background .15s,color .15s;
+}
+.aff-view-btn:first-child{border-radius:4px 0 0 4px;border-right:none;}
+.aff-view-btn:last-child{border-radius:0 4px 4px 0;border-left:none;}
+.aff-view-btn.active{background:#1976d2;color:white;border-color:#1976d2;font-weight:600;}
+.aff-view-btn:not(.active):hover{background:#f5f5f5;}
 
 /* Edit / Reassign / Reject action buttons */
 .btn-alloc-action{
@@ -1033,14 +1112,22 @@ body.rotation-mode #btnBuildRotation{display:none;}
 .ag-th.today{background:#e3f2fd}
 .ag-th.in-req{background:white}
 .ag-th.in-req .dd{color:#003179}
+/* Week view only — highlight in-range week column headers */
+.alloc-week-view .ag-th.in-req{background:#eff6ff}
+.alloc-week-view .ag-th.in-req .dd{color:#1d4ed8;font-weight:700}
+.alloc-week-view .ag-th.in-req .dw{color:#3b82f6}
 .ag-th.wknd{background:#f5f5f5}
 .ag-th.wknd .dd{color:#888}
 
 /* Agency rows */
 .ag-row{display:flex;align-items:stretch;border-bottom:1px solid #e8e8e8;cursor:pointer;transition:background .1s}
 .ag-row:hover{background:#fafbff}
-.ag-row.requested{border-left:3px solid #2e7d32;background:white;}
+.ag-row.requested{background:white;}
 .ag-row.requested .ag-lbl{color:#1a1d23;font-weight:600}
+/* Child label — progressively smaller so hierarchy depth is scannable */
+.ag-row.depth-1 .ag-lbl{font-size:12px;color:#1a4b8c;}
+.ag-row.depth-2 .ag-lbl{font-size:11.5px;color:#2c5f9e;}
+.ag-row.depth-3 .ag-lbl{font-size:11px;color:#3a6fae;}
 .ag-row-left{
   width:300px;min-width:300px;padding:5px 8px;display:flex;align-items:flex-start;
   gap:5px;border-right:2px solid #ddd;position:sticky;left:0;background:inherit;z-index:5;
@@ -1136,7 +1223,7 @@ body.rotation-mode #btnBuildRotation{display:none;}
 .alloc-branch-cancel{background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;line-height:1;padding:0 2px;}
 .alloc-branch-cancel:hover{color:#374151;}
 
-.alloc-inline{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0;}
+.alloc-inline-hint{font-size:10px;color:#888;white-space:nowrap;}display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0;}
 .qty-input{width:44px;height:24px;border:1.5px solid #2563eb;border-radius:4px;text-align:center;font-family:inherit;font-size:12px;font-weight:600;color:#2563eb;outline:none;background:white;}
 .btn-sel{height:24px;padding:0 10px;background:#2563eb;color:white;border:none;border-radius:4px;font-family:inherit;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;}
 .btn-sel:hover{background:#1d4ed8;}
@@ -1215,21 +1302,114 @@ body.rotation-mode #btnBuildRotation{display:none;}
 .alloc-ctx-cell.req-active{background:#fef2f2;color:#b91c1c;}
 .alloc-ctx-cell.wknd{background:#fafafa;}
 
+/* ── Alloc placement rows — base ── */
+.ag-plc-row{
+  display:flex;align-items:stretch;
+  border-bottom:1px solid #e5e7eb;
+  border-left:3px solid #d1d5db;   /* neutral grey — blue reserved for agreements */
+  background:#f9fafb;
+  min-height:24px;
+}
+.ag-plc-row:hover{background:#f3f4f6;}
+.ag-plc-left{
+  width:300px;min-width:300px;flex-shrink:0;
+  border-right:2px solid #e5e7eb;position:sticky;left:0;z-index:5;
+  background:inherit;display:flex;align-items:center;
+  padding:3px 6px;gap:6px;
+}
+.ag-plc-lbl{font-size:11px;font-weight:500;color:#444;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ag-plc-beyond{font-size:9px;font-weight:500;color:#6b7280;white-space:nowrap;}
+.ag-plc-view{
+  opacity:0;pointer-events:none;flex-shrink:0;
+  font-size:10px;font-family:inherit;font-weight:600;
+  padding:2px 8px;border-radius:4px;border:none;cursor:pointer;
+  color:#fff;background:#6b7280;white-space:nowrap;transition:opacity .15s;
+}
+.ag-plc-row:hover .ag-plc-view{opacity:1;pointer-events:all;}
+.ag-plc-cells{flex:1;display:flex;}
+.ag-plc-cell{
+  width:46px;min-width:46px;flex-shrink:0;
+  padding:2px 2px;border-right:1px solid #e8e8e8;
+  font-size:10px;line-height:1.4;background:inherit;
+}
+.ag-plc-cell.wknd{background:#ececec;}
+.ag-plc-cell.has-data{padding:2px 2px;}
 
-.ag-req-shifts-row{display:flex;background:#dbeafe;border-top:2px solid #2563eb;border-bottom:2px solid #2563eb;position:sticky;top:36px;z-index:2;}
-.ag-req-shifts-left{padding:4px 8px !important;font-size:11px !important;font-weight:700 !important;color:#1d4ed8 !important;background:#dbeafe !important;display:flex;align-items:center;gap:4px;letter-spacing:0.02em;}
-.ag-req-shift-cell{width:46px;min-width:46px;flex-shrink:0;text-align:center;font-size:11px;font-weight:600;padding:3px 3px;border-right:1px solid #bfdbfe;color:#1d4ed8;line-height:1.2;background:#dbeafe;display:flex;align-items:center;justify-content:center;}
-.ag-req-shift-cell .tick-box{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1.5px solid #2563eb;border-radius:3px;background:white;color:#1d4ed8;font-size:11px;font-weight:700;}
-.ag-req-shift-cell.wknd{background:#eff6ff;color:#bcd;border-right-color:#dbeafe;}
-.ag-req-shift-cell.wknd .tick-box{display:none;}
+/* Background toggle placements (EP chips) — grey, clearly secondary/contextual */
+.ag-plc-chip{
+  display:block;
+  background:#f1f5f9;border:1px solid #cbd5e1;border-radius:3px;
+  padding:1px 5px;font-size:10px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;color:#475569;cursor:pointer;
+}
+.ag-plc-chip:hover{background:#e2e8f0;border-color:#94a3b8;}
+
+/* ── Planned placement rows (current request) ── */
+/* Draft — amber: in-progress, not yet generated */
+.ag-plc-planned.status-draft{background:#fefce8;border-left-color:#f59e0b;}
+.ag-plc-planned.status-draft:hover{background:#fef9c3;}
+.ag-plc-chip.status-draft{background:#fef3c7;border-color:#fde68a;color:#92400e;}
+.ag-plc-chip.status-draft:hover{background:#fde68a;}
+.ag-plc-bar-cell.status-draft{background:#fef3c7;}
+.ag-plc-status-badge.status-draft{background:#fef3c7;color:#92400e;}
+
+/* Offered — green: generated and sent to EP */
+.ag-plc-planned.status-offered{background:#f0fdf4;border-left-color:#22c55e;}
+.ag-plc-planned.status-offered:hover{background:#dcfce7;}
+.ag-plc-chip.status-offered{background:#dcfce7;border-color:#86efac;color:#15803d;}
+.ag-plc-chip.status-offered:hover{background:#bbf7d0;}
+.ag-plc-bar-cell.status-offered{background:#dcfce7;}
+.ag-plc-status-badge.status-offered{background:#dcfce7;color:#15803d;}
+
+/* Published — teal/green: confirmed */
+.ag-plc-planned.status-published{background:#f0fdf4;border-left-color:#16a34a;}
+.ag-plc-planned.status-published:hover{background:#dcfce7;}
+.ag-plc-chip.status-published{background:#bbf7d0;border-color:#4ade80;color:#166534;}
+.ag-plc-chip.status-published:hover{background:#86efac;}
+.ag-plc-bar-cell.status-published{background:#bbf7d0;}
+.ag-plc-status-badge.status-published{background:#bbf7d0;color:#166534;}
+
+/* Accepted — stronger green */
+.ag-plc-planned.status-accepted{background:#f0fdf4;border-left-color:#15803d;}
+.ag-plc-chip.status-accepted{background:#bbf7d0;border-color:#4ade80;color:#14532d;}
+.ag-plc-bar-cell.status-accepted{background:#bbf7d0;}
+.ag-plc-status-badge.status-accepted{background:#bbf7d0;color:#14532d;}
+
+/* NOTE: Blue (#dbeafe family) is reserved for Agreements */
+
+/* ── Planned placement row structural styles ── */
+.ag-plc-planned{border-left-width:3px;}
+.ag-plc-info{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
+.ag-plc-line1{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;}
+.ag-plc-status-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+.ag-plc-shift-lbl{font-size:10px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ag-plc-line2{font-size:9px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ag-plc-remove{
+  opacity:0;pointer-events:none;flex-shrink:0;
+  width:18px;height:18px;border:none;background:none;cursor:pointer;
+  color:#aaa;font-size:13px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .12s,color .12s;
+}
+.ag-plc-row:hover .ag-plc-remove{opacity:1;pointer-events:all;}
+.ag-plc-remove:hover{color:#ef4444;}
+.ag-plc-bar-cell{display:flex;align-items:center;justify-content:flex-start;padding:0 6px;}
+.ag-plc-bar-lbl{font-size:9px;font-weight:600;white-space:nowrap;color:#374151;overflow:hidden;text-overflow:ellipsis;}
+
+
+.ag-req-shifts-row{display:flex;background:#eff6ff;border-bottom:1px solid #e2e8f0;position:sticky;top:36px;z-index:2;}
+.ag-req-shifts-left{padding:4px 8px !important;font-size:11px !important;font-weight:700 !important;color:#1d4ed8 !important;background:#eff6ff !important;display:flex;align-items:center;gap:4px;letter-spacing:0.02em;}
+.ag-req-shift-cell{width:46px;min-width:46px;flex-shrink:0;text-align:center;font-size:11px;font-weight:600;padding:3px 2px;border-right:1px solid #e8eaed;color:#1d4ed8;line-height:1.2;background:#eff6ff;display:flex;align-items:center;justify-content:center;}
+.ag-req-shift-cell .tick-box{color:#1d4ed8;font-size:11px;font-weight:600;}
+.ag-req-shift-cell.wknd{background:#eff6ff;}
 
 
 /* Pinned requested agency */
 .ag-pinned-label svg{width:11px;height:11px;flex-shrink:0;fill:#2e7d32}
 .ag-pinned-label{
   padding:3px 10px;font-size:9px;font-weight:600;color:#2e7d32;
-  text-transform:uppercase;letter-spacing:.06em;background:#f0faf0;
-  border-bottom:1px solid #c8e6c9;display:flex;align-items:center;gap:5px;
+  text-transform:uppercase;letter-spacing:.06em;background:#fafafa;
+  border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:5px;
   width:100%;box-sizing:border-box;
 }
 .ag-rest-label{
@@ -1238,6 +1418,51 @@ body.rotation-mode #btnBuildRotation{display:none;}
   border-bottom:1px solid #eee;border-top:2px solid #e0e0e0;
   width:100%;box-sizing:border-box;
 }
+
+/* ── AVAILABILITY HIGHLIGHT ── */
+@keyframes accommodateIn {
+  0%   { background:#dcfce7; }
+  60%  { background:#dcfce7; }
+  100% { background:#f0fdf4; }
+}
+.ag-row.can-accommodate .ag-row-right {
+  animation: accommodateIn .5s ease forwards;
+}
+.ag-row.can-accommodate .ag-cell.pos {
+  color: #15803d;
+  font-weight: 600;
+}
+
+/* Loading shimmer on cell area while proc is running */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.ag-row.avail-loading .ag-row-right {
+  background: linear-gradient(90deg, transparent 25%, rgba(22,163,74,.08) 50%, transparent 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* Loading spinner in alloc toolbar */
+.avail-loading-indicator {
+  display:none;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  color:#15803d;
+  margin-left:8px;
+}
+.avail-loading-indicator.show { display:flex; }
+.avail-spinner {
+  width:12px; height:12px;
+  border:2px solid #bbf7d0;
+  border-top-color:#16a34a;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  flex-shrink:0;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
 
 
 
@@ -1844,8 +2069,8 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
     <label>Region <span class="req">*</span></label>
     <select id="fRegion" onchange="onRegionChange()">
       <option value="">Select region...</option>
-      <option value="vic">Victoria</option>
-      <option value="tulsa" selected>Tulsa</option>
+      <option value="vic" selected>Victoria</option>
+      <option value="tulsa">Tulsa</option>
       <option value="nsw">New South Wales</option>
       <option value="qld">Queensland</option>
     </select>
@@ -2035,8 +2260,8 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
       <p>The Request Grid shows all incoming placement requests for a region and discipline across a date range.</p>
       <select class="empty-select" id="emptyRegionSelect" onchange="document.getElementById('fRegion').value=this.value;onRegionChange()">
         <option value="">Region</option>
-        <option value="vic">Victoria</option>
-        <option value="tulsa" selected>Tulsa</option>
+        <option value="vic" selected>Victoria</option>
+        <option value="tulsa">Tulsa</option>
         <option value="nsw">New South Wales</option>
         <option value="qld">Queensland</option>
       </select>
@@ -2087,10 +2312,12 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
 
   <!-- Top nav bar — matches screenshot -->
   <div class="alloc-top-bar">
-    <button class="btn-back-grid" onclick="goBack()">
-      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-      Back to Request Grid
-    </button>
+    <span style="font-size:12px;color:#888;white-space:nowrap;flex-shrink:0;">
+      <a onclick="goBack()" style="color:#888;cursor:pointer;text-decoration:none;">Request</a>
+      <span style="margin:0 4px;color:#ccc;">/</span>
+      <span style="color:#888;">Process Request</span>
+      <span style="margin:0 4px;color:#ccc;">/</span>
+    </span>
     <span class="alloc-back-label" id="allocBreadcrumb"></span>
     <div class="alloc-pending-grp">
       <button class="btn-back-grid" onclick="prevRequest()" title="Previous">‹ Previous</button>
@@ -2099,9 +2326,9 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
     </div>
   </div>
 
-  <!-- Request context bar — v23 style -->
+  <!-- Request context bar — 3 rows matching screenshot -->
   <div class="alloc-req-bar">
-    <!-- Row 1: EP | Req ID | Dates + action buttons + badges + Build Rotation -->
+    <!-- Row 1: EP | Req# | Dates — left; Edit/Reassign/Reject — right -->
     <div class="alloc-req-row1">
       <div class="alloc-req-row1-left">
         <span class="alloc-req-ep" id="allocEp"></span>
@@ -2110,14 +2337,7 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
         <span class="alloc-req-sep">|</span>
         <span class="alloc-dates-lbl" id="allocDatesLbl"></span>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto">
-        <!-- Placement count badges -->
-        <span class="alloc-badge alloc-badge-total" id="ctrTotal">Total: —</span>
-        <span class="alloc-badge alloc-badge-rem"   id="ctrRemaining">Remaining: —</span>
-        <span class="alloc-badge alloc-badge-alloc" id="ctrAllocated">Allocated: 0</span>
-        <span class="alloc-badge alloc-badge-rejected" id="ctrRejected">Rejected: 0</span>
-        <div style="width:1px;height:18px;background:#e0e0e0;margin:0 2px"></div>
-        <!-- Action buttons -->
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
         <button class="btn-alloc-action btn-edit-req" onclick="openAllocEditRequest()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           Edit Request
@@ -2132,8 +2352,22 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
       </div>
     </div>
 
-    <!-- Row 2: meta labels only -->
-    <div class="alloc-meta-row" id="allocMetaRow">
+    <!-- Row 2: meta fields left, count badges right -->
+    <div class="alloc-req-row2">
+      <div class="alloc-meta-fields" id="allocMetaRow"></div>
+      <div class="alloc-req-badges">
+        <span class="alloc-badge alloc-badge-total"      id="ctrTotal">Total: —</span>
+        <span class="alloc-badge alloc-badge-rem"        id="ctrRemaining">Remaining: —</span>
+        <span class="alloc-badge alloc-badge-alloc"      id="ctrAllocated">Allocated: 0</span>
+        <span class="alloc-badge alloc-badge-rejected"   id="ctrRejected">Rejected: 0</span>
+        <span class="alloc-badge alloc-badge-reassigned" id="ctrReassigned">Reassigned: 0</span>
+      </div>
+    </div>
+
+    <!-- Row 3: students — shown only when request has student data -->
+    <div class="alloc-req-row3" id="allocStudentsRow">
+      <span class="alloc-req-row3-lbl">Students:</span>
+      <span id="allocStudentsList"></span>
     </div>
   </div>
 
@@ -2146,62 +2380,67 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
 
   <!-- Filter bar (pre-filled from request) -->
   <div class="alloc-filter-bar">
+
+    <!-- Date Range -->
     <div class="aff-field">
       <label>Date Range</label>
       <div style="display:flex">
-        <button style="width:28px;height:30px;border:1px solid #ddd;border-right:none;border-radius:4px 0 0 4px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button style="width:28px;height:30px;border:1px solid #ddd;border-right:none;border-radius:4px 0 0 4px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="shiftDateRange(-1)"><svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
         <div style="height:30px;border:1px solid #ddd;background:white;padding:0 10px;display:flex;align-items:center;font-size:12px;font-weight:600;color:#333;white-space:nowrap;min-width:140px;justify-content:center;" id="allocDateRange">—</div>
-        <button style="width:28px;height:30px;border:1px solid #ddd;border-left:none;border-radius:0 4px 4px 0;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+        <button style="width:28px;height:30px;border:1px solid #ddd;border-left:none;border-radius:0 4px 4px 0;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="shiftDateRange(1)"><svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
       </div>
     </div>
+
+    <!-- View By Week/Day -->
+    <div class="aff-field">
+      <label>View By</label>
+      <div class="aff-view-toggle">
+        <button class="aff-view-btn" id="affViewWeek" onclick="setAllocViewMode('week',this)">Week</button>
+        <button class="aff-view-btn active" id="affViewDay" onclick="setAllocViewMode('day',this)">Day</button>
+      </div>
+    </div>
+
+    <!-- Region — read only -->
     <div class="aff-field">
       <label>Region</label>
       <div class="aff-input" id="allocRegionLabel" style="cursor:default;background:#f5f5f5;color:#888;pointer-events:none;">Victoria<svg class="aff-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
     </div>
+
+    <!-- Discipline — multiselect -->
     <div class="aff-field">
       <label>Discipline</label>
-      <select class="aff-select" id="allocDiscSelect" onchange="onAllocFilterChange()">
-        <option value="">All disciplines</option>
-        <option value="Nursing">Nursing</option>
-        <option value="Midwifery">Midwifery</option>
-        <option value="Allied Health">Allied Health</option>
-        <option value="Pharmacy">Pharmacy</option>
-        <option value="Paramedicine">Paramedicine</option>
-        <option value="Social Work">Social Work</option>
-        <option value="Audiology">Audiology</option>
-      </select>
+      <div class="aff-ms-trigger req-default" id="msDiscTrigger" onclick="openAllocMs('disc')">
+        <span id="msDiscLabel">All</span>
+      </div>
+      <div class="aff-req-hint" id="msDiscHint"></div>
     </div>
+
+    <!-- Placement Type — multiselect -->
     <div class="aff-field">
       <label>Placement Type</label>
-      <select class="aff-select" id="allocPTSelect" onchange="onAllocFilterChange()">
-        <option value="">All placement types</option>
-        <option value="Acute">Acute</option>
-        <option value="Adult Med-Surg/Intermediate">Adult Med-Surg/Intermediate</option>
-        <option value="Aged Care">Aged Care</option>
-        <option value="Behavioral Health">Behavioral Health</option>
-        <option value="Community">Community</option>
-        <option value="Critical Care">Critical Care</option>
-        <option value="Emergency">Emergency</option>
-        <option value="General Medical">General Medical</option>
-        <option value="Mental Health">Mental Health</option>
-        <option value="Observation">Observation</option>
-        <option value="Oncology">Oncology</option>
-        <option value="Paediatric">Paediatric</option>
-        <option value="Perioperative">Perioperative</option>
-        <option value="Procedural Observational">Procedural Observational</option>
-        <option value="Rotation">Rotation</option>
-        <option value="Surgical">Surgical</option>
-      </select>
+      <div class="aff-ms-trigger req-default" id="msPTTrigger" onclick="openAllocMs('pt')">
+        <span id="msPTLabel">All</span>
+      </div>
+      <div class="aff-req-hint" id="msPTHint"></div>
+    </div>
 
-    </div>
+    <!-- Year Level — multiselect -->
     <div class="aff-field">
-      <label>Agency</label>
-      <div class="aff-input">All agencies<svg class="aff-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
+      <label>Year Level</label>
+      <div class="aff-ms-trigger req-default" id="msYLTrigger" onclick="openAllocMs('yl')">
+        <span id="msYLLabel">All</span>
+      </div>
+      <div class="aff-req-hint" id="msYLHint"></div>
     </div>
-    <div class="aff-field">
-      <label>Capacity</label>
-      <div class="aff-input">Available only<svg class="aff-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
+
+    <!-- Filter + Reset -->
+    <div class="aff-field" style="justify-content:flex-end;">
+      <div style="display:flex;align-items:center;gap:6px;padding-bottom:1px;">
+        <button class="aff-btn-filter" onclick="applyAllocFilters()">Filter</button>
+        <button class="aff-btn-reset" id="allocResetBtn" onclick="resetAllocFilters()">Reset</button>
+      </div>
     </div>
+
     <!-- Comment inline — shown only when request has a comment -->
     <div id="allocCommentBar" style="display:none;flex:1;min-width:160px;max-width:360px;">
       <div style="font-size:10px;font-weight:500;color:#999;letter-spacing:.01em;margin-bottom:3px;">Comment</div>
@@ -2217,6 +2456,12 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
     <span class="alb-lbl">Group By</span>
     <button class="alb-pill active" onclick="setAllocGroupBy('shift',this)">Shift</button>
     <button class="alb-pill" onclick="setAllocGroupBy('pt',this)">Placement Type</button>
+
+    <!-- Availability loading indicator -->
+    <div class="avail-loading-indicator" id="availLoadingIndicator">
+      <div class="avail-spinner"></div>
+      Checking availability…
+    </div>
 
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
       <div style="width:1px;height:16px;background:#e0e0e0"></div>
@@ -2263,10 +2508,10 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
         </div>
       </div>
       <!-- Requested shifts row — same flex structure as ag-row so cells align with grid -->
-      <div id="agReqShiftsRowWrap" style="display:none;background:#dbeafe;border-top:2px solid #2563eb;border-bottom:2px solid #2563eb;position:sticky;top:36px;z-index:2;">
+      <div id="agReqShiftsRowWrap" style="display:none;background:#eff6ff;border-bottom:1px solid #e2e8f0;position:sticky;top:36px;z-index:2;">
         <div style="display:flex;width:max-content;min-width:100%;">
-          <div id="agReqShiftsLeft" style="width:300px;min-width:300px;flex-shrink:0;padding:4px 8px;font-size:11px;font-weight:700;color:#1d4ed8;background:#dbeafe;position:sticky;left:0;z-index:3;border-right:2px solid #93c5fd;display:flex;align-items:center;gap:4px;letter-spacing:0.02em;"></div>
-          <div id="agReqShiftsCells" style="display:flex;background:#dbeafe;"></div>
+          <div id="agReqShiftsLeft" style="width:300px;min-width:300px;flex-shrink:0;padding:4px 8px;font-size:11px;font-weight:700;color:#1d4ed8;background:#eff6ff;position:sticky;left:0;z-index:3;border-right:1px solid #e8eaed;display:flex;align-items:center;gap:4px;letter-spacing:0.02em;"></div>
+          <div id="agReqShiftsCells" style="display:flex;background:#eff6ff;"></div>
         </div>
       </div>
       <div id="agReqShiftsRow" style="display:none;"></div>
@@ -2712,23 +2957,6 @@ const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 /* ─── AGENCY DATA ───────────────────────────────── */
 // Region-level requests — sit under Victoria, not under any specific agency
 const VICTORIA_REQS = [
-  // ── OPTION 1: cells show qty-EPcode ──────────────────────────────────────
-  {id:'r87520',reqNum:'Req: 87520',status:'pending',ep:'ACU',campus:'Melbourne',epCode:'QACURR513A',
-   discipline:'Nursing',type:'General Medical',year:'Yr 3',qty:1,dur:'18 days',
-   shiftLabel:'AM only',shiftBadge:'sb-am',chipStyle:'ep',chipLabel:'AM',
-   shiftId:'s-am',ptId:'pt-gm',dates:'12 May – 30 May 2026',
-   comment:'Please allocate near ICU if possible',
-   roster:{days:['Mon'],shift:'AM (08:00-14:00)'},
-   cells:{7:1,14:1,21:1,28:1}},
-
-  // ── OPTION 2: cells show shift label ─────────────────────────────────────
-  // Specific shift — AM
-  {id:'r92100',reqNum:'Req: 92100',status:'pending',ep:'Deakin',campus:'Geelong',epCode:'DKN',
-   discipline:'Nursing',type:'Perioperative',year:'Yr 3',qty:3,dur:'28 days',
-   shiftLabel:'AM only',shiftBadge:'sb-am',chipStyle:'shift',chipLabel:'AM',
-   shiftId:'all',ptId:'pt-gm',dates:'13 May – 9 Jun 2026',comment:'NUR1525 – Medical Surgical, Intermediate Medical Surgical, Peri Operative Students complete 7 total clinical days over a 7 week rotation.',
-   roster:{days:['Mon'],shift:'AM (08:00-14:00)'},
-   cells:{7:1,14:1,21:1,28:1}},
   // Any shift — no preference
   {id:'r92101',reqNum:'Req: 92101',status:'offered',ep:'Monash',campus:'Clayton',epCode:'MON',
    discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:2,dur:'28 days',
@@ -2800,6 +3028,24 @@ const AGENCIES = [
        shiftLabel:'Any shift',shiftBadge:'sb-all',chipStyle:'ep',chipLabel:'Any',
        shiftId:'all',ptId:'pt-peri',
        dates:'13 May – 9 Jun 2026',comment:'',cells:{}},
+      {id:'r92100',reqNum:'Req: 92100',status:'pending',
+       ep:'Deakin',campus:'Geelong',epCode:'DKN',
+       discipline:'Nursing',type:'Perioperative',year:'Yr 3',qty:3,dur:'28 days',
+       shiftLabel:'AM only',shiftBadge:'sb-am',chipStyle:'ep',chipLabel:'AM',
+       shiftId:'s-am',ptId:'pt-peri',
+       dates:'13 May – 9 Jun 2026',
+       comment:'NUR1525 – Medical Surgical, Intermediate Medical Surgical, Peri Operative Students complete 7 total clinical days over a 7 week rotation.',
+       roster:{days:['Mon'],shift:'AM (06:30-15:30)'},
+       cells:{0:1,7:1,14:1,21:1}},
+      {id:'r87520',reqNum:'Req: 87520',status:'pending',
+       ep:'ACU',campus:'Melbourne',epCode:'QACURR513A',
+       discipline:'Nursing',type:'General Medical',year:'Yr 3',qty:1,dur:'18 days',
+       shiftLabel:'AM only',shiftBadge:'sb-am',chipStyle:'ep',chipLabel:'AM',
+       shiftId:'s-am',ptId:'pt-gm',
+       dates:'13 May – 9 Jun 2026',
+       comment:'Please allocate near ICU if possible',
+       roster:{days:['Mon'],shift:'AM (06:30-15:30)'},
+       cells:{0:1,7:1,14:1,21:1}},
     ],
     hiddenChildren:[]
   },
@@ -2855,8 +3101,20 @@ const AGENCIES = [
        discipline:'Nursing',type:'Surgical',year:'Yr 3',qty:7,allocated:7,dur:'28 days',shiftLabel:'All shifts',shiftBadge:'sb-all',chipStyle:'ep',chipLabel:'Full Day',
        shiftId:'all',ptId:'g03-pt1',dates:'13 May – 9 Jun 2026',comment:'Surgical ward preference',allChip:true},
       {id:'r85589',reqNum:'Req: 85589',status:'pending',ep:'Deakin',campus:'Melbourne Burwood',epCode:'CURR512A',
-       discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:9,allocated:4,dur:'28 days',shiftLabel:'All shifts',shiftBadge:'sb-all',chipStyle:'ep',chipLabel:'Full Day',
-       shiftId:'all',ptId:'g03-pt2',dates:'13 May – 9 Jun 2026',comment:'',allChip:true},
+       discipline:'Nursing',type:'General Medical',year:'Yr 2',qty:9,allocated:4,reassigned:1,dur:'28 days',shiftLabel:'All shifts',shiftBadge:'sb-all',chipStyle:'ep',chipLabel:'Full Day',
+       shiftId:'all',ptId:'g03-pt2',dates:'13 May – 9 Jun 2026',comment:'',allChip:true,
+       course:'Bachelor of Nursing',unit:'NURS3210 – Clinical Practice 3',
+       students:[
+         {name:'Jordan Smith',   code:'S00123456'},
+         {name:'Aisha Okonkwo',  code:'S00134821'},
+         {name:'Liam Nguyen',    code:'S00150033'},
+         {name:'Ella Petrova',   code:'S00167294'},
+         {name:'Marcus Webb',    code:'S00178901'},
+         {name:'Priya Sharma',   code:'S00189012'},
+         {name:'Tom Walsh',      code:'S00192345'},
+         {name:'Chloe Nguyen',   code:'S00201456'},
+         {name:'David Park',     code:'S00212567'},
+       ]},
       // Mixed-shift request: Mon=AM, Tue=PM
       // AM-specific request — will show demand on AM shift sub-row
       {id:'r88101',reqNum:'Req: 88101',status:'offered',ep:'ACU',campus:'Melbourne',epCode:'ACU',
@@ -2876,7 +3134,7 @@ const AGENCIES = [
        shiftLabel:'PM only',shiftBadge:'sb-pm',chipStyle:'ep',chipLabel:'PM',
        shiftId:'g03-pm',ptId:'g03-pt2',dates:'13 May – 9 Jun 2026',comment:'',
        cells:{0:1,7:1,14:1,21:1}},
-      {id:'r90614',reqNum:'Req: 90614',status:'pending',ep:'ACU',campus:'Melbourne',epCode:'ACU',
+      {id:'r90620',reqNum:'Req: 90620',status:'pending',ep:'ACU',campus:'Melbourne',epCode:'ACU',
        discipline:'Nursing',type:'Acute',year:'Yr 2',qty:5,dur:'28 days',
        shiftLabel:'Mixed shifts',shiftBadge:'sb-custom',chipLabel:'AM',
        // shiftId null = mixed, handled by rosterShifts
@@ -2887,7 +3145,7 @@ const AGENCIES = [
          {day:'Tue', shiftId:'g03-pm', chipLabel:'PM',  cells:{2:1,9:1,16:1,23:1}},
        ]},
       // Rejected — Monash Acute, insufficient night shift capacity
-      {id:'r90615',reqNum:'Req: 90615',status:'rejected',
+      {id:'r90621',reqNum:'Req: 90621',status:'rejected',
        ep:'Monash',campus:'Clayton',epCode:'MON',
        discipline:'Nursing',type:'Acute',year:'Yr 3',qty:4,dur:'28 days',
        shiftLabel:'Night shift',shiftBadge:'sb-ngt',chipStyle:'ep',chipLabel:'Night',
@@ -2914,7 +3172,15 @@ const AGENCIES = [
               {id:'a23-ngt',label:'Night',full:'Night (14:00 - 22:00) | Nursing',caps:Array(28).fill(null)},
             ],
             pts:[{id:'a23-pt1',label:'Nursing | Not Specified | Not Specified | Not Specified',caps:Array(28).fill(null)}],
-            reqs:[],hiddenChildren:[],children:[]
+            reqs:[
+              {id:'r93001',reqNum:'Req: 93001',status:'pending',
+               ep:'Deakin',campus:'Geelong Waterfront',epCode:'DKN',
+               discipline:'Nursing',type:'Surgical',year:'Yr 3',qty:2,allocated:0,dur:'14 days',
+               shiftLabel:'Day shift',shiftBadge:'sb-am',chipStyle:'ep',chipLabel:'Day',
+               shiftId:'a23-day',ptId:'a23-pt1',
+               dates:'13 May - 26 May 2026',comment:'Ward A preferred.',
+               cells:{0:1,1:1,2:1,7:1,8:1,9:1}},
+            ],hiddenChildren:[],children:[]
           }
         ]
       }
@@ -2971,6 +3237,16 @@ const AGENCIES = [
        shiftId:'at-am',ptId:'at-pt1',dates:'20 May – 26 May 2026',comment:'Student has disability support needs — please advise parking',
        roster:{days:['Wed','Thu','Fri'],shift:'AM (08:00-14:00)'},
        cells:{7:1,8:1,9:1}},
+
+      // ── No-shift request — shift not specified by EP ──────────────────────
+      {id:'r99001',reqNum:'Req: 99001',status:'pending',
+       ep:'Deakin',campus:'Geelong Waterfront',epCode:'DKN',
+       discipline:'Nursing',type:'General Medical',year:'Yr 2',
+       qty:3,allocated:0,dur:'28 days',
+       shiftLabel:'',shiftBadge:'',chipLabel:'',chipStyle:'ep',
+       shiftId:null,ptId:'at-pt1',
+       dates:'13 May – 9 Jun 2026',comment:'Shift not specified — please assign appropriate shift on allocation.',
+       allChip:true},
     ],
     hiddenChildren:[{id:'h1',name:'Room 3A',reasons:['Mismatched agency placement types']}]
   },
@@ -3431,6 +3707,17 @@ const TULSA_AGENCIES = [
    Placements are linked to requests via reqId.
    Statuses: offered | published | accepted | confirmed | cancelled | withdrawn
    Cells: same day-index format as requests                               */
+/* ═══════════════════════════════════════════════════════════════════════════
+   DATA LOCATIONS GUIDE
+   ─────────────────────────────────────────────────────────────────────────
+   AGENCIES (Victoria capacity grid data):  search "const AGENCIES ="
+   TULSA_AGENCIES:                          search "const TULSA_AGENCIES ="
+   REQ_META (request registry):            search "const REQ_META ="
+   PLACEMENTS (existing placed students):   line below this comment
+   allocDraftPlacements (runtime drafts):   runtime array, starts as []
+     → populated by confirmAlloc() when user clicks Allocate+Confirm
+     → status updated by spGenerate() when Review panel Generate is clicked
+   ═══════════════════════════════════════════════════════════════════════════ */
 const PLACEMENTS = [
   // Deakin · Melbourne Burwood — linked to r85589 (General Medical, All shifts, pt:g03-pt2)
   {id:'p75176',plcNum:'Plc: 75176',reqId:'r85589',status:'offered',
@@ -4982,7 +5269,18 @@ function renderFacRow(ag,cols,depth){
 function renderSubRow(sub,ag,cols,depth,mode){
   const pad=8+(depth+1)*20;
   const rawLabel=sub.full||sub.label;
-  const label = ['Any shift','All shifts','Any'].includes(rawLabel) ? '' : rawLabel;
+
+  // Shift rows: use full label as-is e.g. "AM (06:30 - 15:30) | Nursing"
+  // PT rows: trim to "Discipline | Placement Type" only — drop year/degree
+  let label;
+  if(mode==='pt'){
+    const parts = rawLabel.split('|').map(s=>s.trim());
+    const discipline = parts[0] || '';
+    const ptName = parts[1] || '';
+    label = (discipline && ptName) ? `${discipline} | ${ptName}` : (discipline || ptName || rawLabel);
+  } else {
+    label = ['Any shift','All shifts','Any'].includes(rawLabel) ? '' : rawLabel;
+  }
 
   let h=`<tr class="tr-sub"><td class="td-sub-name" style="padding-left:${pad}px" title="${rawLabel}">${label}</td>`;
   for(let i=0;i<cols;i++){
@@ -4993,8 +5291,10 @@ function renderSubRow(sub,ag,cols,depth,mode){
     if(wknd){ cls=' wknd'; }
     else { cls=numCls(v,wknd); }
     const subVal = v!==null&&v!==undefined?v:'';
+    // PT rows: append * to non-empty values to match capacity grid
+    const displayVal = (mode==='pt' && subVal!=='') ? `${subVal}*` : subVal;
     const subStyle = subVal!=='' ? 'font-size:12px;font-weight:400;color:#1976d2;text-decoration:underline;cursor:pointer' : '';
-    h+=`<td class="td-sub-num${cls}"><div style="padding:3px 4px 3px 6px;line-height:1.3;${subStyle}">${subVal}</div></td>`;
+    h+=`<td class="td-sub-num${cls}"><div style="padding:3px 4px 3px 6px;line-height:1.3;${subStyle}">${displayVal}</div></td>`;
   }
   h+='</tr>';
 
@@ -6058,6 +6358,12 @@ function navigateToAllocOptions(rid){
   if(rotationMode) toggleRotation();
   // Reset requested-dates toggle to default (requested dates only)
   reqDatesOnly = true;
+  allocDateOffset = 0;
+  allocViewMode = 'day';
+  // Ensure week-view highlight class is removed on reset
+  document.getElementById('screen-alloc')?.classList.remove('alloc-week-view');
+  document.querySelectorAll('.aff-view-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('affViewDay')?.classList.add('active');
   const rdToggle = document.getElementById('reqDatesToggle');
   if(rdToggle){ rdToggle.classList.add('active'); rdToggle.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Requested dates`; }
   allocShowPlacements = false;
@@ -6065,6 +6371,8 @@ function navigateToAllocOptions(rid){
   document.getElementById('allocShowPlcBtn') && (document.getElementById('allocShowPlcBtn').classList.remove('active-chip'), document.getElementById('allocShowPlcBtn').style.opacity='.6');
   document.getElementById('allocShowReqBtn') && (document.getElementById('allocShowReqBtn').classList.remove('active-chip'), document.getElementById('allocShowReqBtn').style.opacity='.6');
   buildPendingList();
+  // Initialise multiselect filters from request defaults
+  initAllocFilters(r);
 
   // Flash
   const flash = document.getElementById('navFlash');
@@ -6072,11 +6380,11 @@ function navigateToAllocOptions(rid){
   setTimeout(()=>flash.classList.remove('flash'), 280);
 
   // Populate context bar
-  document.getElementById('allocBreadcrumb') && (document.getElementById('allocBreadcrumb').textContent = `Process Response / ${r.reqNum || r.id}`);
+  document.getElementById('allocBreadcrumb') && (document.getElementById('allocBreadcrumb').textContent = `${r.reqNum || r.id} – ${r.ep}${r.campus?' · '+r.campus:''} – ${r.discipline||r.type||''} – ${r.dates||''}`);
   document.getElementById('allocReqNum').textContent = r.reqNum || r.id;
   document.getElementById('allocEp').textContent = r.ep + (r.campus ? ' · ' + r.campus : '');
   document.getElementById('allocDatesLbl').textContent = r.dates;
-  document.getElementById('allocDateRange').textContent = r.dates;
+  updateAllocDateRangeLabel();
 
   // Counters
   const alloc = r.allocated || 0;
@@ -6095,38 +6403,43 @@ function navigateToAllocOptions(rid){
   document.getElementById('allocFilterDiscTxt') && (document.getElementById('allocFilterDiscTxt').textContent = r.discipline);
   document.getElementById('allocFilterPTTxt') && (document.getElementById('allocFilterPTTxt').textContent = r.type);
 
-  // Pre-select actionable dropdowns — add PT option dynamically if not present
-  const discSel = document.getElementById('allocDiscSelect');
-  const ptSel   = document.getElementById('allocPTSelect');
-  if(discSel){ discSel.value = r.discipline || ''; discSel.classList.toggle('prefilled', !!r.discipline); }
-  if(ptSel){
-    if(r.type === 'Rotation'){
-      // Rotation requests: clear PT filter — all placement type rows must be visible
-      ptSel.value = '';
-      ptSel.classList.remove('prefilled');
-    } else if(r.type){
-      // Ensure the option exists (for region-specific PT types)
-      if(![...ptSel.options].some(o=>o.value===r.type)){
-        const opt = document.createElement('option');
-        opt.value = r.type; opt.textContent = r.type;
-        ptSel.appendChild(opt);
-      }
-      ptSel.value = r.type;
-      ptSel.classList.add('prefilled');
+  // Filters initialised via initAllocFilters(r) called above
+
+  // Row 2 — meta fields (left side)
+  const kv = (lbl, val) => `<span class="alloc-req-kv"><span class="alloc-req-lbl">${lbl}</span><span class="alloc-req-sep" style="margin:0 4px">·</span><span class="alloc-req-val">${val}</span></span>`;
+  const dot = `<span class="alloc-req-sep" style="margin:0 5px">·</span>`;
+  const parts = [];
+  if(r.discipline) parts.push(kv('DISCIPLINE', r.discipline));
+  if(r.type)       { if(parts.length) parts.push(dot); parts.push(kv('PLACEMENT TYPE', r.type)); }
+  if(r.year)       { if(parts.length) parts.push(dot); parts.push(kv('YEAR', r.year)); }
+  if(r.course)     { if(parts.length) parts.push(dot); parts.push(kv('COURSE', r.course)); }
+  if(r.unit)       { if(parts.length) parts.push(dot); parts.push(kv('UNIT', r.unit)); }
+  if(r.shiftLabel) { if(parts.length) parts.push(dot); parts.push(kv('SHIFT', r.shiftLabel)); }
+  const metaRow = document.getElementById('allocMetaRow');
+  if(metaRow) metaRow.innerHTML = parts.join('');
+
+  // Row 3 — students (only when data available)
+  const studentsRow = document.getElementById('allocStudentsRow');
+  const studentsList = document.getElementById('allocStudentsList');
+  if(studentsRow && studentsList){
+    // Build student list — support both single student (reqType:'student') and group (r.students array)
+    const studs = r.students || (r.studentName ? [{name:r.studentName, code:r.studentCode||r.studentId}] : []);
+    if(studs.length){
+      studentsList.innerHTML = studs.map(s=>
+        `<span class="alloc-student-link" onclick="openStudentPanel('${s.name||s.studentName}','${s.code||s.studentCode||''}')">${s.name||s.studentName}</span><span class="alloc-student-code">${s.code||s.studentCode||''}</span>`
+      ).join('');
+      studentsRow.classList.add('show');
     } else {
+      studentsRow.classList.remove('show');
     }
   }
 
-  // Meta row — v23 label:value pattern
-  const kv = (lbl, val) => `<span class="alloc-req-kv"><span class="alloc-req-lbl">${lbl}:</span><span class="alloc-req-val">${val}</span></span>`;
-  const sep = `<span class="alloc-req-sep">·</span>`;
-  const parts = [kv('Discipline', r.discipline), sep, kv('Placement Type', r.type), sep, kv('Year', r.year)];
-  if(r.shiftLabel) parts.push(sep, kv('Shift', r.shiftLabel));
-  if(r.reqType==='student' && r.studentName) parts.push(sep, kv('Student', `${r.studentName} (${r.studentCode})`));
-  // Insert meta before the badges div
-  const metaRow = document.getElementById('allocMetaRow');
-  if(metaRow){
-    metaRow.innerHTML = parts.join(' ');
+  // Reassigned badge — always visible
+  const reassigned = r.reassigned || 0;
+  const ctrReassigned = document.getElementById('ctrReassigned');
+  if(ctrReassigned){
+    ctrReassigned.textContent = `Reassigned: ${reassigned}`;
+    ctrReassigned.style.display = '';
   }
 
   // Pending counter
@@ -6190,6 +6503,8 @@ function navigateToAllocOptions(rid){
   renderAllocHeader();
   renderRequestedShiftsRow(r);
   renderAllocRows(rid);
+  // Fire availability highlight after grid renders
+  setTimeout(()=>runAvailabilityHighlight(), 60);
 
   // Per Kaitlyn: Rotation type = always rotation builder. Any other type = always standard. No combination.
   const isRotation = r.type === 'Rotation';
@@ -6273,24 +6588,61 @@ function renderRequestedShiftsRow(r){
     if(wrapElH) wrapElH.style.display = 'none';
     return;
   }
+  // Roster defined = request has rosterShifts (days + shifts both present)
+  const hasRoster = !!(r.rosterShifts && r.rosterShifts.length);
   let cells = '';
-  for(let i=0; i<28; i++){
-    const d = new Date(BASE); d.setDate(d.getDate()+i);
-    const wknd = d.getDay()===0||d.getDay()===6;
-    const inReq = isDateInRange(d, r);
-    const hidden = reqDatesOnly && !inReq;
-    let label = '';
-    if(!wknd){
-      if(r.rosterShifts){
-        r.rosterShifts.forEach(rs=>{ if(rs.cells&&rs.cells[i]) label = rs.chipLabel; });
-      } else if(r.cells&&r.cells[i]){
-        label = r.shiftLabel && !['Any shift','All shifts','Any'].includes(r.shiftLabel) ? r.shiftLabel.replace(' only','').replace(' shift','') : '✓';
-      } else if(r.allChip){
-        label = r.shiftLabel && !['Any shift','All shifts','Any'].includes(r.shiftLabel) ? r.shiftLabel.replace(' only','') : '✓';
+
+  if(allocViewMode === 'week'){
+    // Week view: one cell per week — show shift labels for roster days in that week, or 'Any' if in range
+    for(let w=0; w<4; w++){
+      const wStart = new Date(BASE); wStart.setDate(wStart.getDate() + allocDateOffset + w*7);
+      const dayOfWeek = wStart.getDay();
+      const diffToMon = dayOfWeek===0 ? -6 : 1-dayOfWeek;
+      const mon = new Date(wStart); mon.setDate(wStart.getDate() + diffToMon);
+      const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+      const startD = r.startDate ? new Date(r.startDate) : null;
+      const endD = r.endDate ? new Date(r.endDate) : null;
+      const inReq = startD && endD ? (mon <= endD && sun >= startD) : false;
+      const hidden = reqDatesOnly && !inReq;
+      let label = '';
+      if(inReq){
+        if(hasRoster){
+          const shifts = new Set();
+          r.rosterShifts.forEach(rs=>{
+            for(let d=0;d<7;d++){
+              const dayIdx = allocDateOffset + w*7 + d;
+              if(rs.cells&&rs.cells[dayIdx]) shifts.add(rs.chipLabel);
+            }
+          });
+          label = shifts.size ? [...shifts].join('/') : 'Any';
+        } else {
+          label = r.shiftLabel && !['Any shift','All shifts','Any'].includes(r.shiftLabel)
+            ? r.shiftLabel.replace(' only','').replace(' shift','') : 'Any';
+        }
       }
+      const tickContent = label ? `<span class="tick-box">${label}</span>` : '';
+      cells += `<div class="ag-req-shift-cell${hidden?' hidden-col':''}" style="min-width:60px">${tickContent}</div>`;
     }
-    const tickContent = label ? `<span class="tick-box">${label}</span>` : '';
-    cells += `<div class="ag-req-shift-cell${wknd?' wknd':''}${hidden?' hidden-col':''}">${tickContent}</div>`;
+  } else {
+    // Day view: one cell per day
+    for(let i=0; i<28; i++){
+      const d = new Date(BASE); d.setDate(d.getDate()+allocDateOffset+i);
+      const inReq = isDateInRange(d, r);
+      const hidden = reqDatesOnly && !inReq;
+      let label = '';
+      if(inReq){
+        if(hasRoster){
+          // Show specific shift if this day is in the roster, else blank (not a requested day)
+          r.rosterShifts.forEach(rs=>{ if(rs.cells&&rs.cells[i+allocDateOffset]) label = rs.chipLabel; });
+        } else {
+          // No roster — show named shift or 'Any'
+          label = r.shiftLabel && !['Any shift','All shifts','Any'].includes(r.shiftLabel)
+            ? r.shiftLabel.replace(' only','').replace(' shift','') : 'Any';
+        }
+      }
+      const tickContent = label ? `<span class="tick-box">${label}</span>` : '';
+      cells += `<div class="ag-req-shift-cell${hidden?' hidden-col':''}">${tickContent}</div>`;
+    }
   }
   const wrapEl = document.getElementById('agReqShiftsRowWrap');
   if(leftEl){ leftEl.textContent = 'Requested shifts'; }
@@ -6299,22 +6651,6 @@ function renderRequestedShiftsRow(r){
 }
 
 /* ─── ALLOCATION SCREEN RENDERING ─────────────────── */
-function renderAllocHeader(){
-  const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const r = REQ_META[currentAllocReqId];
-  let hh = '';
-  for(let i=0; i<28; i++){
-    const d = new Date(BASE); d.setDate(d.getDate() + i);
-    const wknd = d.getDay()===0||d.getDay()===6;
-    const tod = d.toDateString() === new Date(2026,7,24).toDateString();
-    const inReq = r ? isDateInRange(d, r) : false;
-    const hidden = reqDatesOnly && !inReq;
-    const cls = (wknd?' wknd':'') + (tod?' today':'') + (inReq?' in-req':'') + (hidden?' hidden-col':'');
-    const dd = String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0');
-    hh += `<div class="ag-th${cls}"><span class="dd">${dd}</span><span class="dw">${DOW[d.getDay()]}</span></div>`;
-  }
-  document.getElementById('agColRight').innerHTML = hh;
-}
 
 function isDateInRange(d, r){
   if(!r) return false;
@@ -6342,12 +6678,38 @@ function getAllocDeduction(agId){
 function renderAllocCells(caps, focusReq, cls, agId){
   const deduction = agId ? getAllocDeduction(agId) : 0;
   let html='';
+
+  if(allocViewMode === 'week'){
+    // Aggregate 7-day caps per week column (4 weeks = 28 cols)
+    for(let w=0; w<4; w++){
+      const weekStart = allocDateOffset + w*7;
+      let weekCap = null;
+      let inReqAny = false;
+      for(let d2=0; d2<7; d2++){
+        const dayIdx = weekStart + d2;
+        const date = new Date(BASE); date.setDate(date.getDate() + dayIdx);
+        if(date.getDay()===0||date.getDay()===6) continue;
+        const inReq = focusReq ? isDateInRange(date, focusReq) : false;
+        if(inReq) inReqAny = true;
+        const cv = caps ? caps[dayIdx] : null;
+        if(cv!==null&&cv!==undefined){ weekCap = (weekCap||0) + cv; }
+      }
+      const hidden = reqDatesOnly && !inReqAny;
+      let v = weekCap;
+      if(v!==null&&v!==undefined&&inReqAny&&deduction>0) v = v - deduction*5;
+      const pos = v!==null&&v!==undefined&&v>0;
+      const neg = v!==null&&v!==undefined&&v<0;
+      html += `<div class="${cls}${pos?' pos':''}${neg?' neg':''}${inReqAny?' in-req':''}${hidden?' hidden-col':''}" style="min-width:60px">${v!==null&&v!==undefined?v:''}</div>`;
+    }
+    return html;
+  }
+
   for(let i=0; i<28; i++){
-    const d = new Date(BASE); d.setDate(d.getDate()+i);
+    const d = new Date(BASE); d.setDate(d.getDate()+allocDateOffset+i);
     const wknd = d.getDay()===0||d.getDay()===6;
     const inReq = focusReq ? isDateInRange(d, focusReq) : false;
     const hidden = reqDatesOnly && !inReq;
-    let v = caps ? caps[i] : null;
+    let v = caps ? caps[allocDateOffset+i] ?? caps[i] : null;
     if(v!==null && v!==undefined && inReq && deduction > 0) v = v - deduction;
     const pos = v!==null&&v!==undefined&&v>0;
     const neg = v!==null&&v!==undefined&&v<0;
@@ -6413,10 +6775,307 @@ function renderAllocCells(caps, focusReq, cls, agId){
   return html;
 }
 
+/* ── Alloc screen placement row ── */
+function renderAllocPlacementRow(agName, pad, filterShift){
+  const focusR = REQ_META[currentAllocReqId];
+  const indentPx = pad + 20;
+  const safeAgName = agName.replace(/'/g,"\'");
+  const cols = 28;
+
+  // Which columns are visible — use cells index directly to avoid BASE date mismatch
+  const isVisible = Array.from({length: cols}, (_, i) => {
+    if(!reqDatesOnly) return true;
+    if(!focusR) return true;
+    if(focusR.allChip){ const d = new Date(BASE); d.setDate(d.getDate()+i); return d.getDay()!==0&&d.getDay()!==6; }
+    if(focusR.cells) return !!focusR.cells[i];
+    if(focusR.rosterShifts) return focusR.rosterShifts.some(rs=>rs.cells&&rs.cells[i]);
+    return true;
+  });
+
+  // ── Shared segment+lane builder ──────────────────────────────────────────────
+  // Takes a map of key→Array(cols) counts, returns lanes of segments
+  function buildLanes(countMap){
+    const keys = Object.keys(countMap);
+    const segments = [];
+    keys.forEach(key => {
+      const counts = countMap[key];
+      let i = 0;
+      while(i < cols){
+        if(!counts[i] || !isVisible[i]){ i++; continue; }
+        let span = 1, total = counts[i];
+        while(i + span < cols){
+          const next = i + span;
+          if(!isVisible[next]) break;
+          const d = new Date(BASE); d.setDate(d.getDate() + next);
+          if(d.getDay()===0||d.getDay()===6){
+            let skip = 1;
+            while(next+skip < cols){ const dd=new Date(BASE);dd.setDate(dd.getDate()+next+skip); if(dd.getDay()!==0&&dd.getDay()!==6) break; skip++; }
+            if(next+skip < cols && counts[next+skip] && isVisible[next+skip]) span += skip;
+            else break;
+          } else if(counts[next]){ total += counts[next]; span++; }
+          else break;
+        }
+        segments.push({ key, start:i, end:i+span-1, span, total });
+        i += span;
+      }
+    });
+    const lanes = [];
+    segments.forEach(seg => {
+      let placed = false;
+      for(const lane of lanes){
+        if(!lane.some(s => seg.start<=s.end && seg.end>=s.start)){ lane.push(seg); placed=true; break; }
+      }
+      if(!placed) lanes.push([seg]);
+    });
+    return lanes;
+  }
+
+  // ── Render a set of lanes into HTML ─────────────────────────────────────────
+  function renderLanes(lanes, chipFn, labelHtml, viewBtn){
+    let html = '';
+    lanes.forEach((lane, laneIdx) => {
+      html += `<div class="ag-plc-row">`;
+      if(laneIdx === 0){
+        html += `<div class="ag-plc-left" style="padding-left:${indentPx}px">
+          ${labelHtml}
+          ${viewBtn||''}
+        </div>`;
+      } else {
+        html += `<div class="ag-plc-left" style="padding-left:${indentPx}px"></div>`;
+      }
+      html += `<div class="ag-plc-cells">`;
+      lane.sort((a,b) => a.start - b.start);
+      let i = 0, segIdx = 0;
+      while(i < cols){
+        if(!isVisible[i]){ i++; continue; }
+        const d = new Date(BASE); d.setDate(d.getDate() + i);
+        const wknd = d.getDay()===0||d.getDay()===6;
+        if(segIdx < lane.length && lane[segIdx].start === i){
+          const seg = lane[segIdx++];
+          let visSpan = 0;
+          for(let j=seg.start; j<=seg.end; j++) if(isVisible[j]) visSpan++;
+          const w = visSpan * 46;
+          html += chipFn(seg, w);
+          i = seg.end + 1;
+        } else {
+          html += `<div class="ag-plc-cell${wknd?' wknd':''}"></div>`;
+          i++;
+        }
+      }
+      html += `</div></div>`;
+    });
+    return html;
+  }
+
+  // ── Section 1: draft groups (planned placements for current request) ──────────
+  // Group allocDraftPlacements by shiftLabel+status → one row per unique combination
+  const allDraftEntries = allocDraftPlacements
+    .map((d, masterIdx) => ({ d, masterIdx }))
+    .filter(({ d }) => {
+      if(d.reqId !== currentAllocReqId) return false;
+      if(d.agId){ const ag = findAgById(d.agId); return ag && ag.name === agName; }
+      return d.agName === agName;
+    });
+
+  const draftGroups = [];
+  allDraftEntries.forEach(({ d, masterIdx }) => {
+    const key = (d.status||'draft') + '__' + (d.shiftLabel||'');
+    const existing = draftGroups.find(g => g.key === key);
+    if(existing){ existing.qty += d.qty; existing.indices.push(masterIdx); }
+    else draftGroups.push({ key, status:d.status||'draft', shiftLabel:d.shiftLabel||'', qty:d.qty, dates:d.dates, indices:[masterIdx] });
+  });
+
+  // Normalise filterShift — strip time/discipline suffix same way confirmAlloc strips shiftLabel
+  // e.g. 'AM (06:30 - 15:30)' → 'AM' so it matches stored shortShift
+  const normShift = (s) => s ? s.split('(')[0].split('|')[0].trim() : s;
+  const normFilterShift = filterShift && filterShift !== '__ANY__' ? normShift(filterShift) : filterShift;
+
+  // Apply filterShift to draft groups
+  const visibleDraftGroups = filterShift
+    ? draftGroups.filter(g => normFilterShift === '__ANY__'
+        ? (!g.shiftLabel || g.shiftLabel === 'Any Shift' || g.shiftLabel === '—')
+        : g.shiftLabel === normFilterShift)
+    : draftGroups;
+
+  // ── Section 2: PLACEMENTS records ────────────────────────────────────────────
+  const agencyPlcs = (PLACEMENTS_BY_AGENCY[agName]||[]).filter(p=>!['cancelled','withdrawn'].includes(p.status));
+  const chipPlcs = allocShowPlacements ? agencyPlcs : agencyPlcs.filter(p=>p.reqId===currentAllocReqId);
+  const visibleChipPlcs = filterShift
+    ? (normFilterShift === '__ANY__'
+        ? chipPlcs.filter(p=>!p.shift||p.shift==='Any Shift')
+        : chipPlcs.filter(p=>normShift(p.shift||'')===normFilterShift))
+    : chipPlcs;
+
+  if(!visibleDraftGroups.length && !visibleChipPlcs.length) return '';
+
+  let html = '';
+
+  // ── Render draft groups using segment+lane ────────────────────────────────────
+  // Each group is its own "EP key" — count = qty on every visible non-weekend col
+  if(visibleDraftGroups.length){
+    visibleDraftGroups.forEach(g => {
+      const { status, shiftLabel:shiftLbl, qty, dates, indices } = g;
+      const isDraft = status === 'draft';
+      const statusLbl = status.charAt(0).toUpperCase()+status.slice(1);
+      const hasShift = shiftLbl && shiftLbl !== 'Any Shift' && shiftLbl !== '—';
+
+      // Offered/published groups → coloured chip format (consistent with EP chips)
+      // Only true draft (not yet generated) → card format with left col detail
+      if(!isDraft){
+        // Render as coloured chip lane — same structure as EP chips but status-coloured
+        const gKey = g.key;
+        const countMap = {};
+        countMap[gKey] = Array(cols).fill(0);
+        for(let i=0;i<cols;i++){
+          if(!isVisible[i]) continue;
+          const d=new Date(BASE);d.setDate(d.getDate()+i);
+          if(d.getDay()!==0&&d.getDay()!==6) countMap[gKey][i]=1;
+        }
+        const lanes = buildLanes(countMap);
+        if(!lanes.length) return;
+        const lbl = hasShift ? `${qty}× ${shiftLbl}` : `${qty} placement${qty!==1?'s':''}`;
+        const chipFn=(seg,w)=>{
+          let visSpan=0; for(let j=seg.start;j<=seg.end;j++) if(isVisible[j]) visSpan++;
+          const chipW = visSpan*46;
+          return `<div class="ag-plc-cell has-data" style="min-width:${chipW}px;width:${chipW}px;max-width:${chipW}px">
+            <span class="ag-plc-chip status-${status}" title="${lbl}">${lbl}</span>
+          </div>`;
+        };
+        const labelHtml=`<span class="ag-plc-lbl"><span class="ag-plc-status-badge status-${status}" style="margin-right:4px">${statusLbl}</span></span>`;
+        html += renderLanes(lanes, chipFn, labelHtml, '');
+        return;
+      }
+
+      // Chip rendering depends on reqDatesOnly:
+      // - Full calendar (off): one chip spanning first→last visible weekday
+      // - Requested dates (on): one small chip per visible weekday column (scattered dates)
+      {
+        let firstVis=-1, lastVis=-1, visWeekdayCols=0;
+        for(let i=0;i<cols;i++){
+          if(!isVisible[i]) continue;
+          const d=new Date(BASE);d.setDate(d.getDate()+i);
+          if(d.getDay()!==0&&d.getDay()!==6){ if(firstVis<0) firstVis=i; lastVis=i; visWeekdayCols++; }
+        }
+        if(visWeekdayCols===0) return;
+
+        const chipLbl=hasShift ? `${qty}\u00d7 ${shiftLbl}` : `${qty} placement${qty!==1?'s':''}`;
+        const leftLbl=hasShift ? `${shiftLbl} \u00b7 ${qty} placement${qty!==1?'s':''}` : `${qty} placement${qty!==1?'s':''}`;
+
+        let cellsHtml='';
+        if(reqDatesOnly){
+          // Requested dates on — emit one chip per visible weekday (scattered columns)
+          for(let i=0;i<cols;i++){
+            if(!isVisible[i]) continue;
+            const d=new Date(BASE);d.setDate(d.getDate()+i);
+            const wknd=d.getDay()===0||d.getDay()===6;
+            if(wknd){ cellsHtml+=`<div class="ag-plc-cell wknd"></div>`; continue; }
+            cellsHtml+=`<div class="ag-plc-cell has-data status-${status}"><span class="ag-plc-chip status-${status}" style="font-size:9px;padding:1px 3px">${qty}</span></div>`;
+          }
+        } else {
+          // Full calendar — one chip spanning first to last visible weekday
+          let spanCols=0;
+          for(let i=firstVis;i<=lastVis;i++){ if(isVisible[i]) spanCols++; }
+          const w=spanCols*46;
+          let chipEmitted=false;
+          for(let i=0;i<cols;i++){
+            if(!isVisible[i]) continue;
+            const d=new Date(BASE);d.setDate(d.getDate()+i);
+            const wknd=d.getDay()===0||d.getDay()===6;
+            if(wknd){ cellsHtml+=`<div class="ag-plc-cell wknd"></div>`; continue; }
+            if(!chipEmitted&&i===firstVis){
+              cellsHtml+=`<div class="ag-plc-cell has-data status-${status}" style="min-width:${w}px;width:${w}px;max-width:${w}px"><span class="ag-plc-chip status-${status}">${chipLbl}</span></div>`;
+              chipEmitted=true; i=lastVis; continue;
+            }
+            cellsHtml+=`<div class="ag-plc-cell"></div>`;
+          }
+        }
+
+        const safeIndices=JSON.stringify(indices);
+        const removeBtn=isDraft?`<button class="ag-plc-remove" onclick="event.stopPropagation();removeDraftGroup(${safeIndices})" title="Remove">✕</button>`:'';
+        html+=`<div class="ag-plc-row ag-plc-planned status-${status}">
+          <div class="ag-plc-left" style="padding-left:${indentPx}px">
+            <div class="ag-plc-info">
+              <div class="ag-plc-line1"><span class="ag-plc-status-badge status-${status}">${statusLbl}</span><span class="ag-plc-shift-lbl">${leftLbl}</span></div>
+              <div class="ag-plc-line2">${dates||focusR?.dates||''}</div>
+            </div>${removeBtn}
+          </div>
+          <div class="ag-plc-cells">${cellsHtml}</div>
+        </div>`;
+      }
+    });
+  }
+
+  // ── Render background placements (EP-chip lanes) ──────────────────────────────
+  if(visibleChipPlcs.length){
+    let hasActivityBeyond = false;
+    const epMap = {};
+    visibleChipPlcs.forEach(p => {
+      const key = p.epCode||p.ep||'—';
+      if(!epMap[key]) epMap[key]=Array(cols).fill(0);
+      for(let i=0;i<cols;i++){
+        if(!p.cells||!p.cells[i]) continue;
+        if(isVisible[i]) epMap[key][i]+=1; else hasActivityBeyond=true;
+      }
+    });
+    const lanes = buildLanes(epMap);
+    if(lanes.length){
+      const beyondHint=(reqDatesOnly&&hasActivityBeyond)?` <span class="ag-plc-beyond">+more dates</span>`:'';
+      const viewTotal=visibleChipPlcs.length;
+      const labelHtml=`<span class="ag-plc-lbl">Placements${beyondHint}</span>`;
+      const viewBtn=`<button class="ag-plc-view" onclick="event.stopPropagation();openVpSheetForAgency('${safeAgName}',${viewTotal})">View</button>`;
+      const chipFn=(seg,w)=>{
+        const safeEp=seg.key.replace(/'/g,"\'");
+        const lbl=`${seg.total}\u00d7 ${seg.key}`;
+        return `<div class="ag-plc-cell has-data" style="min-width:${w}px;width:${w}px;max-width:${w}px">
+          <span class="ag-plc-chip" onclick="openVpSheetForAgency('${safeAgName}',${seg.total},'${safeEp}')" title="${lbl}">${lbl}</span>
+        </div>`;
+      };
+      html += renderLanes(lanes, chipFn, labelHtml, viewBtn);
+    }
+  }
+
+  return html;
+}
+function removeDraftGroup(indices){
+  // Sort descending so splicing doesn't shift earlier indices
+  const sorted = [...indices].sort((a,b) => b - a);
+  const r = REQ_META[currentAllocReqId];
+  let totalQty = 0;
+  let agId = null;
+  sorted.forEach(idx => {
+    const draft = allocDraftPlacements[idx];
+    if(!draft || (draft.status && draft.status !== 'draft')) return;
+    totalQty += draft.qty;
+    agId = agId || draft.agId;
+    allocDraftPlacements.splice(idx, 1);
+  });
+  if(r) r.allocated = Math.max(0, (r.allocated||0) - totalQty);
+  if(agId){
+    const badge = document.getElementById('ward-count-' + agId);
+    if(badge){
+      const total = allocDraftPlacements.filter(d=>d.agId===agId&&d.reqId===currentAllocReqId).reduce((s,d)=>s+d.qty,0);
+      badge.textContent = total > 0 ? `${total} allocated` : '';
+      badge.style.display = total > 0 ? '' : 'none';
+    }
+    if(r){
+      const newRem = r.qty - (r.allocated||0);
+      const btn = document.getElementById('btn-alloc-' + agId);
+      if(btn && newRem > 0) btn.style.display = '';
+    }
+  }
+  if(!allocDraftPlacements.filter(d=>d.reqId===currentAllocReqId).length) hidePlacementRail();
+  renderAllocRows(currentAllocReqId); renderPlacementRail(); updateBottomBar(); refreshCounters();
+}
+
+
 function renderAgencyBlock(ag, focusReq, depth, isPinned){
   const pad = 8 + depth * 16;
-  const isReqAg = (ag.reqs||[]).some(r=>r.id===currentAllocReqId) ||
-    (ag.id==='hope' && currentAllocReqId==='r87520');
+  const directlyHasReq = (ag.reqs||[]).some(r=>r.id===currentAllocReqId);
+  function agOrDescHasReq(a){
+    if((a.reqs||[]).some(r=>r.id===currentAllocReqId)) return true;
+    return (a.children||[]).some(c=>agOrDescHasReq(c));
+  }
+  const isReqAg = agOrDescHasReq(ag);
 
   // Roster awareness — use the passed focusReq, not currentAllocReqId (which may be stale)
   const focusR = focusReq || REQ_META[currentAllocReqId];
@@ -6440,31 +7099,24 @@ function renderAgencyBlock(ag, focusReq, depth, isPinned){
                   || hasKids
                   || (!allocGroupBy && (hasShifts||hasKids));
 
-  // Compute sum caps across shifts for the collapsed row
+  // Compute sum caps: for PT grouping sum PT caps; for shift grouping sum shift caps
   const sumCaps = Array(28).fill(null).map((_,i)=>{
-    const vals = (ag.shifts||[]).map(s=>s.caps[i]).filter(x=>x!==null&&x!==undefined);
+    const src = (allocGroupBy === 'pt' && (ag.pts||[]).length) ? ag.pts : ag.shifts;
+    const vals = (src||[]).map(s=>s.caps[i]).filter(x=>x!==null&&x!==undefined);
     return vals.length ? vals.reduce((a,b)=>a+b,0) : null;
   });
 
-  // PT grouping: does the request have a specific (non-Rotation) PT?
-  const reqPt = focusR?.type && focusR.type !== 'Rotation' ? focusR.type : null;
-  const hasPtSignal = allocGroupBy === 'pt' && reqPt !== null;
-
-  // Collapsed agency row:
-  // - No sub-rows at all: Allocate button directly on agency row
-  // - Has sub-rows + roster defined (shift grouping): fast-path auto-assign using roster shift
-  // - Has sub-rows + specific PT (PT grouping): fast-path auto-assign using request PT
-  // - Has sub-rows + no signal: must expand to pick shift/PT
   const isLeafAg = !(ag.children && ag.children.length);
-  // Allocate button on ALL agency rows (leaf and parent hierarchy levels).
-  // Clicking opens the qty input — allocates at whichever level was clicked.
-  // Uses roster shift if defined, else 'Any Shift'.
-  const agRowShiftTarget = (hasRoster && rosterShiftName) ? rosterShiftName
-                         : (hasPtSignal && reqPt)         ? reqPt
-                         : 'Any Shift';
-  const agRowAllocHtml = inlineAllocHtml(ag.id, agRowShiftTarget, ag.name);
+  const agRowAllocHtml = inlineAllocHtml(ag.id, 'Any Shift', ag.name);
 
-  let html = `<div class="ag-row${isReqAg?' requested':''}" id="ward-${ag.id}" onclick="toggleAllocAg('${ag.id}')">
+  // Requested badge: show on this agency if request directly belongs here.
+  // If request has no specific agency, show badge at region level (depth===0) if
+  // any descendant has the request.
+  const reqMeta = focusR;
+  const reqHasSpecificAgency = !!(reqMeta && reqMeta.agencyName);
+  const showReqBadge = directlyHasReq || (!reqHasSpecificAgency && depth === 0 && isReqAg);
+
+  let html = `<div class="ag-row${isReqAg?' requested':''}${depth>0?' depth-'+depth:''}" id="ward-${ag.id}" onclick="toggleAllocAg('${ag.id}')" style="--ag-depth-indent:${pad}px">
     <div class="ag-row-left" id="rowleft-${ag.id}" style="padding-left:${pad}px">
       ${hasSubRows
         ? `<button class="ag-expand ${ag.expanded?'':'closed'}" onclick="event.stopPropagation();toggleAllocAg('${ag.id}')">
@@ -6473,34 +7125,14 @@ function renderAgencyBlock(ag, focusReq, depth, isPinned){
         : `<span style="width:20px;flex-shrink:0;display:inline-block"></span>`}
       <div class="ag-lbl-wrap">
         <span class="ag-lbl" title="${ag.name}">${ag.name}</span>
-        ${(hasRoster && rosterShiftName && allocGroupBy!=='pt')
-            ? `<span class="ag-lbl-sub" style="font-size:10px;color:#555">${rosterShiftName} · auto-assign</span>`
-            : (hasPtSignal && reqPt)
-              ? `<span class="ag-lbl-sub" style="font-size:10px;color:#555">${reqPt} · auto-assign</span>`
-              : ''}
-        ${(()=>{
-          if(rotationMode) return '';
-          const agPlcs = allocDraftPlacements.filter(p=>p.reqId===currentAllocReqId && p.agId===ag.id && p.status && p.status!=='draft');
-          if(!agPlcs.length) return '';
-          const offered   = agPlcs.filter(p=>p.status==='offered').length;
-          const published = agPlcs.filter(p=>p.status==='published').length;
-          const draft     = allocDraftPlacements.filter(p=>p.reqId===currentAllocReqId&&p.agId===ag.id&&(!p.status||p.status==='draft')).reduce((s,p)=>s+p.qty,0);
-          const parts=[];
-          if(draft)     parts.push(`<span class="ps-chip draft">Draft: ${draft}</span>`);
-          if(offered)   parts.push(`<span class="ps-chip offered">Offered: ${offered}</span>`);
-          if(published) parts.push(`<span class="ps-chip published">Published: ${published}</span>`);
-          return `<span class="ag-plc-subtext">${parts.join('')}<span class="ag-plc-view-trigger" onclick="event.stopPropagation();openVpSheet('${ag.id}')">View placements →</span></span>`;
-        })()}
       </div>
-      ${isReqAg ? `<span class="ag-req-badge">★ Requested</span>` : ''}
+      ${showReqBadge ? `<span class="ag-req-badge">★ Requested</span>` : ''}
       ${agRowAllocHtml}
     </div>
     <div class="ag-row-right">${renderAllocCells(sumCaps, focusReq, 'ag-cell', ag.id)}</div>
   </div>`;
 
   if(ag.expanded){
-    // Only render shift/PT sub-rows for leaf agencies (no child agencies).
-    // Parent agencies show capacity as a hierarchy summary — allocation is at leaf level.
     const isLeaf = !(ag.children && ag.children.length);
     if(isLeaf && allocGroupBy === 'shift'){
       (ag.shifts||[]).forEach(s=>{
@@ -6515,14 +7147,19 @@ function renderAgencyBlock(ag, focusReq, depth, isPinned){
           </div>
           ${renderAllocCells(s.caps, focusReq, 'ag-shift-cell', ag.id)}
         </div>`;
+        // Placement rows for THIS shift immediately below it
+        html += renderAllocPlacementRow(ag.name, pad + 18, shiftName);
       });
+      // Any-shift / unmatched placements at the bottom
+      html += renderAllocPlacementRow(ag.name, pad, '__ANY__');
     } else if(isLeaf && allocGroupBy === 'pt'){
       (ag.pts||[]).forEach(pt=>{
-        // Extract meaningful segments: PT name (index 1) + Year (index 2), skip "Not Specified"
         const parts = pt.label.split('|').map(s=>s.trim());
+        const discipline = parts[0] || '';
         const ptName = parts[1] || parts[0];
-        const yearPart = parts[2] && parts[2] !== 'Not Specified' ? parts[2] : '';
-        const displayLabel = [ptName, yearPart].filter(Boolean).join(' · ');
+        const displayLabel = (discipline && ptName && discipline !== ptName)
+          ? `${discipline} | ${ptName}`
+          : ptName;
         const ptRowId = `ward-${ag.id}-pt-${pt.id||ptName}`.replace(/[\s|]+/g,'_');
         html += `<div class="ag-shift" id="${ptRowId}" data-ptname="${ptName}" data-agid="${ag.id}">
           <div class="ag-shift-left" style="padding-left:${pad+18}px">
@@ -6532,8 +7169,9 @@ function renderAgencyBlock(ag, focusReq, depth, isPinned){
           ${renderAllocCells(pt.caps, focusReq, 'ag-shift-cell', ag.id)}
         </div>`;
       });
+      // Placement rows after PT sub-rows
+      html += renderAllocPlacementRow(ag.name, pad);
     } else if(isLeaf && allocGroupBy === 'ep'){
-      // Group requests by EP
       const epGroups = {};
       (ag.reqs||[]).forEach(r=>{ if(!epGroups[r.ep]) epGroups[r.ep]=[]; epGroups[r.ep].push(r); });
       Object.entries(epGroups).forEach(([ep, reqs])=>{
@@ -6545,8 +7183,8 @@ function renderAgencyBlock(ag, focusReq, depth, isPinned){
           ${renderAllocCells(sumCaps, focusReq, 'ag-shift-cell', ag.id)}
         </div>`;
       });
+      html += renderAllocPlacementRow(ag.name, pad);
     } else if(isLeaf && allocGroupBy === 'availability'){
-      // Show shifts sorted by total available capacity
       const sorted = [...(ag.shifts||[])].sort((a,b)=>{
         const sumA = a.caps.filter(x=>x!==null&&x>0).reduce((s,v)=>s+v,0);
         const sumB = b.caps.filter(x=>x!==null&&x>0).reduce((s,v)=>s+v,0);
@@ -6567,12 +7205,19 @@ function renderAgencyBlock(ag, focusReq, depth, isPinned){
           ${renderAllocCells(s.caps, focusReq, 'ag-shift-cell', ag.id)}
         </div>`;
       });
+      html += renderAllocPlacementRow(ag.name, pad);
+    } else if(isLeaf){
+      // groupBy=none — placement row directly under agency (no shift sub-rows)
+      html += renderAllocPlacementRow(ag.name, pad);
     }
 
     // Recurse into children
     (ag.children||[]).forEach(child=>{
       html += renderAgencyBlock(child, focusReq, depth+1, false);
     });
+  } else if(!ag.expanded && isLeafAg){
+    // Collapsed leaf agency — show placements below agency row
+    html += renderAllocPlacementRow(ag.name, pad);
   }
   return html;
 }
@@ -6594,16 +7239,34 @@ function renderAllocHeader(){
   if(!right) return;
   const r = REQ_META[currentAllocReqId];
   let html='';
-  for(let i=0;i<28;i++){
-    const d=new Date(BASE); d.setDate(d.getDate()+i);
-    const wknd=d.getDay()===0||d.getDay()===6;
-    const isToday=d.toDateString()===new Date().toDateString();
-    const inReq = r ? isDateInRange(d, r) : false;
-    const hidden = reqDatesOnly && !inReq;
-    const dd=String(d.getDate()).padStart(2,'0');
-    const mm=String(d.getMonth()+1).padStart(2,'0');
-    const dw=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
-    html+=`<div class="ag-th${wknd?' wknd':''}${isToday?' today':''}${inReq?' in-req':''}${hidden?' hidden-col':''}"><span class="dd">${dd}-${mm}</span><span class="dw">${dw}</span></div>`;
+
+  if(allocViewMode === 'week'){
+    // 28 days = 4 weeks. Show one column per week starting from Monday.
+    for(let w=0;w<4;w++){
+      const wStart = new Date(BASE); wStart.setDate(wStart.getDate() + allocDateOffset + w*7);
+      // Find Monday of this week
+      const dayOfWeek = wStart.getDay();
+      const diffToMon = dayOfWeek===0 ? -6 : 1-dayOfWeek;
+      const mon = new Date(wStart); mon.setDate(wStart.getDate() + diffToMon);
+      const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+      const inReq = r ? (mon <= new Date(r.endDate||BASE) && sun >= new Date(r.startDate||BASE)) : false;
+      const hidden = reqDatesOnly && !inReq;
+      const dd=String(mon.getDate()).padStart(2,'0');
+      const mm=String(mon.getMonth()+1).padStart(2,'0');
+      html+=`<div class="ag-th${inReq?' in-req':''}${hidden?' hidden-col':''}" style="min-width:60px"><span class="dd">${dd}/${mm}</span><span class="dw">Wk</span></div>`;
+    }
+  } else {
+    for(let i=0;i<28;i++){
+      const d=new Date(BASE); d.setDate(d.getDate()+allocDateOffset+i);
+      const wknd=d.getDay()===0||d.getDay()===6;
+      const isToday=d.toDateString()===new Date().toDateString();
+      const inReq = r ? isDateInRange(d, r) : false;
+      const hidden = reqDatesOnly && !inReq;
+      const dd=String(d.getDate()).padStart(2,'0');
+      const mm=String(d.getMonth()+1).padStart(2,'0');
+      const dw=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+      html+=`<div class="ag-th${wknd?' wknd':''}${isToday?' today':''}${inReq?' in-req':''}${hidden?' hidden-col':''}"><span class="dd">${dd}-${mm}</span><span class="dw">${dw}</span></div>`;
+    }
   }
   right.innerHTML=html;
 }
@@ -6622,35 +7285,266 @@ function toggleReqDates(btn){
 
 function onAllocFilterChange(){
   renderAllocRows(currentAllocReqId);
+  runAvailabilityHighlight();
 }
 
+/* ── MULTISELECT FILTER STATE ─────────────────────────────── */
+const allocFilterState = { disc: [], pt: [], yl: [] };
+const ALLOC_DISC_OPTIONS = ['Nursing','Midwifery','Allied Health','Pharmacy','Paramedicine','Social Work','Audiology'];
+const ALLOC_PT_OPTIONS   = ['Acute','Adult Med-Surg/Intermediate','Aged Care','Behavioral Health','Community','Critical Care','Emergency','General Medical','Mental Health','Observation','Oncology','Paediatric','Perioperative','Procedural Observational','Rotation','Surgical'];
+const ALLOC_YL_OPTIONS   = ['Yr 1','Yr 2','Yr 3','Yr 4'];
+const allocFilterPending = { disc: null, pt: null, yl: null };
+let _allocMsDrop = null;
 
+function openAllocMs(key){
+  if(_allocMsDrop){ _allocMsDrop.remove(); _allocMsDrop = null; }
+  const triggerId = key==='disc'?'msDiscTrigger':key==='pt'?'msPTTrigger':'msYLTrigger';
+  const trigger = document.getElementById(triggerId);
+  if(!trigger) return;
+  const rect = trigger.getBoundingClientRect();
+  const opts = key==='disc'?ALLOC_DISC_OPTIONS:key==='pt'?ALLOC_PT_OPTIONS:ALLOC_YL_OPTIONS;
+  const req = REQ_META[currentAllocReqId];
+  const reqVal = req ? (key==='disc'?req.discipline:key==='pt'?req.type:req.year) : null;
+  const pending = allocFilterPending[key] !== null ? allocFilterPending[key] : [...allocFilterState[key]];
+
+  const drop = document.createElement('div');
+  drop.className = 'aff-ms-drop';
+  drop.style.top  = (rect.bottom+4)+'px';
+  drop.style.left = rect.left+'px';
+  drop.style.minWidth = Math.max(rect.width,180)+'px';
+
+  opts.forEach(opt=>{
+    const isSelected = pending.includes(opt);
+    const isReqVal = opt === reqVal;
+    const item = document.createElement('div');
+    item.className = 'aff-ms-item'+(isSelected?' selected':'');
+    const check = document.createElement('div');
+    check.className = 'aff-ms-item-check';
+    if(isSelected) check.innerHTML = `<svg width="9" height="9" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`;
+    const lbl = document.createElement('span');
+    lbl.textContent = opt;
+    item.appendChild(check);
+    item.appendChild(lbl);
+    if(isReqVal){
+      const chip = document.createElement('span');
+      chip.className = 'aff-ms-req-chip';
+      chip.textContent = 'request';
+      item.appendChild(chip);
+    }
+    item.onclick = (e)=>{
+      e.stopPropagation();
+      const cur = allocFilterPending[key] !== null ? [...allocFilterPending[key]] : [...allocFilterState[key]];
+      const idx = cur.indexOf(opt);
+      if(idx>=0) cur.splice(idx,1); else cur.push(opt);
+      allocFilterPending[key] = cur;
+      drop.remove(); _allocMsDrop = null;
+      openAllocMs(key);
+      updateAllocFilterResetBtn();
+    };
+    drop.appendChild(item);
+  });
+
+  document.body.appendChild(drop);
+  _allocMsDrop = drop;
+  const closeMs = (e)=>{
+    if(!drop.contains(e.target) && !e.target.closest('#'+triggerId)){
+      drop.remove(); _allocMsDrop = null;
+      document.removeEventListener('click', closeMs);
+    }
+  };
+  setTimeout(()=>document.addEventListener('click', closeMs), 0);
+}
+
+function applyAllocFilters(){
+  ['disc','pt','yl'].forEach(key=>{
+    if(allocFilterPending[key] !== null){
+      allocFilterState[key] = [...allocFilterPending[key]];
+      allocFilterPending[key] = null;
+    }
+  });
+  _updateAllocFilterTriggers();
+  renderAllocRows(currentAllocReqId);
+  runAvailabilityHighlight();
+  updateAllocFilterResetBtn();
+}
+
+function resetAllocFilters(){
+  const req = REQ_META[currentAllocReqId];
+  allocFilterState.disc = req?.discipline ? [req.discipline] : [];
+  allocFilterState.pt   = req?.type       ? [req.type]       : [];
+  allocFilterState.yl   = req?.year       ? [req.year]       : [];
+  allocFilterPending.disc = null; allocFilterPending.pt = null; allocFilterPending.yl = null;
+  _updateAllocFilterTriggers();
+  renderAllocRows(currentAllocReqId);
+  runAvailabilityHighlight();
+  updateAllocFilterResetBtn();
+}
+
+function _updateAllocFilterTriggers(){
+  const req = REQ_META[currentAllocReqId];
+  _updateOneTrigger('disc', allocFilterState.disc, req?.discipline, 'msDiscTrigger','msDiscLabel','msDiscHint');
+  _updateOneTrigger('pt',   allocFilterState.pt,   req?.type,       'msPTTrigger',  'msPTLabel',  'msPTHint');
+  _updateOneTrigger('yl',   allocFilterState.yl,   req?.year,       'msYLTrigger',  'msYLLabel',  'msYLHint');
+}
+
+function _updateOneTrigger(key, selected, reqVal, triggerId, labelId, hintId){
+  const trigger = document.getElementById(triggerId);
+  const labelEl = document.getElementById(labelId);
+  const hintEl  = document.getElementById(hintId);
+  if(!trigger||!labelEl) return;
+  const isDefault = selected.length===0 || (selected.length===1 && selected[0]===reqVal);
+  if(selected.length===0) labelEl.textContent = 'All';
+  else if(selected.length===1) labelEl.textContent = selected[0];
+  else labelEl.textContent = selected[0]+` +${selected.length-1}`;
+  trigger.classList.toggle('req-default', isDefault);
+  trigger.classList.toggle('filter-changed', !isDefault && selected.length>0);
+  if(hintEl){
+    if(!isDefault && reqVal){ hintEl.textContent='Req: '+reqVal; hintEl.classList.add('visible'); }
+    else { hintEl.textContent=''; hintEl.classList.remove('visible'); }
+  }
+}
+
+function updateAllocFilterResetBtn(){
+  const req = REQ_META[currentAllocReqId];
+  const btn = document.getElementById('allocResetBtn');
+  if(!btn||!req) return;
+  const discDirty = allocFilterState.disc.length && !(allocFilterState.disc.length===1&&allocFilterState.disc[0]===req.discipline);
+  const ptDirty   = allocFilterState.pt.length   && !(allocFilterState.pt.length===1&&allocFilterState.pt[0]===req.type);
+  const ylDirty   = allocFilterState.yl.length   && !(allocFilterState.yl.length===1&&allocFilterState.yl[0]===req.year);
+  btn.classList.toggle('active', discDirty||ptDirty||ylDirty);
+}
+
+/* ── VIEW BY & DATE NAVIGATION ────────────────────────────── */
+let allocViewMode = 'day'; // 'day' | 'week'
+let allocDateOffset = 0;   // offset in days from BASE
+
+function setAllocViewMode(mode, btn){
+  if(allocViewMode === mode) return;
+  allocViewMode = mode;
+  document.querySelectorAll('.aff-view-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // Scope week-view column header highlight via CSS class
+  const screenEl = document.getElementById('screen-alloc');
+  if(screenEl) screenEl.classList.toggle('alloc-week-view', mode === 'week');
+  renderAllocHeader();
+  renderRequestedShiftsRow(REQ_META[currentAllocReqId]);
+  renderAllocRows(currentAllocReqId);
+  updateAllocDateRangeLabel();
+}
+
+function shiftDateRange(dir){
+  // Day mode: shift by 14 days; Week mode: shift by 4 weeks
+  const step = allocViewMode === 'week' ? 28 : 14;
+  allocDateOffset += dir * step;
+  renderAllocHeader();
+  renderRequestedShiftsRow(REQ_META[currentAllocReqId]);
+  renderAllocRows(currentAllocReqId);
+  updateAllocDateRangeLabel();
+}
+
+function updateAllocDateRangeLabel(){
+  const el = document.getElementById('allocDateRange');
+  if(!el) return;
+  const start = new Date(BASE); start.setDate(start.getDate() + allocDateOffset);
+  const end   = new Date(BASE); end.setDate(end.getDate() + allocDateOffset + (allocViewMode==='week'?27:27));
+  const fmt = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+  el.textContent = `${fmt(start)} – ${fmt(end)}`;
+}
+
+/* ── STUDENT SIDE PANEL ───────────────────────────────────── */
+function openStudentPanel(name, code){
+  // Stub — CPN-15151 will implement the full student detail side panel
+  showAllocToast('Student', `${name} ${code ? '('+code+')' : ''}`);
+}
+
+function initAllocFilters(r){
+  allocFilterState.disc = r?.discipline ? [r.discipline] : [];
+  allocFilterState.pt   = r?.type       ? [r.type]       : [];
+  allocFilterState.yl   = r?.year       ? [r.year]       : [];
+  allocFilterPending.disc = null; allocFilterPending.pt = null; allocFilterPending.yl = null;
+  _updateAllocFilterTriggers();
+  updateAllocFilterResetBtn();
+}
 
 function agencyMatchesAllocFilters(ag){
-  const disc = document.getElementById('allocDiscSelect')?.value || '';
-  const pt   = document.getElementById('allocPTSelect')?.value  || '';
-  if(!disc && !pt) return true;
+  const discs = allocFilterState.disc;
+  const pts   = allocFilterState.pt;
+  const yls   = allocFilterState.yl;
+  if(!discs.length && !pts.length && !yls.length) return true;
 
-  // Discipline: match against shift full labels (e.g. "AM (08:00–14:00) | Nursing")
-  const discLower = disc.toLowerCase();
-  const ptLower   = pt.toLowerCase();
+  // OR logic within each filter: agency matches if it satisfies at least one value per active filter
+  const discMatch = !discs.length || (ag.shifts||[]).some(s=>s.full && discs.some(d=>s.full.toLowerCase().includes(d.toLowerCase())));
+  const ptMatch   = !pts.length   || (ag.pts||[]).some(p=>p.label && pts.some(t=>p.label.toLowerCase().includes(t.toLowerCase())));
+  const ylMatch   = !yls.length   || (ag.pts||[]).some(p=>p.label && yls.some(y=>p.label.toLowerCase().includes(y.toLowerCase())));
 
-  const shiftMatch = !disc || (ag.shifts||[]).some(s=>s.full && s.full.toLowerCase().includes(discLower));
-  // PT: match against pts label segments (e.g. "Nursing | General Medical | Year 3 | ...")
-  // Use AND: agency must match BOTH discipline AND placement type when both are set
-  const ptMatch    = !pt   || (ag.pts||[]).some(p=>p.label && p.label.toLowerCase().includes(ptLower));
-
-  const selfMatch  = disc && pt ? (shiftMatch && ptMatch)   // both set: require both
-                   : disc       ? shiftMatch                 // disc only
-                   :              ptMatch;                   // pt only
-
+  // All active filters must be satisfied (AND across filter types, OR within each)
+  const selfMatch = discMatch && ptMatch && ylMatch;
   const childMatch = (ag.children||[]).some(c=>agencyMatchesAllocFilters(c));
   return selfMatch || childMatch;
 }
+let _availTimer = null;
+
+function runAvailabilityHighlight(){
+  if(!currentAllocReqId) return;
+
+  // 1. Clear existing highlights
+  document.querySelectorAll('#agRows .ag-row').forEach(row=>{
+    row.classList.remove('can-accommodate');
+    row.classList.add('avail-loading');
+  });
+
+  // 2. Show loading indicator
+  const indicator = document.getElementById('availLoadingIndicator');
+  if(indicator) indicator.classList.add('show');
+
+  // 3. Cancel any previous pending call
+  clearTimeout(_availTimer);
+
+  // 4. Simulate SP round-trip (~800ms), then apply results
+  _availTimer = setTimeout(()=>{
+    // Collect visible top-level agency IDs (respecting filters)
+    const isTulsa = document.getElementById('fRegion')?.value === 'tulsa';
+    const activeAgencies = isTulsa ? TULSA_AGENCIES : AGENCIES;
+    const visibleAgs = activeAgencies.filter(ag => agencyMatchesAllocFilters(ag));
+
+    // Simulate SP: agency "can accommodate" if it has any positive capacity
+    // across the requested date range (proxy for the real proc logic)
+    const req = REQ_META[currentAllocReqId];
+    const matchingIds = new Set();
+
+    function checkAg(ag){
+      // Agency can accommodate if it has at least one shift with positive caps
+      // on every requested date column (simplified proxy)
+      const allCaps = [];
+      if(ag.shifts) ag.shifts.forEach(s=>{ if(s.caps) allCaps.push(...s.caps.filter(v=>v!==null)); });
+      if(ag.pts)    ag.pts.forEach(p=>{ if(p.caps) allCaps.push(...p.caps.filter(v=>v!==null)); });
+      const hasPositive = allCaps.some(v=>v > 0);
+      const sumCap = allCaps.filter(v=>v>0).reduce((s,v)=>s+v,0);
+      const reqQty = req ? (req.qty||1) : 1;
+      if(hasPositive && sumCap >= reqQty) matchingIds.add(ag.id);
+      (ag.children||[]).forEach(checkAg);
+    }
+    visibleAgs.forEach(checkAg);
+
+    // 5. Remove loading shimmer, apply green highlight to matches
+    document.querySelectorAll('#agRows .ag-row').forEach(row=>{
+      row.classList.remove('avail-loading');
+      const agId = row.id?.replace('ward-','');
+      if(agId && matchingIds.has(agId)){
+        row.classList.add('can-accommodate');
+      }
+    });
+
+    // 6. Hide loading indicator
+    if(indicator) indicator.classList.remove('show');
+  }, 800);
+}
+
+
+
 
 function agHasReq(ag, focusReqId){
   if((ag.reqs||[]).some(r=>r.id===focusReqId)) return true;
-  if(ag.id==='hope' && focusReqId==='r87520') return true;
   return (ag.children||[]).some(c=>agHasReq(c, focusReqId));
 }
 
@@ -6667,13 +7561,11 @@ function renderAllocRows(focusReqId){
   let html = '';
 
   if(requestedAgs.length){
-    html += `<div class="ag-pinned-label"><svg viewBox="0 0 24 24" width="11" height="11" style="flex-shrink:0;fill:#2e7d32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Requested Agency</div>`;
     requestedAgs.forEach(ag=>{ html += renderAgencyBlock(ag, focusReq, 0, true); });
   }
 
   const filteredOthers = otherAgs.filter(ag=>agencyMatchesAllocFilters(ag));
   if(filteredOthers.length){
-    html += `<div class="ag-rest-label">Other Agencies</div>`;
     filteredOthers.forEach(ag=>{ html += renderAgencyBlock(ag, focusReq, 0, false); });
   }
 
@@ -6725,45 +7617,9 @@ function toggleAllocShow(type, btn){
 
 function insertAllocContextRows(){
   document.querySelectorAll('.alloc-ctx-row').forEach(r=>r.remove());
-  if(!allocShowPlacements && !allocShowRequests) return;
+  if(!allocShowRequests) return;
 
   const focusReq = REQ_META[currentAllocReqId];
-
-  /* ── PLACEMENTS ── */
-  if(allocShowPlacements){
-    const drafts = allocDraftPlacements.filter(d=>d.reqId===currentAllocReqId);
-    // Show draft placements under the relevant agency row
-    drafts.forEach(d=>{
-      const ag = findAgById(d.agId);
-      if(!ag) return;
-      const agRow = findAgRowInDOM(ag.name);
-      if(!agRow) return;
-      const ctx = buildAllocCtxRow({
-        id: `Draft · ${d.qty} × ${d.shiftLabel}`,
-        ep: ag.name,
-        meta: `${focusReq?.discipline||''} · ${focusReq?.year||''} · Draft`,
-        type: 'plc',
-        inRange: true,
-      }, focusReq);
-      agRow.insertAdjacentElement('afterend', ctx);
-    });
-
-    // Show existing PLACEMENTS global data
-    PLACEMENTS.forEach(p=>{
-      const ag = findAgById(p.agencyId||'');
-      if(!ag) return;
-      const agRow = findAgRowInDOM(ag.name);
-      if(!agRow) return;
-      const ctx = buildAllocCtxRow({
-        id: p.plcNum,
-        ep: p.ep||ag.name,
-        meta: `${p.discipline||''} · ${p.status}`,
-        type: 'plc',
-        inRange: true,
-      }, focusReq);
-      agRow.insertAdjacentElement('afterend', ctx);
-    });
-  }
 
   /* ── PENDING REQUESTS ── */
   if(allocShowRequests){
@@ -6877,21 +7733,21 @@ function spGenerate(type){
   // Remove from group list
   spAgGroups.splice(spAgIdx, 1);
 
+  // Always refresh grid so placement rows update immediately
+  renderAllocRows(currentAllocReqId);
+  renderPlacementRail();
+  updateBottomBar();
+  refreshCounters();
+  // Re-fire availability highlight — capacity has changed after finalising placement
+  setTimeout(()=>runAvailabilityHighlight(), 60);
+
   if(spAgGroups.length === 0){
-    // All agencies done — close panel and refresh
     closePanel();
-    renderAllocRows(currentAllocReqId);
-    renderPlacementRail();
-    updateBottomBar();
-    refreshCounters();
   } else {
-    // Advance to next (clamp if we were on last)
     spAgIdx = Math.min(spAgIdx, spAgGroups.length - 1);
     renderPanel();
     const body = document.getElementById('spBody');
     if(body) body.scrollTop = 0;
-    // Briefly flash the rail to show updated state
-    renderPlacementRail();
   }
 }
 
@@ -7696,11 +8552,13 @@ function inlineAllocHtml(agId, shiftName, agName) {
   const safeWard  = wardId.replace(/'/g, "\\'");
   const safeShift = shiftName.replace(/'/g, "\\'");
   const safeAg    = agName.replace(/'/g, "\\'");
-  const label     = 'Allocate';
-  return `<button class="ag-alloc-btn" id="btn-alloc-${wardId}"
+  const r         = REQ_META[currentAllocReqId];
+  const remaining = r ? r.qty - (r.allocated||0) : 0;
+  const btnStyle  = remaining <= 0 ? ' style="display:none"' : '';
+  return `<button class="ag-alloc-btn" id="btn-alloc-${wardId}"${btnStyle}
     onclick="event.stopPropagation();handleAllocClick('${safeWard}','${safeShift}','${safeAg}')">
     <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
-    ${label}
+    Allocate
   </button><span class="ward-alloc-badge" id="ward-count-${wardId}" style="display:none"></span>`;
 }
 
@@ -7739,21 +8597,27 @@ function showInput(wardId, shift, agency){ showStandardInput(wardId, shift, agen
 
 function showStandardInput(wardId, shift, agency) {
   if(fulfillmentMode === 'rotation') return;
-  // Try shift-level rowleft first, fall back to agency-level rowleft
+  const r = REQ_META[currentAllocReqId];
+  const remaining = r ? r.qty - (r.allocated||0) : 0;
+  // Nothing left to allocate — hide button, do nothing
+  if(remaining <= 0){
+    const btn = document.getElementById('btn-alloc-' + wardId);
+    if(btn) btn.style.display = 'none';
+    return;
+  }
   const rowLeft = document.getElementById('rowleft-' + wardId)
                || document.getElementById('rowleft-' + wardId.replace(/-[^-]+$/,''));
   if(!rowLeft) return;
   if(rowLeft.querySelector('.alloc-inline')) return;
   const btn = document.getElementById('btn-alloc-' + wardId);
   if(btn) btn.style.display = 'none';
-  const r = REQ_META[currentAllocReqId];
-  const remaining = r ? Math.max(1, r.qty - (r.allocated||0)) : 1;
   const div = document.createElement('div');
   div.className = 'alloc-inline';
   div.id = 'ai-' + wardId;
-  div.onclick = e => e.stopPropagation(); // prevent click bubbling to toggleAllocAg
+  div.onclick = e => e.stopPropagation();
   div.innerHTML = `
     <input class="qty-input" type="number" min="1" max="${remaining}" value="${remaining}" id="qi-${wardId}" onclick="event.stopPropagation()">
+    <span class="alloc-inline-hint">of ${remaining} remaining</span>
     <button class="btn-sel" onclick="event.stopPropagation();confirmAlloc('${wardId}','${shift}','${agency}')">Confirm</button>
     <button class="btn-cancel-alloc" onclick="event.stopPropagation();cancelInput('${wardId}')">✕</button>`;
   rowLeft.appendChild(div);
@@ -7766,23 +8630,37 @@ function confirmAlloc(wardId, shift, agency) {
   const r = REQ_META[currentAllocReqId];
   if(!r) return;
   const remaining = r.qty - (r.allocated||0);
+  if(remaining <= 0) return; // guard — nothing left
   const qty = Math.max(1, Math.min(parseInt(input.value)||1, remaining));
   const agId = wardId.replace(/-[^-]+$/, '');
   const ag = findAgById(agId);
   const agName = ag ? ag.name : agId;
-  allocDraftPlacements.push({ agId, agName, shiftLabel:shift, qty, reqId:currentAllocReqId, status:'draft', dates:r.dates });
+  // Store short shift name only (strip time/discipline suffix e.g. "AM (08:00-14:00) | Nursing" → "AM")
+  const shortShift = shift ? shift.split('(')[0].split('|')[0].trim() : shift;
+  allocDraftPlacements.push({ agId, agName, shiftLabel:shortShift, qty, reqId:currentAllocReqId, status:'draft', dates:r.dates });
   r.allocated = (r.allocated||0) + qty;
   document.getElementById('ai-' + wardId)?.remove();
   const newRemaining = r.qty - r.allocated;
-  const btn = document.getElementById('btn-alloc-' + wardId);
-  if(btn) btn.style.display = newRemaining > 0 ? '' : 'none';
+
+  // Update this ward's badge
   const badge = document.getElementById('ward-count-' + wardId);
   if(badge){
     const total = allocDraftPlacements.filter(d=>d.agId===agId&&d.reqId===currentAllocReqId).reduce((s,d)=>s+d.qty,0);
     badge.textContent = `${total} allocated`;
     badge.style.display = total > 0 ? '' : 'none';
   }
+
+  // Hide ALL allocate buttons if nothing left to allocate
+  if(newRemaining <= 0){
+    document.querySelectorAll('.ag-alloc-btn').forEach(b => b.style.display = 'none');
+  } else {
+    // Update this ward's button visibility
+    const btn = document.getElementById('btn-alloc-' + wardId);
+    if(btn) btn.style.display = '';
+  }
+
   showPlacementRail();
+  renderAllocRows(currentAllocReqId); // re-render to show updated placement rows + deductions
   renderPlacementRail();
   updateBottomBar();
   refreshCounters();
@@ -7839,8 +8717,7 @@ function startRotationFromHeader(){
     p.classList.toggle('active', p.dataset.gb === 'pt');
   });
   // Broaden placement type filter to show all agencies
-  const ptSel = document.getElementById('allocPTSelect');
-  if(ptSel){ ptSel.value = ''; onAllocFilterChange(); }
+  allocFilterState.pt = []; _updateAllocFilterTriggers(); renderAllocRows(currentAllocReqId);
   // Hide all standard Allocate buttons — rotation owns the whole grid
   document.querySelectorAll('.ag-alloc-btn').forEach(b=>{ b.style.display='none'; });
   // No mode indicator — mode is locked to the request's placement type
