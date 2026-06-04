@@ -867,7 +867,7 @@ html,body{height:100%;overflow:hidden}
 }
 .btn-back-grid:hover{background:#f5f5f5}
 .btn-back-grid svg{width:12px;height:12px;fill:currentColor}
-.alloc-back-label{font-size:12px;font-weight:600;color:#111827;background:#e8edf7;padding:3px 10px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:600px;}
+.alloc-back-label{font-size:12px;font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:600px;}
 .alloc-pending-grp{margin-left:auto;display:flex;align-items:center;gap:8px}
 .alloc-pending-counter{
   display:flex;align-items:center;gap:6px;padding:0 10px;height:28px;
@@ -4277,7 +4277,7 @@ html,body{height:100%;overflow:hidden}
 }
 .btn-back-grid:hover{background:#f5f5f5}
 .btn-back-grid svg{width:12px;height:12px;fill:currentColor}
-.alloc-back-label{font-size:12px;font-weight:600;color:#111827;background:#e8edf7;padding:3px 10px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:600px;}
+.alloc-back-label{font-size:12px;font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:600px;}
 .alloc-pending-grp{margin-left:auto;display:flex;align-items:center;gap:8px}
 .alloc-pending-counter{
   display:flex;align-items:center;gap:6px;padding:0 10px;height:28px;
@@ -10191,8 +10191,8 @@ function navigateToAllocOptions(rid){
     const studs = r.students || (r.studentName ? [{name:r.studentName, code:r.studentCode||r.studentId}] : []);
     if(studs.length){
       studentsList.innerHTML = studs.map(s=>
-        `<span class="alloc-student-link" onclick="openStudentPanel('${s.name||s.studentName}','${s.code||s.studentCode||''}')">${s.name||s.studentName}</span><span class="alloc-student-code">${s.code||s.studentCode||''}</span>`
-      ).join('');
+        `<span class="alloc-student-link" onclick="openStudentPanel('${s.name||s.studentName}','${s.code||s.studentCode||''}')">${s.name||s.studentName}${(s.code||s.studentCode) ? ' (' + (s.code||s.studentCode) + ')' : ''}</span>`
+      ).join('<span style="color:#9ca3af;margin:0 6px">·</span>');
       studentsRow.classList.add('show');
     } else {
       studentsRow.classList.remove('show');
