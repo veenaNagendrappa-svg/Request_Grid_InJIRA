@@ -223,6 +223,41 @@ body{
   appearance:auto;
 }
 .grouping-select:focus{outline:none;border-color:#1976d2}
+/* ── AGREEMENT SUB-ROWS ── */
+.tr-agr td{background:#f0f7ff}
+.tr-agr:hover td{background:#e3f2fd}
+.td-agr-name{
+  position:sticky;left:0;background:inherit;z-index:5;
+  border-right:2px solid #ddd;
+  padding:3px 8px 3px 28px;
+  min-width:220px;max-width:220px;vertical-align:middle;
+}
+.agr-badge{
+  display:inline-block;font-size:9px;font-weight:700;
+  padding:1px 5px;border-radius:3px;
+  background:#1565c0;color:white;
+  margin-right:5px;vertical-align:middle;letter-spacing:.3px;
+}
+/* REQ badge — complements AGR badge, visually distinct */
+.req-badge{
+  display:inline-block;font-size:9px;font-weight:700;
+  padding:1px 5px;border-radius:3px;
+  background:#e8f0fe;color:#1565c0;border:1px solid #c5d3f5;
+  margin-right:5px;vertical-align:middle;letter-spacing:.3px;
+}
+.agr-ep-lbl{font-size:12px;font-weight:500;color:#1565c0;white-space:nowrap}
+.agr-criteria{font-size:10px;color:#888;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.agr-cap-num{font-size:12px;font-weight:400;color:#555}
+/* Agreement capacity cells — neutral, no RAG */
+.td-agr-num{text-align:left;vertical-align:middle;padding:3px 4px 3px 6px;white-space:nowrap;background:#f0f7ff}
+/* Cell outside validity period — blank, visually distinct from weekend */
+.td-agr-num.agr-out-of-validity{background:#f8f8f8}
+/* JS-positioned tooltip — appended to body, escapes overflow clipping */
+.agr-tt{
+  position:fixed;background:#333;color:#fff;font-size:10px;padding:6px 10px;
+  border-radius:4px;white-space:pre;z-index:9000;pointer-events:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.28);line-height:1.6;min-width:180px;display:none;
+}
 .groupby-grp{display:flex;align-items:center;gap:2px;background:#f0f0f0;border-radius:5px;padding:2px}
 .gb-btn{
   height:26px;padding:0 10px;border:none;border-radius:3px;background:none;
@@ -2463,6 +2498,7 @@ body.rotation-mode .ward-alloc-badge{display:none!important;}
       <option value="none">None</option>
       <option value="agency">Shift</option>
       <option value="pt">Placement Type</option>
+      <option value="agreement">Agreement</option>
     </select>
     <span style="font-size:11px;color:#ccc">+</span>
     <select class="grouping-select" id="secondaryGroupSelect" onchange="onSecondaryGroupChange(this.value)">
@@ -3431,7 +3467,80 @@ const DAYS = 28;
 const WEEKS = 28;
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-/* ─── AGENCY DATA ───────────────────────────────── */
+/* ─── AGREEMENT DATA (per agency) ──────────────── */
+// Keyed by agency id → array of concurrent agreement terms for the requesting EP
+// Each term: { ep, epCode, discipline, pt, year, validity, agreedCap }
+const AGREEMENTS_BY_AGENCY = {
+  // ── (GM-Testing) Hope Learning Centre ───────────────────────────────────
+  // ACU + Monash: active Sem 2 agreements — cells blank (validity Jul onwards, current date is Jun)
+  // Deakin: NO agreement → requests sit flat alongside AGR rows
+  'hope': [
+    { ep:'ACU',    epCode:'QACURR513A', discipline:'Nursing', pt:'General Medical', year:'Yr 3', validity:'2026 Sem 2', agreedCap:8,  validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Monash', epCode:'MON',        discipline:'Nursing', pt:'General Medical', year:'Yr 2', validity:'2026 Sem 2', agreedCap:6,  validStart:'2026-07-01', validEnd:'2026-12-31' },
+  ],
+
+  // ── 03-2300 ──────────────────────────────────────────────────────────────
+  // Deakin: two active Sem 2 terms (Surgical + Gen Med) — has matching requests
+  // Monash: active Sem 2 term — has matching request
+  // ACU: Sem 1 term only (expired Jun 30) → cells blank, shows validity scoping
+  // RMIT/LTU/VU/CSU: no agreement → requests sit flat
+  'g03': [
+    { ep:'Deakin', epCode:'CURR512A', discipline:'Nursing', pt:'Surgical',        year:'Yr 3', validity:'2026 Sem 2', agreedCap:10, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Deakin', epCode:'CURR512A', discipline:'Nursing', pt:'General Medical', year:'Yr 2', validity:'2026 Sem 2', agreedCap:12, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Monash', epCode:'MON',      discipline:'Nursing', pt:'Acute',           year:'Yr 3', validity:'2026 Sem 2', agreedCap:8,  validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'ACU',    epCode:'ACU',      discipline:'Nursing', pt:'General Medical', year:'Yr 3', validity:'2026 Sem 1 (expired)', agreedCap:5, validStart:'2026-01-01', validEnd:'2026-06-30' },
+  ],
+
+  // ── 3.11.1 AT ────────────────────────────────────────────────────────────
+  // ACU: Sem 2 agreement — has matching requests
+  // Deakin: Sem 2 agreement — has matching requests (incl. student req)
+  // Victoria University: Sem 2 agreement — has matching request
+  // UniMelb: Sem 2 agreement — NO requests at this agency (agreement visible without requests)
+  // MON/RMIT/LTU/CSU: no agreement → requests sit flat
+  'at3111': [
+    { ep:'ACU',              epCode:'ACU',  discipline:'Nursing', pt:'General Medical', year:'Yr 2', validity:'2026 Sem 2', agreedCap:6,  validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Deakin',           epCode:'DKN',  discipline:'Nursing', pt:'General Medical', year:'Yr 2', validity:'2026 Sem 2', agreedCap:10, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Victoria University', epCode:'VU', discipline:'Nursing', pt:'General Medical', year:'Yr 2', validity:'2026 Sem 2', agreedCap:4, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'UniMelb',          epCode:'UNIM', discipline:'Nursing', pt:'General Medical', year:'Yr 2', validity:'2026 Sem 2', agreedCap:3,  validStart:'2026-07-01', validEnd:'2026-12-31' },
+  ],
+
+  // ── (SA) Agency C ────────────────────────────────────────────────────────
+  // Single agreement, one matching request
+  'sa-c': [
+    { ep:'ACU', epCode:'ACU', discipline:'Nursing', pt:'General Medical', year:'Yr 3', validity:'2026 Sem 2', agreedCap:4, validStart:'2026-07-01', validEnd:'2026-12-31' },
+  ],
+
+  // ── Tulsa — Saint Francis Hospital ───────────────────────────────────────
+  'sfh': [
+    { ep:'Rogers State University', epCode:'RSU', discipline:'Nursing', pt:'General Medical', year:'Junior', validity:'2026 Semester 2', agreedCap:20, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Langston University',     epCode:'LU',  discipline:'Nursing', pt:'General Medical', year:'Junior', validity:'2026 Semester 2', agreedCap:15, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Oral Roberts University', epCode:'ORU', discipline:'Nursing', pt:'General Medical', year:'Senior', validity:'2026 Semester 1 (expired)', agreedCap:10, validStart:'2026-01-01', validEnd:'2026-06-30' },
+  ],
+  'lau': [
+    { ep:'Langston University',     epCode:'LU',  discipline:'Nursing', pt:'Behavioral Health', year:'Junior', validity:'2026 Semester 2', agreedCap:12, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    { ep:'Rogers State University', epCode:'RSU', discipline:'Nursing', pt:'Behavioral Health', year:'Junior', validity:'2026 Semester 2', agreedCap:8,  validStart:'2026-07-01', validEnd:'2026-12-31' },
+  ],
+};
+
+/* ─── AGREEMENT DATA (per region) ──────────────── */
+// Keyed by region key ('vic', 'tulsa') → array of region-level concurrent terms
+// These are terms where Agency: All — display under the region row, not per agency
+const AGREEMENTS_BY_REGION = {
+  'vic': [
+    // ACU has a region-wide agreement covering all Victoria agencies — Nursing Gen Med Yr 2
+    // Agency: All — displays under Victoria region row, not duplicated to individual agencies
+    { ep:'ACU', epCode:'QACURR513A', discipline:'Nursing', pt:'General Medical', year:'Yr 2',
+      validity:'2026 Sem 2', agreedCap:25, validStart:'2026-07-01', validEnd:'2026-12-31' },
+    // Monash region-wide term — Nursing Perioperative Yr 3 — partially expired (Sem 1)
+    { ep:'Monash', epCode:'MON', discipline:'Nursing', pt:'Perioperative', year:'Yr 3',
+      validity:'2026 Sem 1 (expired)', agreedCap:12, validStart:'2026-01-01', validEnd:'2026-06-30' },
+  ],
+  'tulsa': [
+    // Langston University region-wide term across all Tulsa agencies
+    { ep:'Langston University', epCode:'LU', discipline:'Nursing', pt:'General Medical', year:'Junior',
+      validity:'2026 Semester 2', agreedCap:30, validStart:'2026-07-01', validEnd:'2026-12-31' },
+  ],
+};
 // Region-level requests — sit under Victoria, not under any specific agency
 const VICTORIA_REQS = [
   // Any shift — no preference
@@ -5444,6 +5553,76 @@ function renderBody(cols){
     visibleRegionReqs.forEach(r=>{ rows+=renderReqAndPlacements(r,cols,-1); });
   }
 
+  // Region-level agreement terms — shown under region row when Group By = Agreement
+  // These are terms with Agency: All; they do not descend to individual agency rows
+  if(groupBy === 'agreement'){
+    const regionTerms = AGREEMENTS_BY_REGION[activeRegion] || [];
+    const windowStart = viewMode==='week' ? getMondayOfWeek(0)      : getDate(0);
+    const windowEnd   = viewMode==='week' ? getMondayOfWeek(cols-1) : getDate(cols-1);
+    const visibleRegionTerms = regionTerms.filter(term => {
+      const vs = term.validStart ? new Date(term.validStart) : null;
+      const ve = term.validEnd   ? new Date(term.validEnd)   : null;
+      if(vs && vs > windowEnd)   return false;
+      if(ve && ve < windowStart) return false;
+      return true;
+    });
+
+    // Group by EP — all terms for EP first, then region-level requests from that EP
+    const epOrder = [];
+    const termsByEp = {};
+    visibleRegionTerms.forEach(term => {
+      if(!termsByEp[term.epCode]){
+        termsByEp[term.epCode] = { ep: term.ep, epCode: term.epCode, terms: [] };
+        epOrder.push(term.epCode);
+      }
+      termsByEp[term.epCode].terms.push(term);
+    });
+
+    const agrEpCodes = new Set(epOrder);
+    const pad = 8; // region-level indent
+
+    epOrder.forEach(epCode => {
+      const group = termsByEp[epCode];
+      const epReqs = visibleRegionReqs.filter(r => r.epCode === epCode);
+
+      group.terms.forEach(term => {
+        const validStart = term.validStart ? new Date(term.validStart) : null;
+        const validEnd   = term.validEnd   ? new Date(term.validEnd)   : null;
+        const ttText = `EP: ${term.ep} (${term.epCode})\nAgreed capacity: ${term.agreedCap}\nValidity: ${term.validity}\nDiscipline: ${term.discipline} · ${term.pt} · ${term.year}\nScope: Region-wide (Agency: All)`;
+
+        rows += `<tr class="tr-agr">
+          <td class="td-agr-name" style="padding-left:${pad}px">
+            <div>
+              <span class="agr-badge agr-tt-trigger" data-tt="${ttText.replace(/"/g,'&quot;')}">AGR</span><span class="agr-ep-lbl">${term.ep}</span>
+            </div>
+            <div class="agr-criteria">${term.discipline} · ${term.pt} · ${term.year} · ${term.validity} · <em style="color:#aaa">Region-wide</em></div>
+          </td>`;
+
+        for(let i=0;i<cols;i++){
+          const d = viewMode==='week'?getMondayOfWeek(i):getDate(i);
+          const wknd = viewMode==='week'?false:isWknd(d);
+          const inValidity = (!validStart || d >= validStart) && (!validEnd || d <= validEnd);
+          const cellVal = (wknd || !inValidity) ? '' : term.agreedCap;
+          const outCls = !wknd && !inValidity ? ' agr-out-of-validity' : '';
+          rows += `<td class="td-agr-num${wknd?' wknd':''}${outCls}">
+            <span class="agr-cap-num" style="padding:3px 4px 3px 6px;display:block">${cellVal}</span>
+          </td>`;
+        }
+        rows += '</tr>';
+      });
+
+      if(epReqs.length){
+        if(showEP) rows += renderEpGroupRows(epReqs, null, cols, 0, null);
+        else epReqs.forEach((r,idx)=>{ rows+=renderReqAndPlacements(r,cols,0,idx===0?'border-top:2px solid #dbeafe':''); });
+      }
+    });
+
+    // Region requests with no region-level agreement — render flat
+    const unmatchedRegionReqs = visibleRegionReqs.filter(r => !agrEpCodes.has(r.epCode));
+    if(showEP && unmatchedRegionReqs.length) rows += renderEpGroupRows(unmatchedRegionReqs, null, cols, -1, null);
+    else unmatchedRegionReqs.forEach(r=>{ rows+=renderReqAndPlacements(r,cols,-1); });
+  }
+
   // Agency rows
   rows+=renderAgencies(activeAgencies,cols,0);
 
@@ -5601,6 +5780,100 @@ function renderPlacementRow(plcs, depth, agencyName, epFilter){
   return h;
 }
 
+function renderAgreementRows(ag, reqs, cols, depth){
+  const pad = 8 + (depth+1)*20;
+  const allTerms = AGREEMENTS_BY_AGENCY[ag.id] || [];
+  let rows = '';
+
+  // ── Visible window: first and last date in grid ───────────────────────────
+  const windowStart = viewMode==='week' ? getMondayOfWeek(0)      : getDate(0);
+  const windowEnd   = viewMode==='week' ? getMondayOfWeek(cols-1) : getDate(cols-1);
+
+  // Filter to terms that overlap the visible window
+  const terms = allTerms.filter(term => {
+    const vs = term.validStart ? new Date(term.validStart) : null;
+    const ve = term.validEnd   ? new Date(term.validEnd)   : null;
+    if(vs && vs > windowEnd)   return false; // starts after visible window
+    if(ve && ve < windowStart) return false; // ended before visible window
+    return true;
+  });
+
+  if(!terms.length){
+    // No visible agreements — render requests flat (or EP-grouped)
+    if(showEP) rows += renderEpGroupRows(reqs, ag, cols, depth, null);
+    else reqs.forEach(r=>{ rows+=renderReqAndPlacements(r,cols,depth); });
+    return rows;
+  }
+
+  // ── Group terms by EP ─────────────────────────────────────────────────────
+  const epOrder = [];
+  const termsByEp = {};
+  terms.forEach(term => {
+    if(!termsByEp[term.epCode]){
+      termsByEp[term.epCode] = { ep: term.ep, epCode: term.epCode, terms: [] };
+      epOrder.push(term.epCode);
+    }
+    termsByEp[term.epCode].terms.push(term);
+  });
+
+  const agrEpCodes = new Set(epOrder);
+
+  // ── Render: for each EP — all agreement terms, then all requests from that EP ──
+  epOrder.forEach(epCode => {
+    const group = termsByEp[epCode];
+    const epReqs = reqs.filter(r => r.epCode === epCode);
+
+    // One AGR row per term for this EP
+    group.terms.forEach(term => {
+      const validStart = term.validStart ? new Date(term.validStart) : null;
+      const validEnd   = term.validEnd   ? new Date(term.validEnd)   : null;
+
+      const ttText = `EP: ${term.ep} (${term.epCode})\nAgreed capacity: ${term.agreedCap}\nValidity: ${term.validity}\nDiscipline: ${term.discipline} · ${term.pt} · ${term.year}`;
+
+      rows += `<tr class="tr-agr">
+        <td class="td-agr-name" style="padding-left:${pad}px">
+          <div>
+            <span class="agr-badge agr-tt-trigger" data-tt="${ttText.replace(/"/g,'&quot;')}">AGR</span><span class="agr-ep-lbl">${term.ep}</span>
+          </div>
+          <div class="agr-criteria">${term.discipline} · ${term.pt} · ${term.year} · ${term.validity}</div>
+        </td>`;
+
+      for(let i=0;i<cols;i++){
+        const d = viewMode==='week'?getMondayOfWeek(i):getDate(i);
+        const wknd = viewMode==='week'?false:isWknd(d);
+        const inValidity = (!validStart || d >= validStart) && (!validEnd || d <= validEnd);
+        const cellVal = (wknd || !inValidity) ? '' : term.agreedCap;
+        const outCls = !wknd && !inValidity ? ' agr-out-of-validity' : '';
+        rows += `<td class="td-agr-num${wknd?' wknd':''}${outCls}">
+          <span class="agr-cap-num" style="padding:3px 4px 3px 6px;display:block">${cellVal}</span>
+        </td>`;
+      }
+      rows += '</tr>';
+    });
+
+    // All requests from this EP follow their agreement terms — no term matching
+    // First request gets a top border to visually separate from the AGR rows above
+    if(epReqs.length){
+      if(showEP){
+        rows += renderEpGroupRows(epReqs, ag, cols, depth+1, null);
+      } else {
+        epReqs.forEach((r, idx)=>{ 
+          rows += renderReqAndPlacements(r, cols, depth+1, idx===0 ? 'border-top:2px solid #dbeafe' : '');
+        });
+      }
+    }
+  });
+
+  // ── EPs with no agreement — requests sit flat after agreement groups ──────
+  const unmatchedReqs = reqs.filter(r => !agrEpCodes.has(r.epCode));
+  if(unmatchedReqs.length){
+    if(showEP) rows += renderEpGroupRows(unmatchedReqs, ag, cols, depth, null);
+    else unmatchedReqs.forEach(r=>{ rows+=renderReqAndPlacements(r,cols,depth); });
+  }
+
+  return rows;
+}
+
 function renderAgencies(ags,cols,depth){
   let rows='';
   ags.forEach(ag=>{
@@ -5668,6 +5941,10 @@ function renderAgencies(ags,cols,depth){
           else ptReqs.forEach(r=>{ rows+=renderReqAndPlacements(r,cols,depth); });
           if(!reqs.length) rows+=renderEmptySubRow('No placement types configured',cols,depth);
         }
+
+      } else if(groupBy==='agreement'){
+        // ── GROUP BY AGREEMENT ───────────────────────────────────────────────
+        rows += renderAgreementRows(ag, reqs, cols, depth);
       }
 
       // Hidden agencies ghost row
@@ -6058,12 +6335,12 @@ function renderEpCountRow(group, ag, cols, depth, isCollapsed){
   return h + '</tr>';
 }
 
-function renderReqAndPlacements(r, cols, depth){
+function renderReqAndPlacements(r, cols, depth, rowStyle){
   // Placement rows removed from grid — placements surface via agency badge + side sheet
-  return renderReqRow(r, cols, depth);
+  return renderReqRow(r, cols, depth, rowStyle);
 }
 
-function renderReqRow(r,cols,depth){
+function renderReqRow(r,cols,depth,rowStyle){
   if(!r)return'';
   const isStudent = r.reqType==='student';
   const cc = isStudent
@@ -6088,23 +6365,18 @@ function renderReqRow(r,cols,depth){
     ? `×${r.qty - r.allocated}/${r.qty}`
     : r.allocated > 0 ? `×${r.qty}` : `×${r.qty}`;
 
-  const statusKey = isStudent ? null : isPartial ? 'partial' : (r.status || 'pending');
-  const statusText = isStudent ? '' : isPartial
+  const statusKey = isPartial ? 'partial' : (r.status || 'pending');
+  const statusText = isPartial
     ? 'Partial'
     : statusKey.charAt(0).toUpperCase() + statusKey.slice(1);
 
-  const statusPill = statusKey
-    ? `<span class="req-status-pill rsp-${statusKey}">● ${statusText}</span>`
-    : '';
+  const statusPill = `<span class="req-status-pill rsp-${statusKey}">● ${statusText}</span>`;
 
-  const studentBadge = isStudent ? `<span class="req-student-badge">Student</span>` : '';
-
-  // LINE 1: ACU · 87520 · 5/10 ● Pending
-  // LINE 2: Nursing · Gen Med · Y3 · 12–30 May  (wraps, never truncated)
+  const reqBadge = isStudent ? '' : `<span class="req-badge">REQ</span>`;
 
   const line1Parts = isStudent
     ? `<span class="req-lbl-link" data-rid="${r.id}">${r.studentName||'Student'}</span><span class="req-lbl-plain"> · ${reqId} · ${allocPart}</span>`
-    : `<span class="req-lbl-link" data-rid="${r.id}">${r.ep}</span><span class="req-lbl-plain"> · ${reqId} · ${allocPart}</span>`;
+    : `${reqBadge}<span class="req-lbl-link" data-rid="${r.id}">${reqId}</span><span class="req-lbl-plain"> · ${r.ep} · ${allocPart}</span>`;
 
   // Shorten dates — drop year if both dates in same year
   function shortenDates(d){
@@ -6123,13 +6395,13 @@ function renderReqRow(r,cols,depth){
     : '';
 
   const pad = depth < 0 ? 46 : depth === 0 ? 28 : 8+(depth+1)*20;
-  let h=`<tr class="tr-req"><td class="td-req-name" style="padding-left:${pad}px">
+  const trStyle = rowStyle ? ` style="${rowStyle}"` : '';
+  let h=`<tr class="tr-req"${trStyle}><td class="td-req-name" style="padding-left:${pad}px">
     <div class="req-lbl-wrap">
       <div class="req-lbl-top">
         ${line1Parts}
         ${condensedDateSpan}
         ${statusPill}
-        ${studentBadge}
       </div>
       <div class="req-lbl-sub">${line2}</div><span class="req-lbl-sub-tooltip">${line2}</span>
     </div>
@@ -11177,5 +11449,38 @@ function allocConfirmReject(mode){
     <button class="plc-detail-back" onclick="closePlcDetail()">← Back to list</button>
   </div>
 </div>
+<!-- AGR tooltip — JS-positioned, appended to body to escape overflow clipping -->
+<div id="agrTt" class="agr-tt"></div>
+<script>
+(function(){
+  const tt = document.getElementById('agrTt');
+  document.addEventListener('mouseover', function(e){
+    const el = e.target.closest('.agr-tt-trigger');
+    if(!el) return;
+    const text = el.getAttribute('data-tt');
+    if(!text) return;
+    tt.textContent = text;
+    tt.style.display = 'block';
+    positionAgrTt(e);
+  });
+  document.addEventListener('mousemove', function(e){
+    if(tt.style.display === 'block') positionAgrTt(e);
+  });
+  document.addEventListener('mouseout', function(e){
+    if(e.target.closest('.agr-tt-trigger')) tt.style.display = 'none';
+  });
+  function positionAgrTt(e){
+    const margin = 12;
+    let x = e.clientX + margin;
+    let y = e.clientY + margin;
+    const w = tt.offsetWidth || 200;
+    const h = tt.offsetHeight || 80;
+    if(x + w > window.innerWidth - 8) x = e.clientX - w - margin;
+    if(y + h > window.innerHeight - 8) y = e.clientY - h - margin;
+    tt.style.left = x + 'px';
+    tt.style.top  = y + 'px';
+  }
+})();
+</script>
 </body>
 </html>
